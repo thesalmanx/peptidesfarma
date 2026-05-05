@@ -26,10 +26,10 @@ const ProductsPage = () => {
   return (
     <div>
       {/* Page header */}
-      <section className="pf-starfield" style={{ padding: "80px 0 60px" }}>
+      <section className="pf-starfield" style={{ padding: "60px 0 48px" }}>
         <div className="pf-wrap">
-          <div className="pf-eyebrow pf-eyebrow--dark" style={{ marginBottom: 16 }}>Catalog · {all.length} compounds</div>
-          <h1 style={{ fontSize: 64, fontWeight: 600, letterSpacing: "-0.03em", color: "#fff", margin: "0 0 16px", lineHeight: 1 }}>
+          <div className="pf-eyebrow pf-eyebrow--dark" style={{ marginBottom: 14 }}>Catalog · {all.length} compounds</div>
+          <h1 style={{ fontSize: "clamp(36px, 6vw, 64px)", fontWeight: 600, letterSpacing: "-0.03em", color: "#fff", margin: "0 0 14px", lineHeight: 1.02 }}>
             Research-grade <span style={{ color: "var(--pf-blue-soft)" }}>peptides</span>
           </h1>
           <p style={{ color: "var(--pf-dark-text-2)", fontSize: 16, maxWidth: 640, margin: 0, lineHeight: 1.6 }}>
@@ -39,10 +39,10 @@ const ProductsPage = () => {
       </section>
 
       {/* Sticky filter bar */}
-      <section style={{ position: "sticky", top: 64, zIndex: 40, background: "var(--pf-paper)", borderBottom: "1px solid var(--pf-line)" }}>
-        <div className="pf-wrap" style={{ padding: "16px 0", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+      <section style={{ position: "sticky", top: 0, zIndex: 30, background: "var(--pf-paper)", borderBottom: "1px solid var(--pf-line)" }}>
+        <div className="pf-wrap pf-filter-bar" style={{ padding: "16px 0", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
           {/* Category pills */}
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", flex: 1, minWidth: 0 }}>
+          <div className="pf-filter-bar-pills" style={{ display: "flex", gap: 6, flexWrap: "wrap", flex: 1, minWidth: 0 }}>
             <CatPill label="All" count={all.length} active={category === "all"} onClick={() => setCategory("all")} />
             {C.CATEGORIES.filter(c => c.id !== "support").map(c => {
               const n = all.filter(p => p.category === c.id).length;
@@ -50,7 +50,7 @@ const ProductsPage = () => {
             })}
           </div>
           {/* Size + Sort */}
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div className="pf-filter-bar-selects" style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <select value={sizeFilter} onChange={(e) => setSizeFilter(e.target.value)} style={selectStyle}>
               <option value="all">Any size</option>
               <option value="5mg">5 mg</option>
@@ -74,7 +74,7 @@ const ProductsPage = () => {
           <div style={{ fontSize: 13, color: "var(--pf-text-3)", marginBottom: 24 }} className="pf-mono">
             {sorted.length} {sorted.length === 1 ? "result" : "results"}
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+          <div className="pf-catalog-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
             {sorted.map(p => <window.ProductCard key={p.handle} product={p} />)}
           </div>
         </div>

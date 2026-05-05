@@ -16,7 +16,7 @@ const CartDrawer = () => {
       {app.drawerOpen && (
         <div onClick={() => app.setDrawerOpen(false)} style={{ position: "fixed", inset: 0, background: "rgba(8,18,42,0.5)", zIndex: 60, backdropFilter: "blur(4px)", animation: "pf-fade 280ms ease both" }} />
       )}
-      <aside style={{
+      <aside className="pf-cart-drawer" style={{
         position: "fixed", top: 0, right: 0, bottom: 0, width: "min(440px, 100vw)",
         background: "#fff", zIndex: 61,
         transform: app.drawerOpen ? "translateX(0)" : "translateX(100%)",
@@ -25,7 +25,7 @@ const CartDrawer = () => {
         boxShadow: "var(--pf-shadow-lg)",
       }}>
         {/* header */}
-        <div style={{ padding: "20px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid var(--pf-line)" }}>
+        <div className="pf-cart-drawer-header" style={{ padding: "20px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid var(--pf-line)" }}>
           <div>
             <div className="pf-eyebrow">Cart</div>
             <div style={{ fontSize: 18, fontWeight: 600, marginTop: 2 }}>Your order ({app.cartCount})</div>
@@ -45,7 +45,7 @@ const CartDrawer = () => {
         </div>
 
         {/* lines */}
-        <div style={{ flex: 1, overflowY: "auto", padding: 24, display: "flex", flexDirection: "column", gap: 16 }}>
+        <div className="pf-cart-drawer-body" style={{ flex: 1, overflowY: "auto", padding: 24, display: "flex", flexDirection: "column", gap: 16 }}>
           {app.cartLineDetails.length === 0 ? (
             <div style={{ textAlign: "center", padding: "60px 20px", color: "var(--pf-text-3)" }}>
               <div style={{ width: 64, height: 64, margin: "0 auto 16px", borderRadius: 32, background: "var(--pf-paper-2)", display: "flex", alignItems: "center", justifyContent: "center" }}><Icon.bag size={28} /></div>
@@ -96,7 +96,7 @@ const CartDrawer = () => {
 
         {/* summary */}
         {app.cartLineDetails.length > 0 && (
-          <div style={{ borderTop: "1px solid var(--pf-line)", padding: 24 }}>
+          <div className="pf-cart-drawer-footer" style={{ borderTop: "1px solid var(--pf-line)", padding: 24 }}>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, marginBottom: 6 }}>
               <span>Subtotal</span>
               <span className="pf-mono" style={{ fontWeight: 600 }}>{C.formatPrice(app.subtotalCents)}</span>

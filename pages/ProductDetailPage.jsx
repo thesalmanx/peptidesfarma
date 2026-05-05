@@ -17,7 +17,7 @@ const ProductDetailPage = () => {
   return (
     <div>
       {/* HERO with vial */}
-      <section className="pf-starfield" style={{ paddingTop: 40, paddingBottom: 40 }}>
+      <section className="pf-starfield pf-pdp-hero" style={{ paddingTop: 40, paddingBottom: 40 }}>
         <div className="pf-wrap" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }}>
           <div>
             <div style={{ fontSize: 12, color: "var(--pf-dark-text-2)", marginBottom: 16, fontFamily: "var(--pf-mono)", letterSpacing: "0.08em" }}>
@@ -41,7 +41,7 @@ const ProductDetailPage = () => {
               <dt style={{ color: "var(--pf-dark-text-2)" }}>Tested</dt><dd style={{ color: "#fff" }}>Freedom Diagnostics, 3rd party</dd>
             </dl>
           </div>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+          <div className="pf-pdp-vial" style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
             <div style={{ position: "absolute", inset: "10% 10%", background: "radial-gradient(circle, rgba(79,138,247,0.30), transparent 60%)" }}></div>
             <window.Vial name={product.title} dose={variant.size} size="xl" />
           </div>
@@ -50,7 +50,7 @@ const ProductDetailPage = () => {
 
       {/* BUY BAR */}
       <section style={{ background: "var(--pf-paper)", borderTop: "1px solid var(--pf-line)", borderBottom: "1px solid var(--pf-line)" }}>
-        <div className="pf-wrap" style={{ padding: "32px 0", display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 40, alignItems: "center" }}>
+        <div className="pf-wrap pf-pdp-buybar" style={{ padding: "32px 0", display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 40, alignItems: "center" }}>
           <div>
             <div className="pf-eyebrow" style={{ marginBottom: 8 }}>Select size</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -77,7 +77,7 @@ const ProductDetailPage = () => {
               {variant.stock <= 0 ? "Out of stock" : variant.stock < 10 ? `Only ${variant.stock} in stock` : "In stock, ships today"}
             </div>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 16, justifyContent: "flex-end" }}>
+          <div className="pf-pdp-buybar-right" style={{ display: "flex", alignItems: "center", gap: 16, justifyContent: "flex-end" }}>
             <div style={{ textAlign: "right" }}>
               <div className="pf-eyebrow">Price</div>
               <div className="pf-mono" style={{ fontSize: 32, fontWeight: 600 }}>{C.formatPrice(variant.priceCents * qty)}</div>
@@ -92,9 +92,9 @@ const ProductDetailPage = () => {
 
       {/* DETAILS TABS */}
       <section style={{ padding: "60px 0" }}>
-        <div className="pf-wrap" style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 60 }}>
+        <div className="pf-wrap pf-pdp-detail" style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 60 }}>
           <div>
-            <div style={{ display: "flex", gap: 0, borderBottom: "1px solid var(--pf-line)", marginBottom: 24 }}>
+            <div className="pf-pdp-tabs" style={{ display: "flex", gap: 0, borderBottom: "1px solid var(--pf-line)", marginBottom: 24 }}>
               {[["description", "Description"], ["dosing", "Dosing & handling"], ["coa", "Certificate of Analysis"], ["notes", "Important notes"]].map(([k, l]) => (
                 <button key={k} onClick={() => setTab(k)} style={{
                   padding: "12px 20px", background: "transparent", border: "none", cursor: "pointer", fontFamily: "inherit",
@@ -119,7 +119,7 @@ const ProductDetailPage = () => {
             )}
             {tab === "coa" && (
               <div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
+                <div className="pf-pdp-coa-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
                   {[
                     { lot: product.lot, purity: product.purity, date: "Feb 2026", latest: true },
                     { lot: "B0041", purity: "99.1%", date: "Dec 2025", latest: false },

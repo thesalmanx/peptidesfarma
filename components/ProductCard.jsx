@@ -13,7 +13,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="pf-reveal is-in" style={{ position: "relative" }}>
-      <div onClick={() => app.navigate("product", { handle: product.handle })} style={{
+      <div onClick={() => app.navigate("product", { handle: product.handle })} className="pf-catalog-card-image" style={{
         cursor: "pointer",
         background: "linear-gradient(180deg, #1B2D5C 0%, #0E1A33 70%, #4F6B9C 100%)",
         borderRadius: 12,

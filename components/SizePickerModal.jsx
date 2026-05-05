@@ -26,7 +26,7 @@ const SizePickerModal = () => {
         padding: 24,
         animation: "pf-fade 220ms ease both",
       }}>
-      <div onClick={(e) => e.stopPropagation()}
+      <div onClick={(e) => e.stopPropagation()} className="pf-picker-modal"
         style={{
           width: "min(460px, 100%)", background: "#fff", borderRadius: 18,
           padding: 28, boxShadow: "0 24px 60px rgba(8,18,42,0.4)",

@@ -85,7 +85,7 @@ const Hero = () => {
       <div style={{ position: "absolute", right: "-10%", top: "10%", width: 720, height: 720, background: "radial-gradient(circle, rgba(79,138,247,0.35), transparent 60%)", filter: "blur(20px)", pointerEvents: "none" }}></div>
       <div style={{ position: "absolute", left: "-10%", bottom: "-10%", width: 600, height: 600, background: "radial-gradient(circle, rgba(122,162,255,0.18), transparent 60%)", pointerEvents: "none" }}></div>
 
-      <div className="pf-wrap" style={{ position: "relative", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center", minHeight: 720, paddingBlock: "80px 96px" }}>
+      <div className="pf-wrap pf-hero-grid" style={{ position: "relative", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center", minHeight: 720, paddingBlock: "80px 96px" }}>
         {/* LEFT — Headline */}
         <div>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "6px 16px 6px 6px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.10)", borderRadius: 999, marginBottom: 28, backdropFilter: "blur(8px)" }}>
@@ -116,7 +116,7 @@ const Hero = () => {
             <button onClick={() => app.navigate("about")} className="pf-btn pf-btn--ghost-dark pf-btn--lg">View lab reports</button>
           </div>
           {/* Trust pills */}
-          <div style={{ display: "flex", gap: 24, flexWrap: "wrap", paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.10)" }}>
+          <div className="pf-hero-stats" style={{ display: "flex", gap: 24, flexWrap: "wrap", paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.10)" }}>
             {[
               { v: "99.2%", l: "Avg purity" },
               { v: "27", l: "Compounds" },
@@ -132,7 +132,7 @@ const Hero = () => {
         </div>
 
         {/* RIGHT — Vial cluster */}
-        <div style={{ position: "relative", height: 620, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div className="pf-hero-vials" style={{ position: "relative", height: 620, display: "flex", alignItems: "center", justifyContent: "center" }}>
           {/* radial halo behind vials */}
           <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 50% 50%, rgba(79,138,247,0.4), transparent 55%)", filter: "blur(40px)" }}></div>
           {/* floor reflection */}
@@ -181,7 +181,7 @@ const TrustStrip = () => {
   ];
   return (
     <section style={{ background: "#0E1A33", color: "#fff", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-      <div className="pf-wrap pf-reveal-stagger" ref={useReveal()} style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0, padding: "32px 24px" }}>
+      <div className="pf-wrap pf-reveal-stagger pf-trust-strip" ref={useReveal()} style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0, padding: "32px 24px" }}>
         {items.map((t, i) => (
           <div key={t.h} style={{
             display: "flex", alignItems: "center", gap: 16,
@@ -365,7 +365,7 @@ const FeaturedCompound = ({ product }) => {
     <section style={{ background: "linear-gradient(180deg, #08122A 0%, #13234A 100%)", color: "#fff", position: "relative", overflow: "hidden" }}>
       <div className="pf-starfield" style={{ position: "absolute", inset: 0, opacity: 0.55 }}></div>
       <div style={{ position: "absolute", left: "30%", top: "20%", width: 600, height: 600, background: "radial-gradient(circle, rgba(79,138,247,0.25), transparent 60%)", filter: "blur(40px)", pointerEvents: "none" }}></div>
-      <div className="pf-wrap" style={{ position: "relative", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center", paddingBlock: 120 }}>
+      <div className="pf-wrap pf-featured" style={{ position: "relative", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center", paddingBlock: 120 }}>
         <Reveal variant="pf-reveal-x">
           <div className="pf-eyebrow pf-eyebrow--dark" style={{ marginBottom: 16 }}>Featured compound</div>
           <h2 style={{ fontFamily: "var(--pf-display)", fontWeight: 600, fontSize: "clamp(40px, 5vw, 68px)", lineHeight: 1.02, letterSpacing: "-0.03em", margin: "0 0 20px", color: "#fff" }}>
@@ -389,7 +389,7 @@ const FeaturedCompound = ({ product }) => {
             <button onClick={() => app.pickAndAddToCart(product.handle, 1)} className="pf-btn pf-btn--ghost-dark pf-btn--lg">Add to cart · from {C.formatPrice(C.fromPriceCents(product))}</button>
           </div>
         </Reveal>
-        <Reveal variant="pf-reveal-scale" style={{ position: "relative", height: 580, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <Reveal variant="pf-reveal-scale pf-featured-vial" style={{ position: "relative", height: 580, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 50% 50%, rgba(79,138,247,0.45), transparent 60%)", filter: "blur(40px)" }}></div>
           <div style={{ animation: "pf-float-y 7s ease-in-out infinite", transform: "scale(0.9)" }}>
             <window.Vial name={product.title} dose={v.size} size="xl" bg="none" image={false} />
@@ -517,7 +517,7 @@ const ClosingCTA = () => {
   return (
     <section style={{ padding: "96px 0 120px", background: "var(--pf-paper)" }}>
       <div className="pf-wrap">
-        <div style={{
+        <div className="pf-closing-cta" style={{
           background: "linear-gradient(135deg, #08122A 0%, #14213D 50%, #1B2D5C 100%)",
           borderRadius: 24, padding: "80px 64px",
           color: "#fff", position: "relative", overflow: "hidden",
@@ -561,7 +561,7 @@ const LotTicker = () => {
   const row = [...items, ...items];
   return (
     <div style={{ background: "#08122A", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", overflow: "hidden", padding: "14px 0" }}>
-      <div style={{ display: "flex", gap: 48, animation: "pf-marquee 50s linear infinite", whiteSpace: "nowrap" }}>
+      <div className="pf-lot-ticker" style={{ display: "flex", gap: 48, animation: "pf-marquee 50s linear infinite", whiteSpace: "nowrap" }}>
         {row.map((it, i) => (
           <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, color: "rgba(255,255,255,0.7)", fontFamily: "var(--pf-mono)", fontSize: 12, letterSpacing: "0.05em", textTransform: "uppercase" }}>
             <span style={{ width: 6, height: 6, borderRadius: 999, background: "var(--pf-blue)", boxShadow: "0 0 10px var(--pf-blue)" }}></span>
@@ -615,7 +615,7 @@ const WhyUs = () => {
               <div style={{ textAlign: "center" }}>Most</div>
             </div>
             {rows.map((r, i) => (
-              <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 110px 110px", padding: "20px 24px", borderBottom: i < rows.length - 1 ? "1px solid var(--pf-line)" : "none", alignItems: "center", fontSize: 14 }}>
+              <div key={i} className="pf-whyus-row" style={{ display: "grid", gridTemplateColumns: "1fr 110px 110px", padding: "20px 24px", borderBottom: i < rows.length - 1 ? "1px solid var(--pf-line)" : "none", alignItems: "center", fontSize: 14 }}>
                 <div style={{ color: "var(--pf-ink)", fontWeight: 500 }}>{r.label}</div>
                 <div style={{ textAlign: "center" }}>
                   <span style={{ display: "inline-flex", width: 28, height: 28, borderRadius: 999, background: "rgba(79,138,247,0.12)", color: "var(--pf-blue)", alignItems: "center", justifyContent: "center" }}>
@@ -657,10 +657,10 @@ const FAQ = () => {
             const isOpen = open === i;
             return (
               <div key={i} style={{ borderBottom: "1px solid var(--pf-line)" }}>
-                <button onClick={() => setOpen(isOpen ? -1 : i)}
+                <button onClick={() => setOpen(isOpen ? -1 : i)} className="pf-faq-q"
                   style={{ width: "100%", textAlign: "left", padding: "28px 8px", background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24, fontFamily: "inherit" }}>
                   <span style={{ fontFamily: "var(--pf-display)", fontSize: 22, fontWeight: 600, color: "var(--pf-ink)", letterSpacing: "-0.015em" }}>{it.q}</span>
-                  <span style={{
+                  <span className="pf-faq-q-icon" style={{
                     flexShrink: 0, width: 36, height: 36, borderRadius: 999,
                     background: isOpen ? "var(--pf-ink)" : "var(--pf-paper-2)",
                     color: isOpen ? "#fff" : "var(--pf-ink)",
@@ -670,8 +670,8 @@ const FAQ = () => {
                     <window.Icon.plus size={14} />
                   </span>
                 </button>
-                <div style={{
-                  maxHeight: isOpen ? 200 : 0,
+                <div className="pf-faq-body" style={{
+                  maxHeight: isOpen ? 240 : 0,
                   overflow: "hidden",
                   transition: "max-height 360ms cubic-bezier(0.22, 1, 0.36, 1), padding 200ms ease",
                   paddingBottom: isOpen ? 28 : 0,

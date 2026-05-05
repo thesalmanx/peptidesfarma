@@ -10,7 +10,7 @@ const AnnouncementBar = () => {
   ];
   // marquee, but slow & restrained
   return (
-    <div style={{ background: "var(--pf-ink-3)", color: "var(--pf-dark-text)", borderBottom: "1px solid rgba(255,255,255,0.06)", overflow: "hidden", height: 32, display: "flex", alignItems: "center" }}>
+    <div className="pf-announcement-bar" style={{ background: "var(--pf-ink-3)", color: "var(--pf-dark-text)", borderBottom: "1px solid rgba(255,255,255,0.06)", overflow: "hidden", height: 32, display: "flex", alignItems: "center" }}>
       <div style={{ display: "flex", gap: 48, animation: "pf-marquee 38s linear infinite", whiteSpace: "nowrap", paddingLeft: "100%" }}>
         {[...items, ...items, ...items].map((t, i) => (
           <span key={i} style={{ fontFamily: "var(--pf-mono)", fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(231,236,247,0.7)" }}>
@@ -40,7 +40,19 @@ const Navbar = ({ dark = true }) => {
   const C = window.PF_CATALOG;
   const [scrolled, setScrolled] = React.useState(false);
   const [openMenu, setOpenMenu] = React.useState(null); // 'shop' | 'science' | null
+  const [mobileOpen, setMobileOpen] = React.useState(false);
   const closeTimer = React.useRef(null);
+
+  // Close mobile drawer on route change
+  React.useEffect(() => { setMobileOpen(false); }, [app.route.name, app.route.params]);
+  // Lock body scroll when mobile drawer open
+  React.useEffect(() => {
+    if (mobileOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => { document.body.style.overflow = prev; };
+    }
+  }, [mobileOpen]);
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -68,20 +80,20 @@ const Navbar = ({ dark = true }) => {
         color: "#fff",
         transition: "background 220ms ease, border-color 220ms ease",
       }}>
-      <div className="pf-wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 72 }}>
+      <div className="pf-wrap pf-nav-row" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 72 }}>
         <a onClick={() => app.navigate("home")} style={{ cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 12 }}>
           <PFMonogram size={32} bg="var(--pf-blue)" />
           <Wordmark color="#fff" size={15} />
         </a>
-        <nav style={{ display: "flex", gap: 4, alignItems: "center", whiteSpace: "nowrap" }}>
+        <nav className="pf-nav-desktop" style={{ display: "flex", gap: 4, alignItems: "center", whiteSpace: "nowrap" }}>
           <NavTrigger label="Catalog" active={openMenu === "shop"} onEnter={() => open("shop")} onClick={() => app.navigate("products")} />
           <NavTrigger label="Science" active={openMenu === "science"} onEnter={() => open("science")} onClick={() => app.navigate("about")} />
           <NavLink label="Journal" onEnter={scheduleClose} onClick={() => app.navigate("blog")} />
           <NavLink label="Contact" onEnter={scheduleClose} onClick={() => app.navigate("contact")} />
         </nav>
         <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-          <button aria-label="Search" onClick={() => app.setSearchOpen(true)} style={navIconBtn}><Icon.search /></button>
-          <button aria-label="Account" onClick={() => app.navigate(app.mockUser ? "account" : "login")} style={navIconBtn}><Icon.user /></button>
+          <button aria-label="Search" onClick={() => app.setSearchOpen(true)} style={navIconBtn} className="pf-nav-desktop"><Icon.search /></button>
+          <button aria-label="Account" onClick={() => app.navigate(app.mockUser ? "account" : "login")} style={navIconBtn} className="pf-nav-desktop"><Icon.user /></button>
           <button aria-label="Cart" onClick={() => app.setDrawerOpen(true)} style={{ ...navIconBtn, position: "relative" }}>
             <Icon.bag />
             {app.cartCount > 0 && (
@@ -95,13 +107,71 @@ const Navbar = ({ dark = true }) => {
               }}>{app.cartCount}</span>
             )}
           </button>
+          <button aria-label="Menu" onClick={() => setMobileOpen(true)} className="pf-nav-mobile-toggle" style={{ ...navIconBtn, display: "none" }}>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="3" y1="6" x2="17" y2="6" /><line x1="3" y1="10" x2="17" y2="10" /><line x1="3" y1="14" x2="17" y2="14" /></svg>
+          </button>
         </div>
       </div>
 
-      {/* MEGA MENU PANEL */}
+      {/* MEGA MENU PANEL — desktop only */}
       {openMenu === "shop" && <MegaShopPanel onClose={() => setOpenMenu(null)} />}
       {openMenu === "science" && <MegaSciencePanel onClose={() => setOpenMenu(null)} />}
+
+      {/* MOBILE DRAWER */}
+      <MobileNavDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} />
     </header>
+  );
+};
+
+// --------- Mobile drawer ---------
+const MobileNavDrawer = ({ open, onClose }) => {
+  const app = useApp();
+  const [openSection, setOpenSection] = React.useState(null);
+  const cats = [
+    { id: "metabolic", label: "Metabolic" },
+    { id: "longevity", label: "Longevity" },
+    { id: "recovery", label: "Recovery & Repair" },
+    { id: "cognitive", label: "Cognitive" },
+    { id: "growth", label: "Growth & GH" },
+    { id: "skin", label: "Skin & Pigment" },
+    { id: "specialty", label: "Specialty" },
+  ];
+  const go = (route, params) => { app.navigate(route, params); onClose(); };
+  return (
+    <div className={`pf-nav-mobile-drawer${open ? " is-open" : ""}`} aria-hidden={!open}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 20px", borderBottom: "1px solid rgba(255,255,255,0.10)" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
+          <PFMonogram size={28} bg="var(--pf-blue)" />
+          <Wordmark color="#fff" size={14} />
+        </div>
+        <button onClick={onClose} aria-label="Close menu" style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.14)", color: "#fff", width: 36, height: 36, borderRadius: 999, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <window.Icon.close size={16} />
+        </button>
+      </div>
+      <div style={{ flex: 1, overflowY: "auto" }}>
+        <button onClick={() => setOpenSection(openSection === "shop" ? null : "shop")} className="pf-nav-mobile-link">
+          <span>Catalog</span>
+          <span style={{ transform: openSection === "shop" ? "rotate(180deg)" : "none", transition: "transform 200ms" }}><window.Icon.chevDown size={14} /></span>
+        </button>
+        {openSection === "shop" && (
+          <div>
+            <button className="pf-nav-mobile-sublink" onClick={() => go("products")}>All compounds</button>
+            {cats.map(c => (
+              <button key={c.id} className="pf-nav-mobile-sublink" onClick={() => go("products", { category: c.id })}>{c.label}</button>
+            ))}
+          </div>
+        )}
+        <button onClick={() => go("about")} className="pf-nav-mobile-link"><span>Science</span><window.Icon.arrowRight size={16} /></button>
+        <button onClick={() => go("blog")} className="pf-nav-mobile-link"><span>Journal</span><window.Icon.arrowRight size={16} /></button>
+        <button onClick={() => go("contact")} className="pf-nav-mobile-link"><span>Contact</span><window.Icon.arrowRight size={16} /></button>
+        <button onClick={() => { app.setSearchOpen(true); onClose(); }} className="pf-nav-mobile-link"><span>Search</span><window.Icon.search size={16} /></button>
+        <button onClick={() => go(app.mockUser ? "account" : "login")} className="pf-nav-mobile-link"><span>{app.mockUser ? "Account" : "Log in"}</span><window.Icon.user size={16} /></button>
+      </div>
+      <div style={{ padding: 20, borderTop: "1px solid rgba(255,255,255,0.10)" }}>
+        <button onClick={() => go("products")} className="pf-btn pf-btn--primary pf-btn--lg" style={{ width: "100%" }}>Shop the catalog →</button>
+        <div style={{ marginTop: 14, fontSize: 11, color: "rgba(255,255,255,0.5)", textAlign: "center", fontFamily: "var(--pf-mono)", letterSpacing: "0.08em", textTransform: "uppercase" }}>For research use only</div>
+      </div>
+    </div>
   );
 };
 
@@ -316,7 +386,7 @@ const Footer = () => {
     <footer className="pf-starfield" style={{ color: "var(--pf-dark-text)", paddingTop: 80, marginTop: 0 }}>
       <div className="pf-wrap">
         {/* Newsletter band */}
-        <div className="pf-card--dark" style={{ padding: "40px 48px", display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 40, alignItems: "center", marginBottom: 64, borderRadius: 16 }}>
+        <div className="pf-card--dark pf-news-band" style={{ padding: "40px 48px", display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 40, alignItems: "center", marginBottom: 64, borderRadius: 16 }}>
           <div>
             <div className="pf-eyebrow pf-eyebrow--dark" style={{ marginBottom: 12 }}>The lab notebook</div>
             <h3 style={{ fontSize: 32, fontWeight: 600, letterSpacing: "-0.02em", margin: "0 0 8px", color: "#fff" }}>
@@ -337,7 +407,7 @@ const Footer = () => {
           </form>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1.4fr repeat(4, 1fr)", gap: 48, paddingBottom: 64 }}>
+        <div className="pf-footer-cols" style={{ display: "grid", gridTemplateColumns: "1.4fr repeat(4, 1fr)", gap: 48, paddingBottom: 64 }}>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
               <PFMonogram size={32} bg="var(--pf-blue)" />
@@ -367,7 +437,7 @@ const Footer = () => {
           ))}
         </div>
         <div className="pf-rule pf-rule--dark"></div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "24px 0 40px", flexWrap: "wrap", gap: 16 }}>
+        <div className="pf-footer-bottom" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "24px 0 40px", flexWrap: "wrap", gap: 16 }}>
           <div style={{ fontSize: 12, color: "var(--pf-dark-text-2)" }}>
             © 2026 Peptidesfarma · For research purposes only. Not for human consumption.
           </div>
@@ -451,7 +521,7 @@ const SearchModal = () => {
       ).slice(0, 8)
     : window.PF_CATALOG.homepageBestSellers(6);
   return (
-    <div onClick={() => app.setSearchOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 80, background: "rgba(8,18,42,0.5)", backdropFilter: "blur(8px)", display: "flex", alignItems: "flex-start", justifyContent: "center", paddingTop: 100 }}>
+    <div onClick={() => app.setSearchOpen(false)} className="pf-search-modal" style={{ position: "fixed", inset: 0, zIndex: 80, background: "rgba(8,18,42,0.5)", backdropFilter: "blur(8px)", display: "flex", alignItems: "flex-start", justifyContent: "center", paddingTop: 100 }}>
       <div onClick={(e) => e.stopPropagation()} style={{ width: "min(680px, 92vw)", background: "#fff", borderRadius: 16, boxShadow: "var(--pf-shadow-lg)", overflow: "hidden" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "16px 20px", borderBottom: "1px solid var(--pf-line)" }}>
           <Icon.search color="var(--pf-text-3)" />

@@ -20,10 +20,10 @@ const CartPage = () => {
       <div className="pf-wrap">
         <div className="pf-eyebrow" style={{ marginBottom: 12 }}>Your order</div>
         <h1 style={{ fontSize: 48, fontWeight: 600, letterSpacing: "-0.025em", margin: "0 0 40px" }}>Cart ({app.cartCount})</h1>
-        <div style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 40 }}>
+        <div className="pf-cart-grid" style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 40 }}>
           <div className="pf-card" style={{ padding: 0, overflow: "hidden" }}>
             {app.cartLineDetails.map((line, i) => (
-              <div key={line.handle + line.variantSize} style={{ display: "grid", gridTemplateColumns: "100px 1fr auto", gap: 20, padding: 24, borderBottom: i < app.cartLineDetails.length - 1 ? "1px solid var(--pf-line)" : "none", alignItems: "center" }}>
+              <div key={line.handle + line.variantSize} className="pf-cart-line" style={{ display: "grid", gridTemplateColumns: "100px 1fr auto", gap: 20, padding: 24, borderBottom: i < app.cartLineDetails.length - 1 ? "1px solid var(--pf-line)" : "none", alignItems: "center" }}>
                 <div style={{ width: 100, height: 120, background: "var(--pf-ink)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <window.Vial name={line.product.title} dose={line.variantSize} size="sm" bg="none" />
                 </div>
@@ -32,7 +32,7 @@ const CartPage = () => {
                   <div style={{ fontSize: 13, color: "var(--pf-text-3)", marginBottom: 8 }}>{line.product.subtitle}</div>
                   <span className="pf-chip pf-chip--light">{line.variantSize}</span>
                 </div>
-                <div style={{ textAlign: "right" }}>
+                <div className="pf-cart-line-price" style={{ textAlign: "right" }}>
                   <div className="pf-mono" style={{ fontWeight: 600, fontSize: 16, marginBottom: 8 }}>{C.formatPrice(line.lineTotalCents)}</div>
                   <window.QtyStepper value={line.qty} onChange={(q) => app.updateQty(line.handle, line.variantSize, q)} />
                   <div style={{ marginTop: 8 }}>
@@ -42,7 +42,7 @@ const CartPage = () => {
               </div>
             ))}
           </div>
-          <aside style={{ position: "sticky", top: 84, alignSelf: "start" }}>
+          <aside className="pf-cart-summary" style={{ position: "sticky", top: 84, alignSelf: "start" }}>
             <div className="pf-card" style={{ padding: 24 }}>
               <h3 style={{ margin: "0 0 16px", fontSize: 18, fontWeight: 600 }}>Order summary</h3>
               <SummaryRow label="Subtotal" value={C.formatPrice(app.subtotalCents)} />
@@ -107,14 +107,14 @@ const CheckoutPage = () => {
           <h1 style={{ fontSize: 32, fontWeight: 600, margin: 0 }}>Checkout</h1>
           {!app.mockUser && <button onClick={() => app.navigate("login")} className="pf-btn pf-btn--ghost pf-btn--sm">Already have an account? Log in</button>}
         </div>
-        <div style={{ display: "flex", gap: 4, marginBottom: 32 }}>
+        <div className="pf-step-row pf-checkout-step-row" style={{ display: "flex", gap: 4, marginBottom: 32 }}>
           {["Address", "Shipping", "Payment", "Review"].map((s, i) => (
             <div key={s} style={{ flex: 1, padding: "12px 16px", background: i + 1 <= step ? "var(--pf-ink)" : "#fff", color: i + 1 <= step ? "#fff" : "var(--pf-text-3)", borderRadius: 8, border: "1px solid var(--pf-line)", display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 600 }}>
               <span className="pf-mono" style={{ opacity: 0.7 }}>0{i + 1}</span> {s}
             </div>
           ))}
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 32 }}>
+        <div className="pf-checkout-grid" style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 32 }}>
           <div className="pf-card" style={{ padding: 28 }}>
             {step === 1 && (
               <>
@@ -122,7 +122,7 @@ const CheckoutPage = () => {
                 <Field label="Email" value={addr.email} onChange={(v) => setAddr({ ...addr, email: v })} placeholder="researcher@lab.org" />
                 <Field label="Full name" value={addr.name} onChange={(v) => setAddr({ ...addr, name: v })} />
                 <Field label="Street address" value={addr.street} onChange={(v) => setAddr({ ...addr, street: v })} placeholder="Powered by Google Places" />
-                <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: 12 }}>
+                <div className="pf-checkout-form-row pf-citystate" style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: 12 }}>
                   <Field label="City" value={addr.city} onChange={(v) => setAddr({ ...addr, city: v })} />
                   <Field label="State" value={addr.state} onChange={(v) => setAddr({ ...addr, state: v })} />
                   <Field label="ZIP" value={addr.zip} onChange={(v) => setAddr({ ...addr, zip: v })} />
@@ -156,7 +156,7 @@ const CheckoutPage = () => {
             {step === 3 && (
               <>
                 <h3 style={{ margin: "0 0 20px", fontSize: 18 }}>Payment</h3>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginBottom: 20 }}>
+                <div className="pf-pay-methods" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginBottom: 20 }}>
                   {["card", "apple", "google", "venmo"].map(m => (
                     <button key={m} onClick={() => setPay(m)} style={{ padding: 14, border: `1px solid ${pay === m ? "var(--pf-ink)" : "var(--pf-line)"}`, borderRadius: 10, background: pay === m ? "var(--pf-ink)" : "#fff", color: pay === m ? "#fff" : "var(--pf-text)", cursor: "pointer", fontWeight: 600, fontSize: 13, textTransform: "capitalize" }}>{m === "apple" ? "Apple Pay" : m === "google" ? "Google Pay" : m}</button>
                   ))}
@@ -164,7 +164,7 @@ const CheckoutPage = () => {
                 {pay === "card" && (
                   <div>
                     <Field label="Card number" placeholder="0000 0000 0000 0000" />
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                    <div className="pf-checkout-form-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                       <Field label="Expiry" placeholder="MM/YY" />
                       <Field label="CVC" placeholder="123" />
                     </div>
@@ -193,7 +193,7 @@ const CheckoutPage = () => {
               </>
             )}
           </div>
-          <aside style={{ position: "sticky", top: 84, alignSelf: "start" }}>
+          <aside className="pf-checkout-summary" style={{ position: "sticky", top: 84, alignSelf: "start" }}>
             <div className="pf-card" style={{ padding: 24 }}>
               <h3 style={{ margin: "0 0 16px", fontSize: 16 }}>Summary</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: 12, paddingBottom: 16, borderBottom: "1px solid var(--pf-line)" }}>
@@ -274,7 +274,7 @@ const AccountPage = () => {
   ];
   return (
     <section className="pf-section">
-      <div className="pf-wrap" style={{ display: "grid", gridTemplateColumns: "240px 1fr", gap: 40 }}>
+      <div className="pf-wrap pf-account-grid" style={{ display: "grid", gridTemplateColumns: "240px 1fr", gap: 40 }}>
         <aside>
           <div className="pf-eyebrow" style={{ marginBottom: 12 }}>Account</div>
           <div style={{ fontWeight: 600, fontSize: 18, marginBottom: 4 }}>{app.mockUser.name}</div>
@@ -289,7 +289,7 @@ const AccountPage = () => {
           <h1 style={{ fontSize: 36, fontWeight: 600, letterSpacing: "-0.02em", margin: "0 0 24px" }}>Orders</h1>
           <div className="pf-card">
             {orders.map((o, i) => (
-              <div key={o.id} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr auto", padding: 20, gap: 16, alignItems: "center", borderBottom: i < orders.length - 1 ? "1px solid var(--pf-line)" : "none" }}>
+              <div key={o.id} className="pf-order-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr auto", padding: 20, gap: 16, alignItems: "center", borderBottom: i < orders.length - 1 ? "1px solid var(--pf-line)" : "none" }}>
                 <div>
                   <div style={{ fontWeight: 600 }}>{o.id}</div>
                   <div style={{ fontSize: 12, color: "var(--pf-text-3)" }}>{o.date}</div>
@@ -421,7 +421,7 @@ const AboutPage = () => <SimplePage title="About Peptidesfarma" body={
 } />;
 const ContactPage = () => <SimplePage title="Contact the lab" body={<>
   <p>For questions about lots, COAs, shipping or technical handling, the team is available Monday through Friday.</p>
-  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 24 }}>
+  <div className="pf-checkout-form-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 24 }}>
     <Field label="First name" />
     <Field label="Last name" />
     <Field label="Email" />
