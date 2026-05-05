@@ -1,1 +1,14 @@
-.vercel
+node_modules/
+.next/
+.medusa/
+.vercel/
+.env
+.env.local
+.env.*.local
+*.log
+.DS_Store
+dist/
+build/
+.yarn/cache
+.yarn/install-state.gz
+static-reference/

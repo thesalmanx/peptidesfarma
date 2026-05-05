@@ -1,0 +1,129 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: medusa
+      POSTGRES_PASSWORD: medusa_password
+      POSTGRES_DB: peptidesfarma
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medusa -d peptidesfarma"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  medusa-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "9000:9000"
+    environment:
+      DATABASE_URL: postgres://medusa:medusa_password@postgres:5432/peptidesfarma
+      REDIS_URL: redis://redis:6379
+      MEDUSA_WORKER_MODE: server
+      MEDUSA_BACKEND_URL: ${MEDUSA_BACKEND_URL:-http://localhost:9000}
+      JWT_SECRET: ${JWT_SECRET:-supersecret}
+      COOKIE_SECRET: ${COOKIE_SECRET:-supersecret}
+      STORE_CORS: ${STORE_CORS:-http://localhost:8000,https://peptidesfarma.com,https://www.peptidesfarma.com}
+      ADMIN_CORS: ${ADMIN_CORS:-http://localhost:9000,https://admin.peptidesfarma.com}
+      AUTH_CORS: ${AUTH_CORS:-http://localhost:8000,http://localhost:9000,https://peptidesfarma.com,https://www.peptidesfarma.com,https://admin.peptidesfarma.com}
+      STOREFRONT_URL: ${STOREFRONT_URL:-https://www.peptidesfarma.com}
+      # Email
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL:-contact@peptidesfarma.com}
+      RESEND_ORDER_FROM_EMAIL: ${RESEND_ORDER_FROM_EMAIL:-support@peptidesfarma.com}
+      # Shipping
+      SHIPPO_API_KEY: ${SHIPPO_API_KEY:-}
+      SHIPPO_FROM_NAME: ${SHIPPO_FROM_NAME:-Peptidesfarma}
+      SHIPPO_FROM_STREET: ${SHIPPO_FROM_STREET:-123 Commerce St}
+      SHIPPO_FROM_CITY: ${SHIPPO_FROM_CITY:-San Francisco}
+      SHIPPO_FROM_STATE: ${SHIPPO_FROM_STATE:-CA}
+      SHIPPO_FROM_ZIP: ${SHIPPO_FROM_ZIP:-94105}
+      SHIPPO_FROM_COUNTRY: ${SHIPPO_FROM_COUNTRY:-US}
+      SHIPPO_FROM_EMAIL: ${SHIPPO_FROM_EMAIL:-orders@peptidesfarma.com}
+      # Payment
+      PAYPAL_CLIENT_ID: ${PAYPAL_CLIENT_ID:-}
+      PAYPAL_SECRET: ${PAYPAL_SECRET:-}
+      # Webhook
+      MEDUSA_WEBHOOK_SECRET: ${MEDUSA_WEBHOOK_SECRET:-}
+      # Klaviyo
+      KLAVIYO_PRIVATE_KEY: ${KLAVIYO_PRIVATE_KEY:-}
+      # Auth providers
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL:-}
+      APPLE_CLIENT_ID: ${APPLE_CLIENT_ID:-}
+      APPLE_TEAM_ID: ${APPLE_TEAM_ID:-}
+      APPLE_KEY_ID: ${APPLE_KEY_ID:-}
+      APPLE_PRIVATE_KEY: ${APPLE_PRIVATE_KEY:-}
+      APPLE_CALLBACK_URL: ${APPLE_CALLBACK_URL:-}
+      # File storage (S3/Spaces)
+      SPACES_BUCKET: ${SPACES_BUCKET:-}
+      SPACES_REGION: ${SPACES_REGION:-}
+      SPACES_ENDPOINT: ${SPACES_ENDPOINT:-}
+      SPACES_ACCESS_KEY_ID: ${SPACES_ACCESS_KEY_ID:-}
+      SPACES_SECRET_ACCESS_KEY: ${SPACES_SECRET_ACCESS_KEY:-}
+      SPACES_FILE_URL: ${SPACES_FILE_URL:-}
+      # Quiklie
+      QUIKLIE_MERCHANT_ID: ${QUIKLIE_MERCHANT_ID:-}
+      QUIKLIE_API_KEY: ${QUIKLIE_API_KEY:-}
+
+  medusa-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://medusa:medusa_password@postgres:5432/peptidesfarma
+      REDIS_URL: redis://redis:6379
+      MEDUSA_WORKER_MODE: worker
+      MEDUSA_BACKEND_URL: ${MEDUSA_BACKEND_URL:-http://localhost:9000}
+      JWT_SECRET: ${JWT_SECRET:-supersecret}
+      COOKIE_SECRET: ${COOKIE_SECRET:-supersecret}
+      STORE_CORS: ${STORE_CORS:-http://localhost:8000}
+      ADMIN_CORS: ${ADMIN_CORS:-http://localhost:9000}
+      AUTH_CORS: ${AUTH_CORS:-http://localhost:8000,http://localhost:9000}
+      STOREFRONT_URL: ${STOREFRONT_URL:-https://www.peptidesfarma.com}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL:-contact@peptidesfarma.com}
+      RESEND_ORDER_FROM_EMAIL: ${RESEND_ORDER_FROM_EMAIL:-support@peptidesfarma.com}
+      SHIPPO_API_KEY: ${SHIPPO_API_KEY:-}
+      PAYPAL_CLIENT_ID: ${PAYPAL_CLIENT_ID:-}
+      PAYPAL_SECRET: ${PAYPAL_SECRET:-}
+      MEDUSA_WEBHOOK_SECRET: ${MEDUSA_WEBHOOK_SECRET:-}
+      KLAVIYO_PRIVATE_KEY: ${KLAVIYO_PRIVATE_KEY:-}
+
+volumes:
+  pgdata:
+  redisdata:

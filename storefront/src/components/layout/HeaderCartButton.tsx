@@ -1,0 +1,25 @@
+"use client"
+
+import { useCart } from "@/lib/cart-context"
+
+export default function HeaderCartButton() {
+  const { openDrawer, itemCount } = useCart()
+
+  return (
+    <button
+      aria-label="Cart"
+      onClick={openDrawer}
+      className="hover:opacity-80 transition-opacity relative"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M3.32352 13.0113C3.6739 10.009 4.18586 7.75784 4.66063 6.15851C5.04994 4.84711 5.24459 4.19141 6.04283 3.5957C6.84107 3 7.65697 3 9.28876 3H14.7113C16.3431 3 17.159 3 17.9572 3.5957C18.7554 4.19141 18.9501 4.84711 19.3394 6.15851C19.8142 7.75784 20.3261 10.009 20.6765 13.0113C21.0895 16.5497 21.2959 18.3189 20.1027 19.6594C18.9095 21 16.9758 21 13.1084 21H10.8916C7.02422 21 5.09052 21 3.89731 19.6594C2.70411 18.3189 2.91058 16.5497 3.32352 13.0113Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M9 7C9 8.65685 10.3431 10 12 10C13.6569 10 15 8.65685 15 7" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+      {itemCount > 0 && (
+        <span className="absolute -top-2 -right-2 bg-white text-[#2E7089] text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+          {itemCount > 99 ? "99+" : itemCount}
+        </span>
+      )}
+    </button>
+  )
+}

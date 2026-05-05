@@ -1,0 +1,20 @@
+{
+  "redirects": [
+    {
+      "source": "/product/:handle",
+      "destination": "/product-page/:handle",
+      "permanent": true
+    },
+    {
+      "source": "/product",
+      "destination": "/products",
+      "permanent": true
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/stripe/renew",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}

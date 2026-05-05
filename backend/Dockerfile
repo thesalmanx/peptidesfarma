@@ -1,0 +1,19 @@
+FROM node:20-bookworm
+
+WORKDIR /app
+
+COPY . .
+
+RUN printf 'DATABASE_URL=postgres://x:x@localhost:5432/x\nREDIS_URL=redis://localhost:6379\nJWT_SECRET=buildonly\nCOOKIE_SECRET=buildonly\nSTORE_CORS=http://localhost\nADMIN_CORS=http://localhost\nAUTH_CORS=http://localhost\nMEDUSA_BACKEND_URL=https://admin.peptidesfarma.com\n' > .env
+
+RUN npm install --legacy-peer-deps
+# Install linux-specific native binaries (npm only installs host platform)
+RUN npm install @swc/core-linux-x64-gnu@1.15.21 @rollup/rollup-linux-x64-gnu@4.60.1 --save-optional --legacy-peer-deps
+RUN NODE_ENV=development npx medusa build
+RUN rm -f .env
+
+RUN cd /app/.medusa/server && npm install --legacy-peer-deps
+RUN ln -sf /app/.medusa/server/medusa-config.js /app/medusa-config.js
+
+WORKDIR /app/.medusa/server
+CMD ["sh", "-c", "env > /app/.medusa/server/.env && npm start"]
