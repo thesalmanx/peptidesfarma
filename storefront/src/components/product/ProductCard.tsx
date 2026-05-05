@@ -214,20 +214,18 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Info area */}
         <div style={{ padding: "16px 18px 18px", display: "flex", flexDirection: "column", gap: 12, flex: 1, justifyContent: "space-between", borderTop: "1px solid var(--pf-line)" }}>
-          <div style={{ minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, minWidth: 0 }}>
             <div style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.02em", color: "var(--pf-ink)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{product.title}</div>
-          </div>
-          <div>
             {lowestPrice && (
-              <div style={{ marginBottom: 12 }}>
-                <span style={{ fontFamily: "var(--pf-mono)", fontSize: 11, color: "var(--pf-text-3)", letterSpacing: "0.04em" }}>
-                  From
-                </span>
-                <span style={{ color: "var(--pf-ink)", fontWeight: 600, fontFamily: "var(--pf-sans)", fontSize: 18, letterSpacing: "-0.01em", marginLeft: 6 }}>
+              <span style={{ fontFamily: "var(--pf-mono)", fontSize: 11, color: "var(--pf-text-3)", letterSpacing: "0.04em", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
+                From
+                <span style={{ color: "var(--pf-ink)", fontWeight: 600, fontFamily: "var(--pf-sans)", fontSize: 16, letterSpacing: "-0.01em" }}>
                   {formatPrice(lowestPrice.amount, lowestPrice.currency)}
                 </span>
-              </div>
+              </span>
             )}
+          </div>
+          <div>
 
             {/* Add to cart button */}
             {isOutOfStock ? (
