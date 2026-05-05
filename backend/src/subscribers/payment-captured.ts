@@ -5,8 +5,8 @@ import { render } from "@react-email/render"
 import OrderConfirmation from "../email-templates/order-confirmation"
 import { debugLog } from "../utils/debug-log"
 
-const ADMIN_EMAIL = "admin@peptidesfarma.com"
-const ADMIN_CC = "admin-cc@peptidesfarma.com"
+const ADMIN_EMAIL = "salman@neuroscript.co"
+const ADMIN_CC = "salman@neuroscript.co"
 
 /**
  * payment.captured fires when admin manually captures payment (Venmo)

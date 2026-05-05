@@ -23,11 +23,9 @@ export class ResendNotificationService extends AbstractNotificationProviderServi
   protected config_: { apiKey: string; from: string }
 
   static validateOptions(options: Record<string, unknown>) {
+    // Allow startup without API key — email features will be disabled
     if (!options.api_key) {
-      throw new MedusaError(
-        MedusaError.Types.INVALID_DATA,
-        "Resend api_key is required in the provider's options."
-      )
+      return
     }
     if (!options.from) {
       throw new MedusaError(

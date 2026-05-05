@@ -10,9 +10,10 @@ import {
   createApiKeysWorkflow,
   updateStoresWorkflow,
 } from "@medusajs/medusa/core-flows"
-import { ExecArgs, ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import type { MedusaContainer } from "@medusajs/framework/types"
 
-export default async function seedPeptidesfarma({ container }: ExecArgs) {
+export default async function seedPeptidesfarma({ container }: { container: MedusaContainer }) {
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
   const link = container.resolve(ContainerRegistrationKeys.LINK)
   const query = container.resolve("query")
@@ -334,11 +335,12 @@ export default async function seedPeptidesfarma({ container }: ExecArgs) {
 
   for (const product of productResult) {
     for (const variant of product.variants || []) {
-      if (!variant.inventory_items?.length) continue
+      const variantAny = variant as any
+      if (!variantAny.inventory_items?.length) continue
       const sku = variant.sku || ""
       const qty = inventoryQuantities[sku] || 10
 
-      for (const invItem of variant.inventory_items) {
+      for (const invItem of variantAny.inventory_items) {
         inventoryLevels.push({
           location_id: stockLocation.id,
           inventory_item_id: invItem.inventory_item_id,

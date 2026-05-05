@@ -9,7 +9,7 @@ RUN printf 'DATABASE_URL=postgres://x:x@localhost:5432/x\nREDIS_URL=redis://loca
 RUN npm install --legacy-peer-deps
 # Install linux-specific native binaries (npm only installs host platform)
 RUN npm install @swc/core-linux-x64-gnu@1.15.21 @rollup/rollup-linux-x64-gnu@4.60.1 --save-optional --legacy-peer-deps
-RUN NODE_ENV=development npx medusa build
+RUN NODE_OPTIONS="--max-old-space-size=2048" NODE_ENV=development npx medusa build
 RUN rm -f .env
 
 RUN cd /app/.medusa/server && npm install --legacy-peer-deps

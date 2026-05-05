@@ -4,7 +4,7 @@ import { debugLog } from "../../../utils/debug-log"
 
 /**
  * POST /hooks/payment-log
- * Receives log entries from vulaskin frontend for tracking payment flow.
+ * Receives log entries from summerteez frontend for tracking payment flow.
  * No auth required — logs are informational only.
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {

@@ -6,7 +6,7 @@ import { debugLog } from "../../../utils/debug-log"
 /**
  * POST /hooks/paypal-capture
  * Captures an approved PayPal order. Checks for DECLINED captures.
- * Called from vulaskin.com frontend after customer approves payment.
+ * Called from summerteez.com frontend after customer approves payment.
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   // CORS

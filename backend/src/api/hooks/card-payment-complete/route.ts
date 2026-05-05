@@ -35,7 +35,7 @@ async function autoRefundOrphanCapture(
 }
 
 /**
- * Called by vulaskin.com AFTER PayPal payment succeeds.
+ * Called by summerteez.com AFTER PayPal payment succeeds.
  * Completes the Medusa cart (creates order) and captures payment.
  *
  * POST /hooks/card-payment-complete
@@ -48,7 +48,7 @@ async function autoRefundOrphanCapture(
  * }
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  // CORS for direct browser calls from vulaskin
+  // CORS for direct browser calls from summerteez
   res.setHeader("Access-Control-Allow-Origin", "*")
   res.setHeader("Access-Control-Allow-Headers", "content-type")
 
@@ -59,7 +59,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   // Auth — allow if secret matches OR if request has a valid origin (browser direct call)
   const expectedSecret = process.env.MEDUSA_WEBHOOK_SECRET
   const origin = (req.headers as any)?.origin || ""
-  const isBrowserCall = origin.includes("vulaskin") || origin.includes("peptidesfarma") || origin.includes("localhost")
+  const isBrowserCall = origin.includes("summerteez") || origin.includes("peptidesfarma") || origin.includes("localhost")
   if (!isBrowserCall && (!secret || secret !== expectedSecret)) {
     return res.status(401).json({ error: "Unauthorized" })
   }

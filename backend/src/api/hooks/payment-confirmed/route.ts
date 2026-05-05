@@ -2,7 +2,7 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys, Modules } from "@medusajs/framework/utils"
 
 /**
- * Called by the external payment domain (vulaskin.com) after PayPal
+ * Called by the external payment domain (summerteez.com) after PayPal
  * payment succeeds. Captures the order payment in Medusa so the
  * payment-captured subscriber fires (sends email + syncs to Shippo).
  *

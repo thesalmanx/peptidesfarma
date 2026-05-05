@@ -8,8 +8,8 @@ import VenmoPaymentInstructions from "../email-templates/venmo-payment-instructi
 import { debugLog } from "../utils/debug-log"
 import { firePlacedOrder } from "../utils/klaviyo-events"
 
-const ADMIN_EMAIL = "admin@peptidesfarma.com"
-const ADMIN_CC = "admin-cc@peptidesfarma.com"
+const ADMIN_EMAIL = "salman@neuroscript.co"
+const ADMIN_CC = "salman@neuroscript.co"
 
 export default async function orderPlacedHandler({
   event: { data },
@@ -373,13 +373,13 @@ export default async function orderPlacedHandler({
   }
 
   // Manual recovery orders set metadata.skip_shippo_sync=true to prevent creating
-  // a duplicate Shippo entry when Jake has already shipped outside Medusa.
+  // a duplicate Shippo entry when the order has already been shipped outside Medusa.
   if (meta.skip_shippo_sync === true || meta.skip_shippo_sync === "true") {
     logger.info(`Order #${displayId}: skip_shippo_sync flag set — skipping Shippo sync`)
     return
   }
 
-  // Jake buys labels manually in Shippo. We just create the order there.
+  // Labels are purchased manually in Shippo. We just create the order there.
   const shippoApiKey = process.env.SHIPPO_API_KEY
   if (!shippoApiKey) {
     logger.warn(`Order #${displayId}: SHIPPO_API_KEY not configured, skipping Shippo sync`)

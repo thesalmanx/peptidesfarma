@@ -36,12 +36,7 @@ export class ShippoFulfillmentService extends AbstractFulfillmentProviderService
   protected options_: ShippoOptions
 
   static validateOptions(options: Record<string, unknown>) {
-    if (!options.api_key) {
-      throw new MedusaError(
-        MedusaError.Types.INVALID_DATA,
-        "Shippo api_key is required in the provider's options."
-      )
-    }
+    // Allow startup without API key — features will be disabled
   }
 
   constructor({ logger }: InjectedDependencies, options: ShippoOptions) {

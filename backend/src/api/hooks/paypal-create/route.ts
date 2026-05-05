@@ -6,7 +6,7 @@ import { debugLog } from "../../../utils/debug-log"
 /**
  * POST /hooks/paypal-create
  * Creates a PayPal order for Google Pay / Apple Pay flows.
- * Called from vulaskin.com frontend.
+ * Called from summerteez.com frontend.
  */
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   // CORS
