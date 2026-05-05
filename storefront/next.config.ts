@@ -66,6 +66,18 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "api.qrserver.com",
       },
+      {
+        protocol: "https",
+        hostname: "www.peptidesfarma.com",
+      },
+      {
+        protocol: "https",
+        hostname: "peptidesfarma.com",
+      },
+      {
+        protocol: "https",
+        hostname: "admin.peptidesfarma.com",
+      },
     ],
   },
 };

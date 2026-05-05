@@ -1,79 +1,276 @@
+"use client"
+
 import Link from "next/link"
-import dynamic from "next/dynamic"
+import { useState, useEffect, useRef } from "react"
 import HeaderCartButton from "./HeaderCartButton"
 import HeaderAccountButton from "./HeaderAccountButton"
 import SearchButton from "@/components/search/SearchButton"
 
-const MobileMenu = dynamic(() => import("@/components/layout/MobileMenu"))
-
-interface NavLink {
-  label: string
-  url: string
+/* ─── Announcement Bar ─── */
+function AnnouncementBar() {
+  const items = [
+    "Free shipping on lab orders over $200",
+    "Take 10% off — code RESEARCH10",
+    "COA included with every vial",
+    "Same-day processing before 2pm CT",
+  ]
+  return (
+    <div
+      className="pf-announcement-bar"
+      style={{
+        background: "var(--pf-ink-3)",
+        color: "var(--pf-dark-text)",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
+        overflow: "hidden",
+        height: 32,
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          gap: 48,
+          animation: "pf-marquee 38s linear infinite",
+          whiteSpace: "nowrap",
+          paddingLeft: "100%",
+        }}
+      >
+        {[...items, ...items, ...items].map((t, i) => (
+          <span
+            key={i}
+            style={{
+              fontFamily: "var(--pf-mono)",
+              fontSize: 11,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "rgba(231,236,247,0.7)",
+            }}
+          >
+            <span style={{ color: "var(--pf-blue-soft)", marginRight: 8 }}>&#9670;</span>
+            {t}
+          </span>
+        ))}
+      </div>
+    </div>
+  )
 }
 
-const defaultNavLinks: NavLink[] = [
-  { label: "Home", url: "/" },
-  { label: "Products", url: "/products" },
-  { label: "About", url: "/about" },
-  { label: "Contact", url: "/contact" },
-]
+/* ─── PF Monogram ─── */
+function PFMonogram({ size = 32, bg = "var(--pf-blue)" }: { size?: number; bg?: string }) {
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: size,
+        height: size,
+        borderRadius: 8,
+        background: bg,
+        color: "#fff",
+        fontFamily: "var(--pf-display)",
+        fontWeight: 600,
+        fontSize: size * 0.42,
+        letterSpacing: "-0.02em",
+      }}
+    >
+      pf
+    </span>
+  )
+}
+
+/* ─── Wordmark ─── */
+function Wordmark({ color = "#fff", size = 15 }: { color?: string; size?: number }) {
+  return (
+    <span
+      style={{
+        fontFamily: "var(--pf-display)",
+        fontWeight: 600,
+        fontSize: size,
+        letterSpacing: "-0.02em",
+        color,
+        display: "inline-flex",
+        alignItems: "baseline",
+      }}
+    >
+      peptides<span style={{ color: "var(--pf-blue-soft)" }}>farma</span>
+    </span>
+  )
+}
+
+/* ─── Mobile Drawer ─── */
+function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+  useEffect(() => {
+    if (open) {
+      const prev = document.body.style.overflow
+      document.body.style.overflow = "hidden"
+      return () => { document.body.style.overflow = prev }
+    }
+  }, [open])
+
+  return (
+    <div className={`pf-nav-mobile-drawer${open ? " is-open" : ""}`} aria-hidden={!open}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 20px", borderBottom: "1px solid rgba(255,255,255,0.10)" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
+          <PFMonogram size={28} bg="var(--pf-blue)" />
+          <Wordmark color="#fff" size={14} />
+        </div>
+        <button
+          onClick={onClose}
+          aria-label="Close menu"
+          style={{
+            background: "rgba(255,255,255,0.08)",
+            border: "1px solid rgba(255,255,255,0.14)",
+            color: "#fff",
+            width: 36,
+            height: 36,
+            borderRadius: 999,
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m6 6 12 12" /><path d="m18 6-12 12" />
+          </svg>
+        </button>
+      </div>
+      <div style={{ flex: 1, overflowY: "auto" }}>
+        <Link href="/products" onClick={onClose} className="pf-nav-mobile-link">
+          <span>Catalog</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+        </Link>
+        <Link href="/about" onClick={onClose} className="pf-nav-mobile-link">
+          <span>Science</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+        </Link>
+        <Link href="/contact" onClick={onClose} className="pf-nav-mobile-link">
+          <span>Contact</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+        </Link>
+      </div>
+      <div style={{ padding: 20, borderTop: "1px solid rgba(255,255,255,0.10)" }}>
+        <Link href="/products" onClick={onClose} className="pf-btn pf-btn--primary pf-btn--lg" style={{ width: "100%" }}>
+          Shop the catalog &rarr;
+        </Link>
+        <div style={{ marginTop: 14, fontSize: 11, color: "rgba(255,255,255,0.5)", textAlign: "center", fontFamily: "var(--pf-mono)", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+          For research use only
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const navIconBtn: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  width: 40,
+  height: 40,
+  borderRadius: 999,
+  background: "transparent",
+  border: "none",
+  color: "#fff",
+  cursor: "pointer",
+}
 
 export default function Header() {
-  const navLinks = defaultNavLinks
-  const announcementText = 'Use coupon code "FARMA10" and get 10% off.'
+  const [scrolled, setScrolled] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
   return (
     <>
-      <div
-        className="overflow-hidden flex items-center"
-        style={{ background: "#0A1430", height: "40px" }}
-      >
-        <div className="animate-marquee whitespace-nowrap flex items-center">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <span
-              key={i}
-              className="text-white"
-              style={{ fontSize: "14px", fontWeight: 400, lineHeight: "24px", letterSpacing: "0.02em", paddingRight: "96px" }}
-            >
-              {announcementText}
-            </span>
-          ))}
-        </div>
-      </div>
-
+      <AnnouncementBar />
       <header
-        className="relative h-16 md:h-[88px]"
-        style={{ background: "linear-gradient(135deg, #14213D 0%, #1B2A55 50%, #2A4A8C 100%)" }}
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 40,
+          background: scrolled ? "rgba(8,18,42,0.92)" : "rgba(8,18,42,0.62)",
+          backdropFilter: "saturate(160%) blur(18px)",
+          WebkitBackdropFilter: "saturate(160%) blur(18px)",
+          borderBottom: scrolled ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(255,255,255,0.04)",
+          color: "#fff",
+          transition: "background 220ms ease, border-color 220ms ease",
+        }}
       >
-        <div className="h-full flex items-center justify-between mx-auto px-5 md:px-20" style={{ maxWidth: "1440px" }}>
-          <Link href="/" className="shrink-0">
-            <span className="text-white font-bold text-xl md:text-2xl tracking-tight">Peptidesfarma</span>
+        <div
+          className="pf-wrap pf-nav-row"
+          style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 72 }}
+        >
+          {/* Logo */}
+          <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 12 }}>
+            <PFMonogram size={32} bg="var(--pf-blue)" />
+            <Wordmark color="#fff" size={15} />
           </Link>
 
-          <nav aria-label="Main navigation" className="hidden md:flex items-center" style={{ gap: "32px" }}>
-            {navLinks.map((link, i) => (
-              <Link key={i} href={link.url || "#"} className="text-white hover:opacity-80 transition-opacity" style={{ fontSize: "16px", fontWeight: 500, lineHeight: "24px", letterSpacing: "0.02em" }}>
-                {link.label}
-              </Link>
-            ))}
+          {/* Desktop Nav */}
+          <nav className="pf-nav-desktop" style={{ display: "flex", gap: 4, alignItems: "center", whiteSpace: "nowrap" }}>
+            <NavLink label="Catalog" href="/products" />
+            <NavLink label="Science" href="/about" />
+            <NavLink label="Contact" href="/contact" />
           </nav>
 
-          <div className="hidden md:flex items-center" style={{ gap: "20px" }}>
-            <SearchButton />
-            <Link href="/account/wishlist" aria-label="Wishlist" className="hover:opacity-80 transition-opacity">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
-            </Link>
+          {/* Right icons */}
+          <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            <span className="pf-nav-desktop">
+              <SearchButton />
+            </span>
+            <span className="pf-nav-desktop">
+              <HeaderAccountButton />
+            </span>
             <HeaderCartButton />
-            <HeaderAccountButton />
-          </div>
-
-          <div className="flex md:hidden items-center" style={{ gap: "16px" }}>
-            <SearchButton />
-            <HeaderCartButton />
-            <MobileMenu navLinks={navLinks} />
+            <button
+              aria-label="Menu"
+              onClick={() => setMobileOpen(true)}
+              className="pf-nav-mobile-toggle"
+              style={{ ...navIconBtn, display: "none" }}
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <line x1="3" y1="6" x2="17" y2="6" />
+                <line x1="3" y1="10" x2="17" y2="10" />
+                <line x1="3" y1="14" x2="17" y2="14" />
+              </svg>
+            </button>
           </div>
         </div>
+
+        <MobileNavDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} />
       </header>
     </>
+  )
+}
+
+function NavLink({ label, href }: { label: string; href: string }) {
+  return (
+    <Link
+      href={href}
+      style={{
+        height: 40,
+        padding: "0 14px",
+        background: "transparent",
+        border: "none",
+        color: "#fff",
+        fontSize: 14,
+        fontWeight: 500,
+        fontFamily: "inherit",
+        borderRadius: 999,
+        display: "inline-flex",
+        alignItems: "center",
+        transition: "background 160ms",
+      }}
+      onMouseOver={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)")}
+      onMouseOut={(e) => ((e.currentTarget as HTMLElement).style.background = "transparent")}
+    >
+      {label}
+    </Link>
   )
 }

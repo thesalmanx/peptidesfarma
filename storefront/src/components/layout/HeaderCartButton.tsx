@@ -16,7 +16,20 @@ export default function HeaderCartButton() {
         <path d="M9 7C9 8.65685 10.3431 10 12 10C13.6569 10 15 8.65685 15 7" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
       {itemCount > 0 && (
-        <span className="absolute -top-2 -right-2 bg-white text-[#2E7089] text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+        <span
+          className="absolute -top-1 -right-1 flex items-center justify-center"
+          style={{
+            minWidth: 18,
+            height: 18,
+            padding: "0 5px",
+            background: "var(--pf-blue)",
+            color: "#fff",
+            borderRadius: 999,
+            fontSize: 10,
+            fontWeight: 700,
+            fontVariantNumeric: "tabular-nums",
+          }}
+        >
           {itemCount > 99 ? "99+" : itemCount}
         </span>
       )}

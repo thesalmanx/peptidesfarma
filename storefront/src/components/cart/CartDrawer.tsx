@@ -20,57 +20,21 @@ function FreeShippingBar({ subtotal }: { subtotal: number }) {
   const dollars = subtotal
   const reachedStandard = dollars >= FREE_STANDARD_THRESHOLD
   const reached2Day = dollars >= FREE_2DAY_THRESHOLD
-
-  let message: React.ReactNode
-  let progressPercent: number
-
-  if (reached2Day) {
-    message = (
-      <span className="text-[14px] leading-[20px] text-[#16a34a] font-medium">
-        <span className="font-semibold">Free 2-day shipping</span> unlocked!
-      </span>
-    )
-    progressPercent = 100
-  } else if (reachedStandard) {
-    const remaining = FREE_2DAY_THRESHOLD - dollars
-    message = (
-      <span className="text-[14px] leading-[20px] text-[#333]">
-        <span className="font-semibold text-[#16a34a]">Free shipping unlocked!</span> &middot; <span className="font-semibold text-[#16a34a]">${remaining.toFixed(2)}</span> to free 2-day
-      </span>
-    )
-    progressPercent = ((dollars - FREE_STANDARD_THRESHOLD) / (FREE_2DAY_THRESHOLD - FREE_STANDARD_THRESHOLD)) * 50 + 50
-  } else {
-    const remaining = FREE_STANDARD_THRESHOLD - dollars
-    message = (
-      <span className="text-[14px] leading-[20px] text-[#333]">
-        <span className="font-semibold text-[#16a34a]">${remaining.toFixed(2)}</span> away from free shipping
-      </span>
-    )
-    progressPercent = (dollars / FREE_STANDARD_THRESHOLD) * 50
-  }
-
+  const progressPercent = reached2Day
+    ? 100
+    : reachedStandard
+      ? ((dollars - FREE_STANDARD_THRESHOLD) / (FREE_2DAY_THRESHOLD - FREE_STANDARD_THRESHOLD)) * 50 + 50
+      : (dollars / FREE_STANDARD_THRESHOLD) * 50
+  const freeShipRemaining = Math.max(0, FREE_STANDARD_THRESHOLD - dollars)
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-2">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="shrink-0 text-[#16a34a]">
-          <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M14 9h4l4 4v4a1 1 0 0 1-1 1h-1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <circle cx="7" cy="18" r="2" stroke="currentColor" strokeWidth="1.5"/>
-          <circle cx="17" cy="18" r="2" stroke="currentColor" strokeWidth="1.5"/>
-        </svg>
-        {message}
+    <div style={{ padding: "12px 0", display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "var(--pf-text-2)" }}>
+        <span>{freeShipRemaining > 0 ? `Add $${freeShipRemaining.toFixed(2)} for free shipping` : "Free shipping unlocked"}</span>
+        <span style={{ fontFamily: "var(--pf-mono)" }}>{Math.round(progressPercent)}%</span>
       </div>
-      <div className="relative w-full h-[6px] rounded-full bg-[#e5e7eb] overflow-hidden">
-        <div className="absolute left-0 top-0 h-full rounded-full bg-[#16a34a] transition-all duration-500 ease-out" style={{ width: `${Math.min(progressPercent, 100)}%` }} />
-      </div>
-      <div className="flex items-center justify-between">
-        <span className={`text-[11px] leading-[16px] ${reachedStandard ? "text-[#16a34a] font-medium" : "text-[#999]"}`}>
-          Free standard &middot; ${FREE_STANDARD_THRESHOLD}
-        </span>
-        <span className={`text-[11px] leading-[16px] ${reached2Day ? "text-[#16a34a] font-medium" : "text-[#999]"}`}>
-          Free 2-day &middot; ${FREE_2DAY_THRESHOLD}
-        </span>
+      <div style={{ height: 4, background: "var(--pf-line)", borderRadius: 2, overflow: "hidden" }}>
+        <div style={{ height: "100%", width: `${Math.min(progressPercent, 100)}%`, background: "var(--pf-blue)", transition: "width 300ms ease" }} />
       </div>
     </div>
   )
@@ -96,10 +60,6 @@ function ExpressPayButton({ amount, currency, onSuccess }: { amount: number; cur
     }
   }, [stripe, elements, onSuccess])
 
-  if (!ready) {
-    // Still render the element but hidden until ready
-  }
-
   return (
     <div className={ready ? "" : "hidden"}>
       <ExpressCheckoutElement
@@ -111,15 +71,11 @@ function ExpressPayButton({ amount, currency, onSuccess }: { amount: number; cur
           paymentMethods: { amazonPay: "never" },
         }}
       />
-      {error && (
-        <p className="text-red-500 text-[13px] mt-2 text-center">{error}</p>
-      )}
+      {error && <p className="text-red-500 text-[13px] mt-2 text-center">{error}</p>}
     </div>
   )
 }
 
-// Cache intent across drawer open/close to avoid re-fetching.
-// Invalidated automatically when amount changes (useEffect dependency).
 let cachedIntent: { secret: string; amount: number; cartId?: string } | null = null
 
 function ExpressPayWrapper({ amount, currency, cartId, onSuccess }: { amount: number; currency: string; cartId?: string; onSuccess: () => void }) {
@@ -130,13 +86,10 @@ function ExpressPayWrapper({ amount, currency, cartId, onSuccess }: { amount: nu
   useEffect(() => {
     if (amount <= 0) return
     const amountCents = Math.round(amount * 100)
-
-    // Use cached if amount matches
     if (cachedIntent && cachedIntent.amount === amountCents) {
       setClientSecret(cachedIntent.secret)
       return
     }
-
     fetch("/api/stripe/intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -166,11 +119,8 @@ export default function CartDrawer() {
   const router = useRouter()
 
   useEffect(() => {
-    if (isDrawerOpen) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = ""
-    }
+    if (isDrawerOpen) document.body.style.overflow = "hidden"
+    else document.body.style.overflow = ""
     return () => { document.body.style.overflow = "" }
   }, [isDrawerOpen])
 
@@ -188,7 +138,6 @@ export default function CartDrawer() {
   const total = cart?.total ?? subtotal
   const items = cart?.items ?? []
 
-  // Get applied promo code from cart
   const appliedPromoCode = (() => {
     const promos = (cart as any)?.promotions || []
     if (promos.length > 0) return promos[0].code || null
@@ -209,133 +158,120 @@ export default function CartDrawer() {
 
   return (
     <>
+      {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-black/50 z-[90] transition-opacity duration-300 ${isDrawerOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        className={`fixed inset-0 z-[90] transition-opacity duration-300 ${isDrawerOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        style={{ background: "rgba(8,18,42,0.5)", backdropFilter: "blur(4px)" }}
         onClick={closeDrawer}
       />
-      <div
+
+      {/* Drawer */}
+      <aside
+        className="pf-cart-drawer"
         role="dialog"
         aria-modal="true"
         aria-label="Shopping cart"
-        className={`fixed top-0 right-0 h-full w-full md:w-[390px] bg-white z-[91] flex flex-col transition-transform duration-300 ease-in-out ${isDrawerOpen ? "translate-x-0" : "translate-x-full"}`}
+        style={{
+          position: "fixed",
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: "min(440px, 100vw)",
+          background: "#fff",
+          zIndex: 91,
+          transform: isDrawerOpen ? "translateX(0)" : "translateX(100%)",
+          transition: "transform 460ms cubic-bezier(.22,1,.36,1)",
+          display: "flex",
+          flexDirection: "column",
+          boxShadow: "var(--pf-shadow-lg)",
+        }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between shrink-0" style={{ padding: "20px", height: "70px" }}>
-          <h2 style={{ fontWeight: 600, fontSize: "20px", lineHeight: "30px", letterSpacing: "-0.02em", color: "#242424" }}>
-            Shopping Cart
-          </h2>
-          <button onClick={closeDrawer} aria-label="Close cart">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M18 6L6 18M6 6L18 18" stroke="#141B34" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+        <div className="pf-cart-drawer-header" style={{ padding: "20px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid var(--pf-line)" }}>
+          <div>
+            <div className="pf-eyebrow">Cart</div>
+            <div style={{ fontSize: 18, fontWeight: 600, marginTop: 2 }}>Your order ({items.length})</div>
+          </div>
+          <button onClick={closeDrawer} style={{ background: "none", border: "none", cursor: "pointer", padding: 8 }} aria-label="Close cart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="m6 6 12 12" /><path d="m18 6-12 12" /></svg>
           </button>
         </div>
 
+        {/* Free shipping progress */}
+        {items.length > 0 && (
+          <div style={{ padding: "0 24px", borderBottom: "1px solid var(--pf-line)", background: "var(--pf-paper)" }}>
+            <FreeShippingBar subtotal={subtotal} />
+          </div>
+        )}
+
         {/* Cart items */}
-        <div className="flex-1 overflow-y-auto flex flex-col gap-3" style={{ padding: "12px 20px" }}>
+        <div className="pf-cart-drawer-body" style={{ flex: 1, overflowY: "auto", padding: 24, display: "flex", flexDirection: "column", gap: 16 }}>
           {items.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full" style={{ padding: "80px 20px", gap: "24px" }}>
-              <div className="flex items-center justify-center" style={{ width: "60px", height: "60px", background: "linear-gradient(95.01deg, rgba(17, 92, 111, 0.08) 16.35%, rgba(54, 132, 142, 0.08) 68.78%), #FFFFFF", border: "2px solid rgba(144, 183, 188, 0.08)", borderRadius: "16px" }}>
-                <Image src="/icons/shopping-bag-01.svg" alt="" width={24} height={24} />
+            <div style={{ textAlign: "center", padding: "60px 20px", color: "var(--pf-text-3)" }}>
+              <div style={{ width: 64, height: 64, margin: "0 auto 16px", borderRadius: 32, background: "var(--pf-paper-2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M6 7h12l-1 13H7L6 7Z" /><path d="M9 7V5a3 3 0 0 1 6 0v2" /></svg>
               </div>
-              <div className="flex flex-col items-center" style={{ gap: "12px" }}>
-                <h3 style={{ fontWeight: 600, fontSize: "32px", lineHeight: "40px", textAlign: "center", letterSpacing: "-0.02em", color: "#242424" }}>
-                  Your cart is empty
-                </h3>
-                <p style={{ fontWeight: 400, fontSize: "16px", lineHeight: "24px", textAlign: "center", color: "#242424" }}>
-                  Looks like you haven&apos;t added anything to your cart yet.
-                </p>
-              </div>
-              <Link href="/products" onClick={closeDrawer} className="btn-primary flex items-center justify-center self-stretch hover:opacity-90 transition-opacity" style={{ padding: "12px 16px", height: "48px", borderRadius: "110px", fontWeight: 700, fontSize: "16px", lineHeight: "24px", letterSpacing: "-0.01em", color: "#FFFFFF" }}>
-                Start shopping
-              </Link>
+              <div style={{ fontWeight: 600, color: "var(--pf-text)", marginBottom: 4 }}>Cart is empty</div>
+              <div style={{ fontSize: 13 }}>Browse the catalog to start an order.</div>
+              <Link href="/products" onClick={closeDrawer} className="pf-btn pf-btn--ink" style={{ marginTop: 16 }}>Shop catalog</Link>
             </div>
           ) : (
             items.map((item) => <CartItem key={item.id} item={item} variant="drawer" />)
           )}
+
+          {/* BAC Water upsell */}
+          {items.length > 0 && <BacWaterUpsell />}
         </div>
 
-        {/* Footer: Subtotal + Shipping + Pay buttons */}
+        {/* Footer */}
         {items.length > 0 && (
-          <div className="shrink-0 flex flex-col" style={{ padding: "16px 20px", gap: "12px", borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-            {/* BAC Water upsell */}
-            <BacWaterUpsell />
-
-            {/* Subtotal */}
-            <div className="flex items-center justify-between">
-              <span style={{ fontWeight: 700, fontSize: "18px", lineHeight: "28px", letterSpacing: "-0.02em", color: "#242424" }}>
-                Subtotal
-              </span>
-              <span style={{ fontWeight: 700, fontSize: "18px", lineHeight: "28px", letterSpacing: "-0.02em", color: "#242424" }}>
-                {formatPrice(subtotal, currencyCode)}
-              </span>
+          <div className="pf-cart-drawer-footer" style={{ borderTop: "1px solid var(--pf-line)", padding: 24 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, marginBottom: 6 }}>
+              <span>Subtotal</span>
+              <span style={{ fontFamily: "var(--pf-mono)", fontWeight: 600 }}>{formatPrice(subtotal, currencyCode)}</span>
             </div>
-
-            {/* Discount line */}
             {discount > 0 && (
-              <div className="flex items-center justify-between">
-                <span style={{ fontSize: "14px", color: "#16a34a", fontWeight: 600 }}>Discount</span>
-                <span style={{ fontSize: "14px", color: "#16a34a", fontWeight: 600 }}>-{formatPrice(discount, currencyCode)}</span>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, marginBottom: 6, color: "var(--pf-ok)" }}>
+                <span>Discount</span>
+                <span style={{ fontWeight: 600 }}>-{formatPrice(discount, currencyCode)}</span>
               </div>
             )}
 
-            {/* Total after discount */}
-            {discount > 0 && (
-              <div className="flex items-center justify-between">
-                <span style={{ fontWeight: 700, fontSize: "16px", color: "#4F8AF7" }}>Total</span>
-                <span style={{ fontWeight: 700, fontSize: "16px", color: "#4F8AF7" }}>{formatPrice(total, currencyCode)}</span>
-              </div>
-            )}
-
-            {/* Coupon/Promo code */}
+            {/* Coupon */}
             {cart?.id && (
               <CouponInput cartId={cart.id} onApplied={() => { if (cart?.id) refreshCart(cart.id) }} initialCode={appliedPromoCode} />
             )}
 
-            {/* Free shipping bar */}
-            <FreeShippingBar subtotal={subtotal} />
+            <div style={{ fontSize: 12, color: "var(--pf-text-3)", marginBottom: 16, marginTop: 8 }}>Tax and shipping calculated at checkout.</div>
 
-            {/* Proceed to Checkout */}
+            {/* Checkout button */}
             {(() => {
               const onlyBacWater = items.length > 0 && items.every((item: any) =>
                 item.product_handle === "bac-water" || item.product_title?.toLowerCase().includes("bac water")
               )
               if (onlyBacWater) return (
-                <div className="flex flex-col items-center gap-2">
-                  <div className="flex items-center justify-center w-full gap-2 opacity-40 cursor-not-allowed" style={{ height: "52px", borderRadius: "110px", background: "#242424", fontWeight: 700, fontSize: "16px", color: "#FFFFFF" }}>
-                    Proceed to Checkout
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                  <div className="pf-btn pf-btn--primary pf-btn--lg" style={{ width: "100%", opacity: 0.4, cursor: "not-allowed" }}>
+                    Checkout &middot; {formatPrice(total, currencyCode)}
                   </div>
-                  <p className="text-[12px] text-amber-600 font-medium text-center">Add a peptide to checkout — BAC Water can&apos;t be purchased alone.</p>
+                  <p style={{ fontSize: 12, color: "var(--pf-warn)", fontWeight: 500, textAlign: "center" }}>Add a peptide to checkout</p>
                 </div>
               )
               return (
-                <Link
-                  href="/checkout"
-                  onClick={closeDrawer}
-                  className="flex items-center justify-center w-full gap-2 hover:opacity-90 transition-opacity"
-                  style={{ height: "52px", borderRadius: "110px", background: "#242424", fontWeight: 700, fontSize: "16px", lineHeight: "24px", letterSpacing: "-0.01em", color: "#FFFFFF" }}
-                >
-                  Proceed to Checkout
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="shrink-0">
-                    <path d="M5 12h14m-6-6l6 6-6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                <Link href="/checkout" onClick={closeDrawer} className="pf-btn pf-btn--primary pf-btn--lg" style={{ width: "100%", marginBottom: 8 }}>
+                  Checkout &middot; {formatPrice(total, currencyCode)}
                 </Link>
               )
             })()}
 
-            {/* Payment logos + secure text */}
-            <div className="flex items-center justify-center gap-3">
-              <div className="flex items-center gap-1.5">
-                <Image src="/icons/Visa_Inc.-Logo.wine.svg" alt="Visa" width={30} height={20} />
-                <Image src="/icons/mastercard-logo.svg" alt="Mastercard" width={30} height={20} />
-                <Image src="/icons/amex.svg" alt="Amex" width={30} height={20} />
-                <Image src="/icons/applepay-logo.svg" alt="Apple Pay" width={30} height={20} />
-              </div>
-              <span className="text-[11px] text-[#999]">100% secure payments</span>
+            <Link href="/cart" onClick={closeDrawer} className="pf-btn pf-btn--ghost" style={{ width: "100%" }}>View full cart</Link>
+
+            <div style={{ marginTop: 16, padding: 12, background: "var(--pf-paper)", borderRadius: 8, fontSize: 11, color: "var(--pf-text-3)", lineHeight: 1.5 }}>
+              For research purposes only. Not for human consumption. Compounds are supplied for laboratory use.
             </div>
           </div>
         )}
-      </div>
+      </aside>
     </>
   )
 }

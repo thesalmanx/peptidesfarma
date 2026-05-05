@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next"
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google"
+import { Geist, Geist_Mono } from "next/font/google"
+import { Instrument_Serif } from "next/font/google"
 import { CartProvider } from "@/lib/cart-context"
 import { AuthProvider } from "@/lib/auth-context"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
-import Newsletter from "@/components/sections/Newsletter"
 import LayoutShell from "@/components/layout/LayoutShell"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
@@ -39,17 +39,17 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   viewportFit: "cover",
-  themeColor: "#14213D",
+  themeColor: "#08122A",
 }
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Peptidesfarma | Premium Research Peptides & Compounds",
+    default: "Peptidesfarma | Research-Grade Peptides, Verified Before They Ship",
     template: "%s | Peptidesfarma",
   },
   description:
-    "Peptidesfarma offers high-purity research peptides and compounds for laboratory use. 99%+ purity, same-day shipping, certificates of analysis included.",
+    "Pharmaceutical-grade research peptides. HPLC-verified, lot-traced compounds for laboratory use. 99%+ purity, same-day shipping, COA included with every order.",
   keywords: [
     "research peptides",
     "laboratory compounds",
@@ -57,7 +57,8 @@ export const metadata: Metadata = {
     "BPC-157",
     "GHK-Cu",
     "peptide research",
-    "laboratory reagents",
+    "HPLC verified",
+    "certificate of analysis",
   ],
   authors: [{ name: "Peptidesfarma" }],
   creator: "Peptidesfarma",
@@ -68,16 +69,16 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: SITE_URL,
     siteName: "Peptidesfarma",
-    title: "Peptidesfarma | Premium Research Peptides & Compounds",
+    title: "Peptidesfarma | Research-Grade Peptides, Verified Before They Ship",
     description:
-      "High-purity research peptides and compounds for laboratory use. 99%+ purity, same-day shipping, certificates of analysis included.",
+      "Pharmaceutical-grade research peptides. HPLC-verified, lot-traced compounds for laboratory use. 99%+ purity, same-day shipping.",
     images: [{ url: `${SITE_URL}/icons/peptidesfarma-logo.png`, width: 1200, height: 630, alt: "Peptidesfarma" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Peptidesfarma | Premium Research Peptides & Compounds",
+    title: "Peptidesfarma | Research-Grade Peptides",
     description:
-      "High-purity research peptides and compounds for laboratory use. 99%+ purity, same-day shipping.",
+      "Pharmaceutical-grade research peptides. HPLC-verified, lot-traced. 99%+ purity, same-day shipping.",
   },
   robots: {
     index: true,
@@ -123,13 +124,13 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased font-sans`}
+        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased`}
+        style={{ fontFamily: "var(--pf-sans)" }}
       >
         <AuthProvider>
           <CartProvider>
             <LayoutShell
               header={<Header />}
-              newsletter={<Newsletter />}
               footer={<Footer />}
             >
               {children}

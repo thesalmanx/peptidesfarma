@@ -28,15 +28,6 @@ interface ProductCardProps {
   }
 }
 
-// Medusa v2 stock-rejection error shapes:
-//   message: "Some variant does not have the required inventory"
-//   code:    "insufficient_inventory"
-// (older Medusa also uses: "not enough stock available for item ...")
-// We detect any of them so we can show "Out of stock" instead of the generic
-// "Failed — try again". This matters because the storefront only sees
-// `inventory_quantity` (stocked), not the derived `available = stocked - reserved`,
-// so an item with live reservations looks "in stock" on the card but the backend
-// refuses at createLineItem time.
 function isStockError(err: unknown): boolean {
   const msg = (err instanceof Error ? err.message : String(err || "")).toLowerCase()
   const code = typeof (err as any)?.code === "string" ? ((err as any).code as string).toLowerCase() : ""
@@ -58,17 +49,16 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [adding, setAdding] = useState(false)
   const [added, setAdded] = useState(false)
   const [addError, setAddError] = useState(false)
-  // Variants that we've seen fail with a stock error → treat as out of stock from here on.
   const [learnedOutOfStock, setLearnedOutOfStock] = useState<Set<string>>(new Set())
   const [wishlisted, setWishlisted] = useState(false)
   const [showVariants, setShowVariants] = useState(false)
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null)
   const [popupPos, setPopupPos] = useState<{ top: number; left: number; width: number } | null>(null)
+  const [hover, setHover] = useState(false)
   const popupRef = useRef<HTMLDivElement>(null)
   const btnRef = useRef<HTMLButtonElement>(null)
   const { addItem } = useCart()
 
-  // Only show variant selector if there are multiple variants with meaningful names (not "Default")
   const meaningfulVariants = product.variants.filter(
     (v) => v.title && v.title.toLowerCase() !== "default"
   )
@@ -84,7 +74,6 @@ export default function ProductCard({ product }: ProductCardProps) {
     return () => window.removeEventListener("wishlist-change", syncWishlist)
   }, [syncWishlist])
 
-  // Close popup on outside click or scroll
   useEffect(() => {
     if (!showVariants) return
     const handleClick = (e: MouseEvent) => {
@@ -108,9 +97,6 @@ export default function ProductCard({ product }: ProductCardProps) {
     toggleWishlistItem(product.id)
   }
 
-  // A variant is out of stock if EITHER the server said so explicitly OR we learned
-  // so from a prior failed add (because storefront only knows stocked_quantity, not
-  // available = stocked - reserved).
   const isVariantOutOfStock = (v: ProductCardProps["product"]["variants"][number]): boolean => {
     if (learnedOutOfStock.has(v.id)) return true
     if (!v.manage_inventory) return false
@@ -146,13 +132,11 @@ export default function ProductCard({ product }: ProductCardProps) {
     } catch (err) {
       setAdding(false)
       if (isStockError(err)) {
-        // Remember this variant is actually out of stock so future clicks show it properly
         setLearnedOutOfStock((prev) => {
           const next = new Set(prev)
           next.add(variantId)
           return next
         })
-        // Keep the popup open on variant selectors so the customer sees which one failed
         if (hasMultipleVariants) setShowVariants(true)
       } else {
         setAddError(true)
@@ -161,7 +145,9 @@ export default function ProductCard({ product }: ProductCardProps) {
     }
   }
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
     if (hasMultipleVariants) {
       if (btnRef.current) {
         const rect = btnRef.current.getBoundingClientRect()
@@ -175,112 +161,112 @@ export default function ProductCard({ product }: ProductCardProps) {
   }
 
   return (
-    <div className={`group flex flex-col gap-2 flex-1 min-w-0 relative text-[#242424] ${showVariants ? "z-50" : ""}`}>
-      <Link href={`/product-page/${product.handle}`} className="block relative">
-        <div
-          className="relative w-full rounded-[16px] overflow-hidden bg-[#F2F7FD]"
-          style={{ aspectRatio: "302 / 280" }}
-        >
-          {product.thumbnail ? (
-            <Image
-              src={product.thumbnail}
-              alt={product.title}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-              sizes="(max-width: 768px) 50vw, 25vw"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-16 h-16">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" />
-              </svg>
-            </div>
-          )}
+    <div
+      className={`relative ${showVariants ? "z-50" : ""}`}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      <Link
+        href={`/product-page/${product.handle}`}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+          background: "#fff",
+          borderRadius: 14,
+          overflow: "hidden",
+          border: hover ? "1px solid var(--pf-ink)" : "1px solid var(--pf-line)",
+          transition: "transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease",
+          boxShadow: hover ? "0 12px 32px rgba(20,33,61,0.12)" : "0 2px 8px rgba(20,33,61,0.06)",
+          textDecoration: "none",
+        }}
+      >
+        {/* Image area */}
+        <div className="pf-catalog-card-image" style={{ position: "relative", height: 280, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", background: "#FAFBFE" }}>
+          {/* Wishlist */}
           <button
+            aria-label="Save"
             onClick={handleWishlistToggle}
-            aria-label={wishlisted ? `Remove ${product.title} from wishlist` : `Add ${product.title} to wishlist`}
-            className={`absolute top-2 right-2 md:top-3 md:right-3 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center transition-colors ${
-              wishlisted ? "bg-white hover:bg-white/90" : "bg-white/[0.12] hover:bg-white/20"
-            }`}
+            style={{ position: "absolute", right: 10, top: 10, width: 30, height: 30, borderRadius: 999, background: wishlisted ? "var(--pf-ink)" : "rgba(20,33,61,0.05)", border: "1px solid rgba(20,33,61,0.08)", color: wishlisted ? "#fff" : "var(--pf-text-3)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2, transition: "all 180ms ease" }}
           >
-            {wishlisted ? (
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#4F8AF7" stroke="#4F8AF7" strokeWidth={1.5} className="w-4 h-4 md:w-5 md:h-5">
-                <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
-              </svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="w-4 h-4 md:w-5 md:h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-              </svg>
-            )}
+            <svg width="13" height="13" viewBox="0 0 24 24" fill={wishlisted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10Z" />
+            </svg>
           </button>
+
+          {/* Product image or placeholder */}
+          <div style={{ position: "absolute", inset: 0, zIndex: 1 }}>
+            {product.thumbnail ? (
+              <Image
+                src={product.thumbnail}
+                alt={product.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 50vw, 33vw"
+              />
+            ) : (
+              <div style={{ width: 100, height: 180, background: "var(--pf-paper-2)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--pf-text-3)" strokeWidth="1"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="m21 15-5-5L5 21" /></svg>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Info area */}
+        <div style={{ padding: "16px 18px 18px", display: "flex", flexDirection: "column", gap: 12, flex: 1, justifyContent: "space-between", borderTop: "1px solid var(--pf-line)" }}>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.02em", color: "var(--pf-ink)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{product.title}</div>
+          </div>
+          <div>
+            {lowestPrice && (
+              <div style={{ marginBottom: 12 }}>
+                <span style={{ fontFamily: "var(--pf-mono)", fontSize: 11, color: "var(--pf-text-3)", letterSpacing: "0.04em" }}>
+                  From
+                </span>
+                <span style={{ color: "var(--pf-ink)", fontWeight: 600, fontFamily: "var(--pf-sans)", fontSize: 18, letterSpacing: "-0.01em", marginLeft: 6 }}>
+                  {formatPrice(lowestPrice.amount, lowestPrice.currency)}
+                </span>
+              </div>
+            )}
+
+            {/* Add to cart button */}
+            {isOutOfStock ? (
+              <button disabled className="pf-btn pf-btn--sm" style={{ width: "100%", opacity: 0.4, cursor: "not-allowed", background: "var(--pf-paper-2)", color: "var(--pf-text-3)", border: "1px solid var(--pf-line)" }}>
+                Out of stock
+              </button>
+            ) : (
+              <button
+                ref={btnRef}
+                onClick={handleAddToCart}
+                disabled={adding}
+                aria-label={`Add ${product.title} to cart`}
+                className={`pf-btn pf-btn--sm ${addError ? "" : added ? "" : "pf-btn--primary"}`}
+                style={{
+                  width: "100%",
+                  ...(addError ? { background: "var(--pf-err)", color: "#fff" } : {}),
+                  ...(added ? { background: "var(--pf-ok)", color: "#fff" } : {}),
+                  cursor: adding ? "wait" : "pointer",
+                }}
+              >
+                {adding ? (
+                  <svg className="animate-spin" width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="50 20" /></svg>
+                ) : addError ? (
+                  "Failed — try again"
+                ) : added ? (
+                  <>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7" /></svg>
+                    Added
+                  </>
+                ) : (
+                  "Add to cart"
+                )}
+              </button>
+            )}
+          </div>
         </div>
       </Link>
 
-      <div className="flex flex-col gap-2" style={{ color: "#141414" }}>
-        <div className="flex flex-row justify-center items-center gap-2.5">
-          <Link href={`/product-page/${product.handle}`} className="flex-1 min-w-0 hover:text-teal-accent transition-colors">
-            <h3 className="text-[16px] md:text-lg font-bold leading-[24px] md:leading-[30px] tracking-[-0.03em] md:tracking-[-0.02em] line-clamp-1" style={{ color: "#141414" }}>
-              {product.title}
-            </h3>
-          </Link>
-          {lowestPrice && (
-            <div className="flex flex-col justify-center items-start shrink-0">
-              <span className="text-[11px] md:text-xs font-normal leading-[14px] md:leading-[18px] text-left" style={{ color: "#333333" }}>From</span>
-              <p className="text-[16px] md:text-xl font-semibold leading-[24px] tracking-[-0.03em] md:tracking-[-0.02em] text-left" style={{ color: "#141414" }}>
-                {formatPrice(lowestPrice.amount, lowestPrice.currency)}
-              </p>
-            </div>
-          )}
-        </div>
-
-        {isOutOfStock ? (
-          <button
-            disabled
-            aria-label={`${product.title} is out of stock`}
-            className="flex items-center justify-center w-full h-10 px-6 rounded-[110px] border text-[13px] md:text-sm font-bold leading-6 tracking-[-0.01em] cursor-not-allowed"
-            style={{ backgroundColor: "#F5F5F5", borderColor: "#E0E0E0", color: "#999" }}
-          >
-            Out of stock
-          </button>
-        ) : (
-          <button
-            ref={btnRef}
-            onClick={handleAddToCart}
-            disabled={adding || !product.variants.length}
-            aria-label={`Add ${product.title} to cart`}
-            className={`group/cart flex items-center justify-center w-full h-10 px-6 rounded-[110px] border text-[13px] md:text-sm font-bold leading-6 tracking-[-0.01em] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 text-white ${
-              addError
-                ? "border-red-500 bg-red-500"
-                : added
-                  ? "border-[#4F8AF7] bg-[#4F8AF7]"
-                  : "border-[#242424] bg-[#242424] hover:!bg-white hover:!text-[#242424] hover:!border-[#242424] hover:shadow-[0_0_20px_4px_rgba(17,92,111,0.25),0_0_40px_8px_rgba(17,92,111,0.10)]"
-            }`}
-          >
-            {adding ? (
-              <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="50 20" />
-              </svg>
-            ) : addError ? (
-              <span className="text-[13px]">Failed — try again</span>
-            ) : added ? (
-              <svg className="w-5 h-5 animate-check-pop" viewBox="0 0 24 24" fill="none">
-                <path d="M5 13l4 4L19 7" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            ) : (
-              <>
-                Add to cart
-                <span className="inline-flex overflow-hidden w-0 group-hover/cart:w-6 group-hover/cart:pl-2 transition-all duration-200 ease-out">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-4 h-4 shrink-0">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                  </svg>
-                </span>
-              </>
-            )}
-          </button>
-        )}
-      </div>
-
-      {/* Variant selector popup — rendered as portal to escape overflow containers */}
+      {/* Variant selector popup */}
       {showVariants && popupPos && typeof document !== "undefined" && createPortal(
         <div
           ref={popupRef}
@@ -297,25 +283,25 @@ export default function ProductCard({ product }: ProductCardProps) {
         >
           <p className="text-[13px] font-semibold text-[#383637] px-1">Select size</p>
           {meaningfulVariants.map((v) => {
-            const variantOutOfStock = isVariantOutOfStock(v)
+            const variantOOS = isVariantOutOfStock(v)
             return (
               <button
                 key={v.id}
-                onClick={() => !variantOutOfStock && addToCart(v.id)}
-                disabled={variantOutOfStock}
+                onClick={() => !variantOOS && addToCart(v.id)}
+                disabled={variantOOS}
                 className={`flex items-center justify-between w-full px-3 py-2.5 rounded-[12px] text-[14px] font-medium transition-colors ${
-                  variantOutOfStock
-                    ? "bg-[#F5F5F5] p-3 cursor-not-allowed opacity-50"
+                  variantOOS
+                    ? "bg-[#F5F5F5] cursor-not-allowed opacity-50"
                     : selectedVariant === v.id
-                      ? "bg-[#4F8AF7] p-3"
-                      : "bg-[#F5F5F5] hover:bg-[#4F8AF7]/10 p-3"
+                      ? "bg-[#4F8AF7]"
+                      : "bg-[#F5F5F5] hover:bg-[#4F8AF7]/10"
                 }`}
-                style={{ color: variantOutOfStock ? "#999" : selectedVariant === v.id ? "#fff" : "#242424" }}
-                onMouseEnter={() => !variantOutOfStock && setSelectedVariant(v.id)}
+                style={{ color: variantOOS ? "#999" : selectedVariant === v.id ? "#fff" : "#242424" }}
+                onMouseEnter={() => !variantOOS && setSelectedVariant(v.id)}
                 onMouseLeave={() => setSelectedVariant(null)}
               >
-                <span>{v.title || "Default"}{variantOutOfStock ? " — Out of stock" : ""}</span>
-                {v.calculated_price && !variantOutOfStock && (
+                <span>{v.title || "Default"}{variantOOS ? " — Out of stock" : ""}</span>
+                {v.calculated_price && !variantOOS && (
                   <span className="font-semibold">
                     {formatPrice(v.calculated_price.calculated_amount, v.calculated_price.currency_code)}
                   </span>

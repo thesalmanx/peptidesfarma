@@ -1,10 +1,7 @@
 import { getProduct, getAllProductHandles } from "@/lib/data"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
-import ProductHero from "@/components/product/ProductHero"
-import ProductDescription from "@/components/product/ProductDescription"
-import ProductStarryHero from "@/components/product/ProductStarryHero"
-import TrustBadges from "@/components/sections/TrustBadges"
+import ProductDetailClient from "@/components/product/ProductDetailClient"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.peptidesfarma.com"
 
@@ -108,26 +105,19 @@ export default async function ProductPage({ params }: PageProps) {
     },
   }
 
-  const description = product.description || null
-
   return (
-    <div className="min-h-screen bg-white">
+    <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
-      <ProductStarryHero>
-        <ProductHero
-          product={{
-            title: product.title || "",
-            description: product.description || null,
-            subtitle: (product as any).subtitle || null,
-            handle: product.handle || "",
-          }}
-          images={images}
-          options={options}
-          variants={variants}
-        />
-        <TrustBadges transparent />
-      </ProductStarryHero>
-      {description && <ProductDescription description={description} />}
+      <ProductDetailClient
+        product={{
+          title: product.title || "",
+          description: product.description || null,
+          handle: product.handle || "",
+        }}
+        images={images}
+        options={options}
+        variants={variants}
+      />
     </div>
   )
 }
