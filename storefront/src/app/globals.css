@@ -514,19 +514,29 @@ select:focus {
 
 /* PDP */
 @media (max-width: 900px) {
-  .pf-pdp-hero { grid-template-columns: 1fr !important; gap: 24px !important; }
-  .pf-pdp-hero h1 { font-size: 40px !important; }
-  .pf-pdp-buybar { grid-template-columns: 1fr !important; gap: 24px !important; }
-  .pf-pdp-buybar-right { justify-content: flex-start !important; flex-wrap: wrap; }
+  .pf-pdp-hero { min-height: auto !important; flex-direction: column !important; padding-top: 20px !important; padding-bottom: 0 !important; }
+  .pf-pdp-hero > .pf-wrap { grid-template-columns: 1fr !important; gap: 0 !important; text-align: center; }
+  .pf-pdp-hero h1 { font-size: 36px !important; text-align: center !important; }
+  .pf-pdp-hero .pf-chip { display: none !important; }
+  .pf-pdp-hero .pf-spec { display: none !important; }
+  .pf-pdp-hero > .pf-wrap > div:first-child > div:first-child { justify-content: center; text-align: center; }
+  .pf-pdp-vial { order: 1; height: auto !important; min-height: 200px; flex: 1; }
+  .pf-pdp-vial img { max-height: 45vh !important; max-width: 60vw !important; }
+  .pf-pdp-buybar { grid-template-columns: 1fr !important; gap: 16px !important; text-align: center; }
+  .pf-pdp-buybar > div:first-child { display: flex; flex-direction: column; align-items: center; }
+  .pf-pdp-buybar-right { justify-content: center !important; flex-wrap: wrap; gap: 12px !important; }
+  .pf-pdp-buybar-right > div:first-child { text-align: center !important; }
   .pf-pdp-detail { grid-template-columns: 1fr !important; gap: 32px !important; }
   .pf-pdp-tabs { overflow-x: auto; flex-wrap: nowrap !important; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .pf-pdp-tabs::-webkit-scrollbar { display: none; }
 }
 @media (max-width: 600px) {
-  .pf-pdp-hero h1 { font-size: 36px !important; }
-  .pf-pdp-buybar { padding: 24px 0 !important; }
-  .pf-pdp-buybar-right { width: 100%; }
-  .pf-pdp-buybar-right > button:last-child { flex: 1; }
+  .pf-pdp-hero h1 { font-size: 32px !important; }
+  .pf-pdp-vial img { max-height: 40vh !important; max-width: 55vw !important; }
+  .pf-pdp-buybar { padding: 16px 0 !important; }
+  .pf-pdp-buybar-right { width: 100%; flex-direction: column; align-items: center !important; }
+  .pf-pdp-buybar-right > div:first-child > div:last-child { font-size: 28px !important; }
+  .pf-pdp-buybar-right > button { width: 100%; }
 }
 
 /* Cart drawer */

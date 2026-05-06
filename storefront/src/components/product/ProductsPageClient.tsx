@@ -111,7 +111,7 @@ export default function ProductsPageClient({ products }: { products: Product[] }
           <div style={{ fontSize: 13, color: "var(--pf-text-3)", marginBottom: 24, fontFamily: "var(--pf-mono)" }}>
             {filtered.length} {filtered.length === 1 ? "result" : "results"}
           </div>
-          <div className="pf-catalog-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+          <div className="pf-catalog-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20 }}>
             {filtered.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}

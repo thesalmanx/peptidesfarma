@@ -177,7 +177,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           overflow: "hidden",
           border: hover ? "1px solid var(--pf-ink)" : "1px solid var(--pf-line)",
           transition: "transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease",
-          boxShadow: hover ? "0 12px 32px rgba(20,33,61,0.12)" : "0 2px 8px rgba(20,33,61,0.06)",
+          boxShadow: "none",
           textDecoration: "none",
         }}
       >

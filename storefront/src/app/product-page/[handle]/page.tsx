@@ -1,4 +1,4 @@
-import { getProduct, getAllProductHandles } from "@/lib/data"
+import { getProduct, getAllProductHandles, getCollectionProducts } from "@/lib/data"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import ProductDetailClient from "@/components/product/ProductDetailClient"
@@ -52,7 +52,9 @@ export default async function ProductPage({ params }: PageProps) {
 
   if (!product) notFound()
 
-  const images = (product.images || []).map((img) => ({ id: img.id, url: img.url }))
+  const productImages = (product.images || []).map((img) => ({ id: img.id, url: img.url }))
+  // If no images but thumbnail exists, use thumbnail as the image
+  const images = productImages.length > 0 ? productImages : (product.thumbnail ? [{ id: "thumb", url: product.thumbnail }] : [])
 
   const options = (product.options || []).map((opt) => ({
     id: opt.id,
@@ -105,6 +107,28 @@ export default async function ProductPage({ params }: PageProps) {
     },
   }
 
+  // Fetch related products (all products minus current, take 4)
+  const allProducts = await getCollectionProducts().catch(() => [])
+  const relatedProducts = allProducts
+    .filter((p) => p.handle !== handle)
+    .slice(0, 4)
+    .map((p) => ({
+      id: p.id,
+      handle: p.handle,
+      title: p.title,
+      thumbnail: p.thumbnail || null,
+      variants: (p.variants || []).map((v) => ({
+        id: v.id,
+        title: v.title || undefined,
+        inventory_quantity: (v as any).manage_inventory ? ((v as any).inventory_quantity ?? 0) : undefined,
+        manage_inventory: (v as any).manage_inventory,
+        allow_backorder: (v as any).allow_backorder,
+        calculated_price: v.calculated_price
+          ? { calculated_amount: v.calculated_price.calculated_amount as number, currency_code: v.calculated_price.currency_code as string }
+          : undefined,
+      })),
+    }))
+
   return (
     <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
@@ -117,6 +141,7 @@ export default async function ProductPage({ params }: PageProps) {
         images={images}
         options={options}
         variants={variants}
+        relatedProducts={relatedProducts}
       />
     </div>
   )

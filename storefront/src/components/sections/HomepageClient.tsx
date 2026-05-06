@@ -41,6 +41,7 @@ export default function HomepageClient({ products }: { products: Product[] }) {
       <BestSellers products={products.slice(0, 8)} />
       <WhyUs />
       <ProcessSection />
+      <ReviewsSection />
       <FAQ />
       <ClosingCTA />
     </div>
@@ -212,7 +213,7 @@ function BestSellers({ products }: { products: Product[] }) {
             </p>
           </div>
         </div>
-        <div ref={ref} className="pf-reveal-stagger pf-catalog-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+        <div ref={ref} className="pf-reveal-stagger pf-catalog-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20 }}>
           {products.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
@@ -275,32 +276,137 @@ function WhyUs() {
   )
 }
 
-/* ========== PROCESS ========== */
+/* ========== WHY CHOOSE US ========== */
 function ProcessSection() {
   const ref = useReveal()
-  const steps = [
-    { n: "01", h: "Synthesis", s: "Solid-phase synthesis under cleanroom conditions" },
-    { n: "02", h: "Purification", s: "Reverse-phase HPLC with multi-step gradient" },
-    { n: "03", h: "Verification", s: "Independent third-party identity & potency assay" },
-    { n: "04", h: "Lyophilization", s: "Freeze-dried into amber vials, sealed under nitrogen" },
-    { n: "05", h: "Release", s: "Lot COA generated, retention sample stored" },
+  const cards = [
+    { icon: "Package", color: "#EDE9FE", iconColor: "#7C3AED", h: "Always in Stock", s: "Top research peptides like BPC-157, Retatrutide, and Tesamorelin ready to ship. No backorders, no waiting." },
+    { icon: "BadgePercent", color: "#DCFCE7", iconColor: "#16A34A", h: "Volume Pricing", s: "Bulk pricing available for larger research orders. Lower per-vial cost at higher volumes." },
+    { icon: "Truck", color: "#FEF9C3", iconColor: "#CA8A04", h: "Safe & Protected Shipping", s: "Cold-pack shipping keeps peptides stable. Discreet packaging with full tracking on every USA order." },
+    { icon: "Globe", color: "#FCE7F3", iconColor: "#DB2777", h: "Researcher Community", s: "Connect with fellow researchers. Share peer insights and discuss peptide research applications." },
+    { icon: "ShieldCheck", color: "#E0E7FF", iconColor: "#4F46E5", h: "99%+ Purity Guaranteed", s: "Every batch tested by US labs via HPLC and Mass Spec. Full Certificate of Analysis included free." },
+    { icon: "RefreshCcw", color: "#D1FAE5", iconColor: "#059669", h: "Shipment Protection", s: "Every order includes free shipment protection. Lost, damaged, or stolen packages are reshipped at no cost." },
   ]
   return (
-    <section style={{ padding: "120px 0", background: "#fff" }}>
+    <section style={{ padding: "100px 0", background: "var(--pf-paper)" }}>
       <div className="pf-wrap">
-        <div style={{ textAlign: "center", maxWidth: 720, margin: "0 auto 64px" }}>
-          <div className="pf-eyebrow" style={{ marginBottom: 12 }}>How we work</div>
-          <h2 style={{ fontFamily: "var(--pf-display)", fontWeight: 600, fontSize: "clamp(34px, 4.2vw, 52px)", lineHeight: 1.04, letterSpacing: "-0.028em", margin: "0 0 16px", color: "var(--pf-ink)" }}>From synthesis to your bench</h2>
-          <p style={{ fontSize: 17, lineHeight: 1.55, color: "var(--pf-text-2)", margin: 0 }}>Five steps. We retain reference samples for every lot and document each step on the COA.</p>
-        </div>
-        <div ref={ref} className="pf-reveal-stagger" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12 }}>
-          {steps.map((step) => (
-            <div key={step.n} style={{ position: "relative", padding: "28px 24px", background: "#fff", border: "1px solid var(--pf-line)", borderRadius: 12 }}>
-              <div style={{ fontFamily: "var(--pf-mono)", fontSize: 12, letterSpacing: "0.12em", color: "var(--pf-blue)", marginBottom: 18 }}>{step.n}</div>
-              <div style={{ fontSize: 17, fontWeight: 600, letterSpacing: "-0.01em", color: "var(--pf-ink)", marginBottom: 6 }}>{step.h}</div>
-              <div style={{ fontSize: 13, color: "var(--pf-text-2)", lineHeight: 1.55 }}>{step.s}</div>
+        <h2 style={{ fontFamily: "var(--pf-display)", fontWeight: 700, fontSize: "clamp(30px, 4vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.025em", textAlign: "center", margin: "0 0 56px", color: "var(--pf-ink)" }}>
+          Why choose Peptidesfarma?
+        </h2>
+        <div ref={ref} className="pf-reveal-stagger" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+          {cards.map((card) => (
+            <div key={card.h} style={{ padding: "28px 28px 32px", background: "#fff", borderRadius: 14, border: "1px solid var(--pf-line)", transition: "box-shadow 200ms ease" }}>
+              <div style={{ width: 48, height: 48, borderRadius: 12, background: card.color, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+                <WhyIcon name={card.icon} color={card.iconColor} />
+              </div>
+              <div style={{ fontSize: 17, fontWeight: 700, letterSpacing: "-0.01em", color: "var(--pf-ink)", marginBottom: 8 }}>{card.h}</div>
+              <div style={{ fontSize: 14, color: "var(--pf-text-2)", lineHeight: 1.6 }}>{card.s}</div>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function WhyIcon({ name, color }: { name: string; color: string }) {
+  const props = { width: 22, height: 22, stroke: color, strokeWidth: 1.8, fill: "none", strokeLinecap: "round" as const, strokeLinejoin: "round" as const }
+  switch (name) {
+    case "Package": return <svg viewBox="0 0 24 24" {...props}><path d="m7.5 4.27 9 5.15" /><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>
+    case "BadgePercent": return <svg viewBox="0 0 24 24" {...props}><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" /><path d="m15 9-6 6" /><path d="M9 9h.01" /><path d="M15 15h.01" /></svg>
+    case "Truck": return <svg viewBox="0 0 24 24" {...props}><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /><path d="M15 18H9" /><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" /><circle cx="17" cy="18" r="2" /><circle cx="7" cy="18" r="2" /></svg>
+    case "Globe": return <svg viewBox="0 0 24 24" {...props}><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></svg>
+    case "ShieldCheck": return <svg viewBox="0 0 24 24" {...props}><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></svg>
+    case "RefreshCcw": return <svg viewBox="0 0 24 24" {...props}><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" /><path d="M16 21h5v-5" /></svg>
+    default: return null
+  }
+}
+
+/* ========== REVIEWS ========== */
+const REVIEWS = [
+  { quote: "Ordered BPC-157 and Retatrutide last month. Both arrived in two days, perfectly packaged with cold packs. The COA matched the label and purity was spot on. Will be ordering again for sure.", author: "Dr. Rachel M.", role: "Research Scientist" },
+  { quote: "Finally found a supplier that actually tests their products. The HPLC results on the COA were verified independently by our lab and everything checked out. Genuinely impressed.", author: "James K.", role: "Lab Director" },
+  { quote: "Been through four different peptide vendors this year. Peptidesfarma is the only one where the purity consistently hits above 99%. Their Tesamorelin is excellent quality.", author: "Sarah L.", role: "Biochemist" },
+  { quote: "Customer support is surprisingly responsive. Had a question about reconstitution protocols and got a detailed reply within an hour. The product quality speaks for itself too.", author: "Michael T.", role: "Researcher" },
+  { quote: "Placed a bulk order for our lab and the volume pricing saved us a good amount. Everything was in stock and shipped same day. No issues with any of the vials.", author: "Dr. Amanda H.", role: "Principal Investigator" },
+  { quote: "The packaging quality alone sets them apart. Every vial sealed under nitrogen, proper cold chain shipping, lot numbers matching the COA. This is how it should be done.", author: "David R.", role: "Pharmacologist" },
+  { quote: "Switched from our previous supplier after quality issues. Three orders in with Peptidesfarma and zero complaints. NAD+ and Epithalon have been particularly consistent.", author: "Lisa W.", role: "Research Associate" },
+  { quote: "Quick shipping to the east coast, always tracked, always on time. The free shipping over $200 is a nice touch when you are ordering regularly for ongoing research.", author: "Robert P.", role: "Lab Manager" },
+]
+
+const AVATAR_COLORS = [
+  "linear-gradient(135deg, #14213D 0%, #4F8AF7 100%)",
+  "linear-gradient(135deg, #1B2D5C 0%, #7AA2FF 100%)",
+  "linear-gradient(135deg, #0E1A33 0%, #4F8AF7 100%)",
+  "linear-gradient(135deg, #14213D 0%, #7AA2FF 100%)",
+  "linear-gradient(135deg, #1B2D5C 0%, #4F8AF7 100%)",
+  "linear-gradient(135deg, #0A1430 0%, #7AA2FF 100%)",
+]
+
+function getInitials(name: string) {
+  const parts = name.trim().split(/\s+/)
+  return ((parts[0]?.[0] || "") + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase()
+}
+
+function ReviewCard({ review, index }: { review: typeof REVIEWS[number]; index: number }) {
+  return (
+    <div style={{
+      display: "flex", flexDirection: "column", justifyContent: "space-between",
+      padding: "24px 28px", width: 420, height: 180, flexShrink: 0,
+      background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)",
+      borderRadius: 18, cursor: "default",
+    }}>
+      <p style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(255,255,255,0.78)", margin: 0, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+        &ldquo;{review.quote}&rdquo;
+      </p>
+      <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
+        {[...Array(5)].map((_, i) => (
+          <svg key={i} width="13" height="13" viewBox="0 0 24 24" fill="#F5A623"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+        ))}
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ width: 32, height: 32, borderRadius: 999, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", background: AVATAR_COLORS[index % AVATAR_COLORS.length] }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: "#fff" }}>{getInitials(review.author)}</span>
+        </div>
+        <div>
+          <div style={{ fontSize: 14, fontWeight: 600, color: "var(--pf-blue-soft)" }}>{review.author}</div>
+          {review.role && <div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)" }}>{review.role}</div>}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ReviewsSection() {
+  const half = Math.ceil(REVIEWS.length / 2)
+  const row1 = REVIEWS.slice(0, half)
+  const row2 = REVIEWS.slice(half)
+  return (
+    <section style={{ padding: "80px 0", background: "var(--pf-ink-2)", overflow: "hidden" }}>
+      <div style={{ textAlign: "center", marginBottom: 48 }}>
+        <h2 style={{ fontFamily: "var(--pf-display)", fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", letterSpacing: "-0.025em", color: "#fff", margin: "0 0 8px" }}>
+          What researchers say about{" "}
+          <span style={{ color: "var(--pf-blue)" }}>Peptidesfarma</span>
+        </h2>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 1280, margin: "0 auto" }}>
+        <div style={{ overflow: "hidden", maskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)", WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)" }}>
+          <div style={{ display: "flex", gap: 16, animation: "pf-marquee 40s linear infinite" }}>
+            {[0, 1, 2, 3].map((setIdx) => (
+              <div key={setIdx} style={{ display: "flex", gap: 16, flexShrink: 0 }}>
+                {row1.map((r, i) => <ReviewCard key={`${setIdx}-${i}`} review={r} index={i} />)}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{ overflow: "hidden", maskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)", WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)" }}>
+          <div style={{ display: "flex", gap: 16, animation: "pf-marquee 45s linear infinite reverse" }}>
+            {[0, 1, 2, 3].map((setIdx) => (
+              <div key={setIdx} style={{ display: "flex", gap: 16, flexShrink: 0 }}>
+                {row2.map((r, i) => <ReviewCard key={`${setIdx}-${i}`} review={r} index={i + half} />)}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
