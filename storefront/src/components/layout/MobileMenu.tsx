@@ -196,10 +196,10 @@ export default function MobileMenu({ navLinks }: { navLinks: NavLink[] }) {
                   style={{ padding: "8px 16px", height: "40px", gap: "8px", borderRadius: "12px" }}
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M15 12H3M3 12L7 8M3 12L7 16" stroke="#4F8AF7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
-                    <path d="M12 3H17C18.6569 3 20 4.34315 20 6V18C20 19.6569 18.6569 21 17 21H12" stroke="#4F8AF7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M15 12H3M3 12L7 8M3 12L7 16" stroke="var(--pf-blue)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
+                    <path d="M12 3H17C18.6569 3 20 4.34315 20 6V18C20 19.6569 18.6569 21 17 21H12" stroke="var(--pf-blue)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  <span style={{ fontWeight: 500, fontSize: "14px", lineHeight: "20px", color: "#4F8AF7" }}>Log In</span>
+                  <span style={{ fontWeight: 500, fontSize: "14px", lineHeight: "20px", color: "var(--pf-blue)" }}>Log In</span>
                 </Link>
               )}
             </div>

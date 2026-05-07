@@ -134,14 +134,13 @@ export default function Footer() {
   return (
     <>
       <NewsletterSection />
-      <footer className="pf-starfield" style={{ color: "var(--pf-dark-text)", paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
+      <footer style={{ background: "linear-gradient(180deg, #1B2A4A 0%, #243660 100%)", color: "#fff", paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
         <div className="max-w-[1280px] mx-auto px-9 lg:px-0">
           <div className="py-12 lg:py-14 flex flex-col gap-10 lg:gap-24">
             <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-20">
               <div className="shrink-0">
-                <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
-                  <PFMonogram size={36} bg="var(--pf-blue)" />
-                  <Wordmark color="#fff" size={18} />
+                <Link href="/">
+                  <img src="/peptidesfarma-logo-light.svg" alt="PeptidesFarma" style={{ height: 36 }} />
                 </Link>
               </div>
 
@@ -149,10 +148,10 @@ export default function Footer() {
                 <div className="grid grid-cols-2 gap-20 lg:hidden">
                   {columns.slice(0, 2).map((col, i) => (
                     <div key={i} className="flex flex-col gap-[10px]">
-                      <h4 className="text-[16px] font-semibold leading-6 tracking-[-0.01em] text-white">{col.title}</h4>
+                      <h4 className="text-[16px] font-semibold leading-6 tracking-[-0.01em]" style={{ color: "#fff" }}>{col.title}</h4>
                       <div className="flex flex-col gap-2">
                         {col.links.map((link, j) => (
-                          <Link key={j} href={link.url} className="text-[14px] font-normal leading-5 tracking-[-0.03em] text-white/90 hover:text-white transition-colors whitespace-pre-line" style={{ textDecoration: "none" }}>
+                          <Link key={j} href={link.url} className="text-[14px] font-normal leading-5 tracking-[-0.03em] hover:opacity-70 transition-colors whitespace-pre-line" style={{ textDecoration: "none", color: "rgba(255,255,255,0.75)" }}>
                             {link.label}
                           </Link>
                         ))}
@@ -162,10 +161,10 @@ export default function Footer() {
                 </div>
                 {columns.length > 2 && (
                   <div className="flex flex-col gap-3 lg:hidden">
-                    <h4 className="text-[16px] font-semibold leading-6 tracking-[-0.01em] text-white">{columns[2].title}</h4>
+                    <h4 className="text-[16px] font-semibold leading-6 tracking-[-0.01em]" style={{ color: "var(--pf-ink)" }}>{columns[2].title}</h4>
                     <div className="flex flex-col gap-2">
                       {columns[2].links.map((link, j) => (
-                        <Link key={j} href={link.url} className="text-[14px] font-normal leading-5 tracking-[-0.03em] text-white/90 hover:text-white transition-colors whitespace-pre-line" style={{ textDecoration: "none" }}>
+                        <Link key={j} href={link.url} className="text-[14px] font-normal leading-5 tracking-[-0.03em] hover:opacity-70 transition-colors whitespace-pre-line" style={{ textDecoration: "none", color: "rgba(255,255,255,0.75)" }}>
                           {link.label}
                         </Link>
                       ))}
@@ -176,10 +175,10 @@ export default function Footer() {
                 <nav aria-label="Footer navigation" className="hidden lg:grid lg:grid-cols-3 gap-20 w-full">
                   {columns.map((col, i) => (
                     <div key={i} className="flex flex-col gap-3">
-                      <h4 className="text-[16px] font-semibold leading-6 tracking-[-0.01em] text-white">{col.title}</h4>
+                      <h4 className="text-[16px] font-semibold leading-6 tracking-[-0.01em]" style={{ color: "#fff" }}>{col.title}</h4>
                       <div className="flex flex-col gap-3">
                         {col.links.map((link, j) => (
-                          <Link key={j} href={link.url} className="text-[16px] font-normal leading-6 tracking-[-0.03em] text-white/90 hover:text-white transition-colors whitespace-pre-line" style={{ textDecoration: "none" }}>
+                          <Link key={j} href={link.url} className="text-[16px] font-normal leading-6 tracking-[-0.03em] hover:opacity-70 transition-colors whitespace-pre-line" style={{ textDecoration: "none", color: "rgba(255,255,255,0.75)" }}>
                             {link.label}
                           </Link>
                         ))}
@@ -191,17 +190,17 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="border-t border-white/10 lg:hidden" />
+          <div className="border-t lg:hidden" style={{ borderColor: "rgba(255,255,255,0.10)" }} />
 
           <div className="py-4 flex flex-col gap-6 lg:hidden">
             <div className="flex flex-col items-center gap-6">
-              <span className="text-[16px] font-normal leading-6 tracking-[-0.03em] text-white text-center">
+              <span className="text-[16px] font-normal leading-6 tracking-[-0.03em] text-center" style={{ color: "rgba(255,255,255,0.5)" }}>
                 &copy; {new Date().getFullYear()} Peptidesfarma
               </span>
             </div>
             <div className="flex flex-wrap items-center justify-center" style={{ gap: "16px 24px" }}>
               {trustBadges.map((badge, i) => (
-                <div key={i} className="flex items-center gap-2 text-white/90">
+                <div key={i} className="flex items-center gap-2" style={{ color: "rgba(255,255,255,0.65)" }}>
                   {badge.icon}
                   <span className="text-[14px] font-normal leading-5 tracking-[-0.03em]">{badge.label}</span>
                 </div>
@@ -213,16 +212,16 @@ export default function Footer() {
             <div className="flex items-center justify-between py-4">
               <div className="flex items-center" style={{ gap: 24 }}>
                 {trustBadges.map((badge, i) => (
-                  <div key={i} className="flex items-center gap-2 text-white/90">
+                  <div key={i} className="flex items-center gap-2" style={{ color: "rgba(255,255,255,0.65)" }}>
                     {badge.icon}
                     <span className="text-[14px] font-normal leading-5 tracking-[-0.03em]">{badge.label}</span>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="border-t border-white/10" />
+            <div className="border-t" style={{ borderColor: "rgba(255,255,255,0.10)" }} />
             <div className="py-4 flex justify-center">
-              <span className="text-[14px] font-normal leading-5 tracking-[-0.03em] text-white/90 text-center">
+              <span className="text-[14px] font-normal leading-5 tracking-[-0.03em] text-center" style={{ color: "rgba(255,255,255,0.5)" }}>
                 &copy; {new Date().getFullYear()} Peptidesfarma. All rights reserved. For research purposes only.
               </span>
             </div>

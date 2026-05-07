@@ -56,32 +56,31 @@ function Hero() {
         position: "relative",
         overflow: "hidden",
         marginTop: -1,
-        background: "linear-gradient(180deg, #08122A 0%, #0E1A33 50%, #13234A 100%)",
+        background: "linear-gradient(180deg, #2D4570 0%, #365088 100%)",
         color: "#fff",
       }}
     >
-      <div className="pf-starfield" style={{ position: "absolute", inset: 0, opacity: 0.7 }} />
-      <div style={{ position: "absolute", right: "-10%", top: "10%", width: 720, height: 720, background: "radial-gradient(circle, rgba(79,138,247,0.35), transparent 60%)", filter: "blur(20px)", pointerEvents: "none" }} />
-      <div style={{ position: "absolute", left: "-10%", bottom: "-10%", width: 600, height: 600, background: "radial-gradient(circle, rgba(122,162,255,0.18), transparent 60%)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", right: "-10%", top: "10%", width: 720, height: 720, background: "radial-gradient(circle, rgba(79,138,247,0.15), transparent 60%)", filter: "blur(40px)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", left: "-10%", bottom: "-10%", width: 600, height: 600, background: "radial-gradient(circle, rgba(122,162,255,0.10), transparent 60%)", pointerEvents: "none" }} />
 
       <div className="pf-wrap pf-hero-grid" style={{ position: "relative", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center", minHeight: 720, paddingBlock: "80px 96px" }}>
         {/* LEFT */}
         <div>
-          <div className="hero-stagger-1" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "6px 16px 6px 6px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.10)", borderRadius: 999, marginBottom: 28, backdropFilter: "blur(8px)" }}>
+          <div className="hero-stagger-1" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "6px 16px 6px 6px", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 999, marginBottom: 28 }}>
             <span style={{ width: 22, height: 22, borderRadius: 999, background: "var(--pf-blue)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7" /></svg>
             </span>
-            <span style={{ fontSize: 12, fontWeight: 500, color: "rgba(255,255,255,0.82)", letterSpacing: "0.01em" }}>Third-party HPLC &middot; 99.2% avg purity</span>
+            <span style={{ fontSize: 12, fontWeight: 500, color: "rgba(255,255,255,0.75)", letterSpacing: "0.01em" }}>Third-party HPLC &middot; 99.2% avg purity</span>
           </div>
 
           <h1 className="hero-stagger-2" style={{ fontFamily: "var(--pf-display)", fontWeight: 600, fontSize: "clamp(44px, 5.6vw, 78px)", lineHeight: 1.02, letterSpacing: "-0.032em", margin: "0 0 24px", color: "#fff" }}>
             Research-grade peptides.<br />
-            <span style={{ fontFamily: "var(--pf-serif)", fontStyle: "italic", fontWeight: 400, letterSpacing: "-0.015em", background: "linear-gradient(135deg, #B8D2EE 0%, #7AA2FF 60%, #4F8AF7 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+            <span style={{ fontFamily: "var(--pf-serif)", fontStyle: "italic", fontWeight: 400, letterSpacing: "-0.015em", background: "linear-gradient(135deg, #4F8AF7 0%, #7AA2FF 60%, #4F8AF7 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
               Verified before they ship.
             </span>
           </h1>
 
-          <p className="hero-stagger-3" style={{ fontSize: 17, lineHeight: 1.6, color: "rgba(255,255,255,0.72)", maxWidth: 520, margin: "0 0 36px" }}>
+          <p className="hero-stagger-3" style={{ fontSize: 17, lineHeight: 1.6, color: "rgba(255,255,255,0.7)", maxWidth: 520, margin: "0 0 36px" }}>
             Pharmaceutical-grade compounds for laboratory research. Lyophilized, sealed under nitrogen, lot-traced and shipped with a third-party Certificate of Analysis on every order.
           </p>
 
@@ -94,12 +93,11 @@ function Hero() {
           </div>
 
           {/* Trust pills */}
-          <div className="pf-hero-stats hero-stagger-5" style={{ display: "flex", gap: 24, flexWrap: "wrap", paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.10)" }}>
+          <div className="pf-hero-stats hero-stagger-5" style={{ display: "flex", gap: 24, flexWrap: "wrap", paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.12)" }}>
             {[
               { v: "99.2%", l: "Avg purity" },
               { v: "27", l: "Compounds" },
               { v: "48hr", l: "Median ship" },
-              { v: "3rd-party", l: "HPLC tested" },
             ].map((t) => (
               <div key={t.l}>
                 <div style={{ fontSize: 24, fontWeight: 600, color: "#fff", letterSpacing: "-0.02em" }}>{t.v}</div>
@@ -109,19 +107,25 @@ function Hero() {
           </div>
         </div>
 
-        {/* RIGHT — Vial area with image */}
-        <div className="pf-hero-vials" style={{ position: "relative", height: 620, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 50% 50%, rgba(79,138,247,0.4), transparent 55%)", filter: "blur(40px)" }} />
-          <div style={{ position: "absolute", left: "12%", right: "12%", bottom: 80, height: 40, background: "radial-gradient(ellipse, rgba(79,138,247,0.30), transparent 70%)", filter: "blur(20px)" }} />
-
-          {/* Floating info tags */}
-
-          {/* Placeholder vial visual — SVG illustration */}
-          <div className="hero-stagger-3" style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
-            <div style={{ position: "relative", animation: "pf-float-y 7s ease-in-out infinite" }}>
-              <VialSVG name="GLP-3 RT" dose="20 mg" size={280} />
-            </div>
-          </div>
+        {/* RIGHT — 3 vial cluster like peptora */}
+        <div className="pf-hero-vials" style={{ position: "relative", width: 608, height: 528 }}>
+          {/* Glow effects */}
+          {[
+            { left: 199, top: 343, rotate: "4.71deg" },
+            { left: 53, top: 283, rotate: "-17.39deg" },
+            { left: 310, top: 492, rotate: "0deg" },
+            { left: 416, top: 275, rotate: "123.89deg" },
+            { left: 349, top: 133, rotate: "91.36deg" },
+            { left: 17, top: 56, rotate: "91.36deg" },
+          ].map((e, i) => (
+            <div key={i} className="absolute pointer-events-none" style={{ width: 168, height: 36, left: e.left, top: e.top, background: "rgba(79,138,247,0.5)", filter: "blur(40px)", transform: `rotate(${e.rotate})` }} />
+          ))}
+          {/* Vial 1 — back left */}
+          <img src="/vial-blue-nobg.png" alt="Peptidesfarma vial" className="absolute pointer-events-none" style={{ width: 520, height: "auto", left: -160, top: 60, objectFit: "contain", animation: "pf-float-y 7s ease-in-out infinite", opacity: 0.7 }} />
+          {/* Vial 2 — back right */}
+          <img src="/vial-blue-nobg.png" alt="Peptidesfarma vial" className="absolute pointer-events-none" style={{ width: 480, height: "auto", left: 160, top: 140, objectFit: "contain", animation: "pf-float-y 8s ease-in-out 1s infinite", opacity: 0.7 }} />
+          {/* Vial 3 — front center (main) */}
+          <img src="/vial-blue-nobg.png" alt="Peptidesfarma vial" className="absolute pointer-events-none" style={{ width: 500, height: "auto", left: 20, top: 30, objectFit: "contain", zIndex: 2, animation: "pf-float-y 6s ease-in-out 0.5s infinite" }} />
         </div>
       </div>
     </section>
@@ -140,15 +144,15 @@ function LotTicker() {
   ]
   const row = [...items, ...items]
   return (
-    <div style={{ background: "#08122A", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", overflow: "hidden", padding: "14px 0" }}>
+    <div style={{ background: "var(--pf-paper-2)", borderTop: "1px solid var(--pf-line)", borderBottom: "1px solid var(--pf-line)", overflow: "hidden", padding: "14px 0" }}>
       <div className="pf-lot-ticker" style={{ display: "flex", gap: 48, animation: "pf-marquee 50s linear infinite", whiteSpace: "nowrap" }}>
         {row.map((it, i) => (
-          <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, color: "rgba(255,255,255,0.7)", fontFamily: "var(--pf-mono)", fontSize: 12, letterSpacing: "0.05em", textTransform: "uppercase" }}>
-            <span style={{ width: 6, height: 6, borderRadius: 999, background: "var(--pf-blue)", boxShadow: "0 0 10px var(--pf-blue)" }} />
-            <span style={{ color: "rgba(255,255,255,0.5)" }}>NEW LOT</span>
-            <span style={{ color: "#fff", fontWeight: 600 }}>{it.lot}</span>
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, color: "var(--pf-text-3)", fontFamily: "var(--pf-mono)", fontSize: 12, letterSpacing: "0.05em", textTransform: "uppercase" }}>
+            <span style={{ width: 6, height: 6, borderRadius: 999, background: "var(--pf-blue)", boxShadow: "0 0 10px rgba(79,138,247,0.4)" }} />
+            <span style={{ color: "var(--pf-text-3)" }}>NEW LOT</span>
+            <span style={{ color: "var(--pf-ink)", fontWeight: 600 }}>{it.lot}</span>
             <span>&middot;</span>
-            <span style={{ color: "#fff" }}>{it.c}</span>
+            <span style={{ color: "var(--pf-ink)" }}>{it.c}</span>
             <span>&middot;</span>
             <span>{it.purity}</span>
             <span>&middot;</span>
@@ -170,16 +174,16 @@ function TrustStrip() {
     { h: "Lot-traced", s: "COA on every order", icon: "shield" },
   ]
   return (
-    <section style={{ background: "#0E1A33", color: "#fff", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+    <section style={{ background: "#fff", color: "var(--pf-ink)", borderTop: "1px solid var(--pf-line)", borderBottom: "1px solid var(--pf-line)" }}>
       <div ref={ref} className="pf-wrap pf-reveal-stagger pf-trust-strip" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0, padding: "32px 24px" }}>
         {items.map((t, i) => (
-          <div key={t.h} style={{ display: "flex", alignItems: "center", gap: 16, paddingInline: 24, borderRight: i < 3 ? "1px solid rgba(255,255,255,0.08)" : "none" }}>
-            <div style={{ width: 44, height: 44, borderRadius: 10, background: "rgba(79,138,247,0.12)", border: "1px solid rgba(79,138,247,0.3)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <div key={t.h} style={{ display: "flex", alignItems: "center", gap: 16, paddingInline: 24, borderRight: i < 3 ? "1px solid var(--pf-line)" : "none" }}>
+            <div style={{ width: 44, height: 44, borderRadius: 10, background: "var(--pf-blue-tint)", border: "1px solid rgba(79,138,247,0.2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <TrustIcon name={t.icon} />
             </div>
             <div>
-              <div style={{ fontSize: 14, fontWeight: 600 }}>{t.h}</div>
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginTop: 2 }}>{t.s}</div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: "var(--pf-ink)" }}>{t.h}</div>
+              <div style={{ fontSize: 12, color: "var(--pf-text-3)", marginTop: 2 }}>{t.s}</div>
             </div>
           </div>
         ))}
@@ -353,10 +357,11 @@ function ReviewCard({ review, index }: { review: typeof REVIEWS[number]; index: 
     <div style={{
       display: "flex", flexDirection: "column", justifyContent: "space-between",
       padding: "24px 28px", width: 420, height: 180, flexShrink: 0,
-      background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)",
+      background: "#fff", border: "1px solid var(--pf-line)",
       borderRadius: 18, cursor: "default",
+      boxShadow: "0 2px 8px rgba(14,26,51,0.04)",
     }}>
-      <p style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(255,255,255,0.78)", margin: 0, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+      <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--pf-text-2)", margin: 0, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
         &ldquo;{review.quote}&rdquo;
       </p>
       <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
@@ -369,8 +374,8 @@ function ReviewCard({ review, index }: { review: typeof REVIEWS[number]; index: 
           <span style={{ fontSize: 11, fontWeight: 700, color: "#fff" }}>{getInitials(review.author)}</span>
         </div>
         <div>
-          <div style={{ fontSize: 14, fontWeight: 600, color: "var(--pf-blue-soft)" }}>{review.author}</div>
-          {review.role && <div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)" }}>{review.role}</div>}
+          <div style={{ fontSize: 14, fontWeight: 600, color: "var(--pf-ink)" }}>{review.author}</div>
+          {review.role && <div style={{ fontSize: 11, color: "var(--pf-text-3)" }}>{review.role}</div>}
         </div>
       </div>
     </div>
@@ -382,9 +387,9 @@ function ReviewsSection() {
   const row1 = REVIEWS.slice(0, half)
   const row2 = REVIEWS.slice(half)
   return (
-    <section style={{ padding: "80px 0", background: "var(--pf-ink-2)", overflow: "hidden" }}>
+    <section style={{ padding: "80px 0", background: "var(--pf-paper)", overflow: "hidden" }}>
       <div style={{ textAlign: "center", marginBottom: 48 }}>
-        <h2 style={{ fontFamily: "var(--pf-display)", fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", letterSpacing: "-0.025em", color: "#fff", margin: "0 0 8px" }}>
+        <h2 style={{ fontFamily: "var(--pf-display)", fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", letterSpacing: "-0.025em", color: "var(--pf-ink)", margin: "0 0 8px" }}>
           What researchers say about{" "}
           <span style={{ color: "var(--pf-blue)" }}>Peptidesfarma</span>
         </h2>
@@ -483,25 +488,32 @@ function FAQ() {
 /* ========== CLOSING CTA ========== */
 function ClosingCTA() {
   return (
-    <section style={{ padding: "96px 0 120px", background: "var(--pf-paper)" }}>
+    <section style={{ padding: "80px 0 0", background: "#fff" }}>
       <div className="pf-wrap">
-        <div className="pf-closing-cta" style={{ background: "linear-gradient(135deg, #08122A 0%, #14213D 50%, #1B2D5C 100%)", borderRadius: 24, padding: "80px 64px", color: "#fff", position: "relative", overflow: "hidden", textAlign: "center" }}>
-          <div className="pf-starfield" style={{ position: "absolute", inset: 0, opacity: 0.5 }} />
-          <div style={{ position: "absolute", top: "-40%", left: "-10%", width: 600, height: 600, background: "radial-gradient(circle, rgba(79,138,247,0.30), transparent 60%)", filter: "blur(40px)" }} />
-          <div style={{ position: "absolute", bottom: "-40%", right: "-10%", width: 600, height: 600, background: "radial-gradient(circle, rgba(122,162,255,0.25), transparent 60%)", filter: "blur(40px)" }} />
-          <div style={{ position: "relative", maxWidth: 720, margin: "0 auto" }}>
-            <div className="pf-eyebrow pf-eyebrow--dark" style={{ marginBottom: 16 }}>Open the catalog</div>
-            <h2 style={{ fontFamily: "var(--pf-display)", fontWeight: 600, fontSize: "clamp(40px, 5.5vw, 68px)", lineHeight: 1.02, letterSpacing: "-0.032em", margin: "0 0 20px", color: "#fff" }}>
-              The catalog opens here.<br />
-              <span style={{ fontFamily: "var(--pf-serif)", fontStyle: "italic", fontWeight: 400, color: "var(--pf-blue-soft)" }}>Documented, traced, shipped today.</span>
+        {/* CTA Banner */}
+        <div style={{
+          position: "relative", overflow: "hidden", borderRadius: 24,
+          background: "linear-gradient(135deg, #F5F0E0 0%, #E8F5E0 30%, #F0EAD6 60%, #DFF0D8 100%)",
+          padding: "40px 40px", textAlign: "center",
+        }}>
+
+          <div style={{ position: "relative", maxWidth: 640, margin: "0 auto" }}>
+            <h2 style={{
+              fontFamily: "var(--pf-serif)", fontStyle: "italic", fontWeight: 400,
+              fontSize: "clamp(28px, 4vw, 42px)", lineHeight: 1.3,
+              letterSpacing: "-0.02em", color: "var(--pf-ink)", margin: "0 0 32px",
+            }}>
+              All the research peptides you need, with the <span style={{ textDecoration: "underline", textDecorationColor: "var(--pf-ink)", textUnderlineOffset: 4 }}>peace of mind</span> and research community at your fingertips.
             </h2>
-            <p style={{ fontSize: 17, color: "rgba(255,255,255,0.72)", lineHeight: 1.55, margin: "0 0 36px" }}>
-              Free shipping on orders over $200. Every vial documented, lot-traced, and HPLC verified.
-            </p>
-            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-              <Link href="/products" className="pf-btn pf-btn--primary pf-btn--lg">Shop the catalog &rarr;</Link>
-              <Link href="/contact" className="pf-btn pf-btn--ghost-dark pf-btn--lg">Talk to the lab</Link>
-            </div>
+            <Link href="/products" style={{
+              display: "inline-flex", alignItems: "center", gap: 10,
+              padding: "14px 32px", borderRadius: 999,
+              background: "var(--pf-ink)", color: "#fff",
+              fontSize: 15, fontWeight: 600, textDecoration: "none",
+              fontFamily: "inherit",
+            }}>
+              Shop Now <span style={{ fontSize: 18 }}>&rarr;</span>
+            </Link>
           </div>
         </div>
       </div>

@@ -151,7 +151,7 @@ function StripeCallbackInner() {
         router.replace("/checkout/success")
         return
       }
-      setError("Your payment was processed but we had trouble completing the order. Please contact support@peptidesfarma.com — do NOT retry payment.")
+      setError("Your payment was processed but we had trouble completing the order. Please contact support@peptidesfarma.com. Do NOT retry payment.")
     }
   }
 

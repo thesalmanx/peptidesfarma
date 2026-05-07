@@ -249,7 +249,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 {adding ? (
                   <svg className="animate-spin" width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="50 20" /></svg>
                 ) : addError ? (
-                  "Failed — try again"
+                  "Failed, try again"
                 ) : added ? (
                   <>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7" /></svg>
@@ -298,7 +298,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 onMouseEnter={() => !variantOOS && setSelectedVariant(v.id)}
                 onMouseLeave={() => setSelectedVariant(null)}
               >
-                <span>{v.title || "Default"}{variantOOS ? " — Out of stock" : ""}</span>
+                <span>{v.title || "Default"}{variantOOS ? " - Out of stock" : ""}</span>
                 {v.calculated_price && !variantOOS && (
                   <span className="font-semibold">
                     {formatPrice(v.calculated_price.calculated_amount, v.calculated_price.currency_code)}

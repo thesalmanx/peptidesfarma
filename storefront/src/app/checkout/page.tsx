@@ -458,7 +458,7 @@ function _Unused() { const handleCompleteOrder = () => {}; const submitting = fa
           </p>
 
           <div>
-            <p className="font-bold text-[15px] text-[#242424] mb-1">IMPORTANT — READ BEFORE COMPLETING ORDER</p>
+            <p className="font-bold text-[15px] text-[#242424] mb-1">IMPORTANT: READ BEFORE COMPLETING ORDER</p>
             <p className="text-[#555]">This checkout method is for manual payments only using the following options:</p>
           </div>
 
@@ -744,7 +744,7 @@ function SquarePaymentSection({
       router.push("/checkout/success")
     } catch (err: any) {
       if (paymentCharged) {
-        setError("Your payment was processed but we had trouble completing the order. Please contact support@peptidesfarma.com — do NOT retry payment. Reference: " + (cart?.id || ""))
+        setError("Your payment was processed but we had trouble completing the order. Please contact support@peptidesfarma.com. Do NOT retry payment. Reference: " + (cart?.id || ""))
       } else {
         setError(extractError(err, "Order failed. Please try again."))
       }

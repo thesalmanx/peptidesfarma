@@ -259,12 +259,12 @@ export default function ProfilePage() {
     }
   }
 
-  const fullName = [customer?.first_name, customer?.last_name].filter(Boolean).join(" ") || "—"
+  const fullName = [customer?.first_name, customer?.last_name].filter(Boolean).join(" ") || "-"
   const initials = `${customer?.first_name?.[0]?.toUpperCase() || ""}${customer?.last_name?.[0]?.toUpperCase() || ""}`
 
   return (
     <div className="w-full max-w-[1280px] flex flex-col gap-4">
-      <div className="flex items-center gap-1 text-[14px] font-medium leading-[22px] tracking-[0.02em] text-[#242424]">
+      <div className="flex items-center gap-1 text-[14px] font-medium leading-[22px] tracking-[0.02em] text-[var(--pf-ink)]">
         <Link href="/" className="hover:underline">Home</Link>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.67} stroke="currentColor" className="w-3.5 h-3.5 -rotate-90">
           <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -278,17 +278,17 @@ export default function ProfilePage() {
 
       <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-6">
         <div className="flex flex-col gap-1 flex-1">
-          <h1 className="text-[20px] lg:text-[24px] font-semibold leading-[30px] lg:leading-[36px] tracking-[-0.03em] text-[#242424]">
+          <h1 className="text-[20px] lg:text-[24px] font-semibold leading-[30px] lg:leading-[36px] tracking-[-0.03em] text-[var(--pf-ink)]">
             My Profile
           </h1>
-          <p className="text-[12px] lg:text-[14px] font-medium leading-[18px] lg:leading-[22px] tracking-[-0.02em] text-[#595959]">
+          <p className="text-[12px] lg:text-[14px] font-medium leading-[18px] lg:leading-[22px] tracking-[-0.02em] text-[var(--pf-text-2)]">
             Manage your personal information.
           </p>
         </div>
         {!editing && (
           <button
             onClick={handleEdit}
-            className="inline-flex items-center justify-center self-stretch lg:self-start px-5 py-3 h-[48px] rounded-[110px] text-[16px] font-medium lg:font-bold leading-[24px] tracking-[-0.01em] text-[#242424] bg-[#4F8AF7]/20"
+            className="inline-flex items-center justify-center self-stretch lg:self-start px-5 py-3 h-[48px] rounded-[110px] text-[16px] font-medium lg:font-bold leading-[24px] tracking-[-0.01em] text-[var(--pf-ink)] bg-[var(--pf-blue-tint)]"
           >
             Edit profile
           </button>
@@ -309,16 +309,16 @@ export default function ProfilePage() {
 
       <div className="flex flex-col gap-[30px]">
         <div className="flex items-center gap-5">
-          <div className="w-[120px] h-[120px] rounded-full border border-[#D6D6D6] p-[3px] shrink-0">
+          <div className="w-[120px] h-[120px] rounded-full border border-[var(--pf-line)] p-[3px] shrink-0">
             {profileImage ? (
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
                 src={profileImage}
                 alt="Profile"
-                className="w-full h-full rounded-full object-cover border border-[#DCE7EA]"
+                className="w-full h-full rounded-full object-cover border border-[var(--pf-line)]"
               />
             ) : (
-              <div className="w-full h-full rounded-full bg-[#4F8AF7] border border-[#DCE7EA] flex items-center justify-center text-white text-[36px] font-semibold">
+              <div className="w-full h-full rounded-full bg-[var(--pf-blue)] border border-[var(--pf-line)] flex items-center justify-center text-white text-[36px] font-semibold">
                 {initials || "U"}
               </div>
             )}
@@ -336,7 +336,7 @@ export default function ProfilePage() {
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploading}
-                  className="inline-flex items-center justify-center px-4 py-2 h-[40px] rounded-[110px] border border-black/[0.24] text-[14px] font-medium leading-[24px] tracking-[-0.01em] text-[#242424] bg-white self-start disabled:opacity-50"
+                  className="inline-flex items-center justify-center px-4 py-2 h-[40px] rounded-[110px] border border-black/[0.24] text-[14px] font-medium leading-[24px] tracking-[-0.01em] text-[var(--pf-ink)] bg-white self-start disabled:opacity-50"
                 >
                   {uploading ? "Uploading..." : "Change photo"}
                 </button>
@@ -349,7 +349,7 @@ export default function ProfilePage() {
                   </button>
                 )}
               </div>
-              <span className="text-[14px] font-normal leading-[20px] tracking-[-0.02em] text-[#595959]">
+              <span className="text-[14px] font-normal leading-[20px] tracking-[-0.02em] text-[var(--pf-text-2)]">
                 JPG, GIF, PNG or WebP. Max 10MB.
               </span>
             </div>
@@ -359,7 +359,7 @@ export default function ProfilePage() {
         {editing ? (
           <form onSubmit={handleSave} className="flex flex-col gap-5">
             <div className="flex flex-col gap-1">
-              <label className="text-[14px] font-semibold leading-[22px] text-[#383637]">Full name</label>
+              <label className="text-[14px] font-semibold leading-[22px] text-[var(--pf-ink)]">Full name</label>
               <input
                 type="text"
                 value={`${form.first_name}${form.last_name ? ` ${form.last_name}` : ""}`}
@@ -369,70 +369,70 @@ export default function ProfilePage() {
                   updateField("last_name", parts.slice(1).join(" "))
                 }}
                 required
-                className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[#242424]/[0.04] border border-[#242424]/[0.08] text-[16px] font-normal leading-[24px] text-[#242424] placeholder:text-[#383637]/[0.72] focus:outline-none focus:ring-2 focus:ring-[#4F8AF7] focus:border-transparent"
+                className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[var(--pf-paper)] border border-[var(--pf-line)] text-[16px] font-normal leading-[24px] text-[var(--pf-ink)] placeholder:text-[var(--pf-text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--pf-blue)] focus:border-transparent"
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-[14px] font-semibold leading-[22px] text-[#383637]">Email</label>
+              <label className="text-[14px] font-semibold leading-[22px] text-[var(--pf-ink)]">Email</label>
               <input
                 type="email"
                 value={customer?.email || ""}
                 disabled
-                className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[#242424]/[0.04] border border-[#242424]/[0.08] text-[16px] font-normal leading-[24px] text-[#242424]/50 cursor-not-allowed"
+                className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[var(--pf-paper)] border border-[var(--pf-line)] text-[16px] font-normal leading-[24px] text-[var(--pf-ink)]/50 cursor-not-allowed"
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-[14px] font-semibold leading-[22px] text-[#383637]">Phone number</label>
+              <label className="text-[14px] font-semibold leading-[22px] text-[var(--pf-ink)]">Phone number</label>
               <input
                 type="tel"
                 value={form.phone}
                 onChange={(e) => updateField("phone", e.target.value)}
                 placeholder="Enter your phone number"
-                className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[#242424]/[0.04] border border-[#242424]/[0.08] text-[16px] font-normal leading-[24px] text-[#242424] placeholder:text-[#383637]/[0.72] focus:outline-none focus:ring-2 focus:ring-[#4F8AF7] focus:border-transparent"
+                className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[var(--pf-paper)] border border-[var(--pf-line)] text-[16px] font-normal leading-[24px] text-[var(--pf-ink)] placeholder:text-[var(--pf-text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--pf-blue)] focus:border-transparent"
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-[14px] font-semibold leading-[22px] text-[#383637]">Company</label>
+              <label className="text-[14px] font-semibold leading-[22px] text-[var(--pf-ink)]">Company</label>
               <input
                 type="text"
                 value={form.company_name}
                 onChange={(e) => updateField("company_name", e.target.value)}
                 placeholder="Enter your company"
-                className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[#242424]/[0.04] border border-[#242424]/[0.08] text-[16px] font-normal leading-[24px] text-[#242424] placeholder:text-[#383637]/[0.72] focus:outline-none focus:ring-2 focus:ring-[#4F8AF7] focus:border-transparent"
+                className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[var(--pf-paper)] border border-[var(--pf-line)] text-[16px] font-normal leading-[24px] text-[var(--pf-ink)] placeholder:text-[var(--pf-text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--pf-blue)] focus:border-transparent"
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-[14px] font-semibold leading-[22px] text-[#383637]">City</label>
+              <label className="text-[14px] font-semibold leading-[22px] text-[var(--pf-ink)]">City</label>
               <input
                 type="text"
                 value={form.city}
                 onChange={(e) => updateField("city", e.target.value)}
                 placeholder="Enter your city"
-                className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[#242424]/[0.04] border border-[#242424]/[0.08] text-[16px] font-normal leading-[24px] text-[#242424] placeholder:text-[#383637]/[0.72] focus:outline-none focus:ring-2 focus:ring-[#4F8AF7] focus:border-transparent"
+                className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[var(--pf-paper)] border border-[var(--pf-line)] text-[16px] font-normal leading-[24px] text-[var(--pf-ink)] placeholder:text-[var(--pf-text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--pf-blue)] focus:border-transparent"
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-[14px] font-semibold leading-[22px] text-[#383637]">Date of Birth</label>
+              <label className="text-[14px] font-semibold leading-[22px] text-[var(--pf-ink)]">Date of Birth</label>
               <input
                 type="date"
                 value={form.date_of_birth}
                 onChange={(e) => updateField("date_of_birth", e.target.value)}
-                className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[#242424]/[0.04] border border-[#242424]/[0.08] text-[16px] font-normal leading-[24px] text-[#242424] placeholder:text-[#383637]/[0.72] focus:outline-none focus:ring-2 focus:ring-[#4F8AF7] focus:border-transparent"
+                className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[var(--pf-paper)] border border-[var(--pf-line)] text-[16px] font-normal leading-[24px] text-[var(--pf-ink)] placeholder:text-[var(--pf-text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--pf-blue)] focus:border-transparent"
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-[14px] font-semibold leading-[22px] text-[#383637]">Bio</label>
+              <label className="text-[14px] font-semibold leading-[22px] text-[var(--pf-ink)]">Bio</label>
               <textarea
                 value={form.bio}
                 onChange={(e) => updateField("bio", e.target.value)}
                 placeholder="Tell us about yourself"
                 rows={3}
-                className="w-full px-4 py-3 rounded-[16px] bg-[#242424]/[0.04] border border-[#242424]/[0.08] text-[16px] font-normal leading-[24px] text-[#242424] placeholder:text-[#383637]/[0.72] focus:outline-none focus:ring-2 focus:ring-[#4F8AF7] focus:border-transparent resize-none"
+                className="w-full px-4 py-3 rounded-[16px] bg-[var(--pf-paper)] border border-[var(--pf-line)] text-[16px] font-normal leading-[24px] text-[var(--pf-ink)] placeholder:text-[var(--pf-text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--pf-blue)] focus:border-transparent resize-none"
               />
             </div>
 
-            <div className="flex flex-col gap-3 pt-2 border-t border-[#E4E4E7]">
-              <h3 className="text-[16px] font-semibold leading-[24px] text-[#383637]">Change Password</h3>
+            <div className="flex flex-col gap-3 pt-2 border-t border-[var(--pf-line)]">
+              <h3 className="text-[16px] font-semibold leading-[24px] text-[var(--pf-ink)]">Change Password</h3>
               {passwordError && (
                 <p className="text-red-600 text-[14px]">{passwordError}</p>
               )}
@@ -440,40 +440,40 @@ export default function ProfilePage() {
                 <p className="text-green-600 text-[14px]">{passwordSuccess}</p>
               )}
               <div className="flex flex-col gap-1">
-                <label className="text-[14px] font-semibold leading-[22px] text-[#383637]">Current password</label>
+                <label className="text-[14px] font-semibold leading-[22px] text-[var(--pf-ink)]">Current password</label>
                 <input
                   type="password"
                   value={passwordForm.current}
                   onChange={(e) => setPasswordForm((p) => ({ ...p, current: e.target.value }))}
                   placeholder="Enter current password"
-                  className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[#242424]/[0.04] border border-[#242424]/[0.08] text-[16px] font-normal leading-[24px] text-[#242424] placeholder:text-[#383637]/[0.72] focus:outline-none focus:ring-2 focus:ring-[#4F8AF7] focus:border-transparent"
+                  className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[var(--pf-paper)] border border-[var(--pf-line)] text-[16px] font-normal leading-[24px] text-[var(--pf-ink)] placeholder:text-[var(--pf-text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--pf-blue)] focus:border-transparent"
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <label className="text-[14px] font-semibold leading-[22px] text-[#383637]">New password</label>
+                <label className="text-[14px] font-semibold leading-[22px] text-[var(--pf-ink)]">New password</label>
                 <input
                   type="password"
                   value={passwordForm.new_password}
                   onChange={(e) => setPasswordForm((p) => ({ ...p, new_password: e.target.value }))}
                   placeholder="Enter new password"
-                  className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[#242424]/[0.04] border border-[#242424]/[0.08] text-[16px] font-normal leading-[24px] text-[#242424] placeholder:text-[#383637]/[0.72] focus:outline-none focus:ring-2 focus:ring-[#4F8AF7] focus:border-transparent"
+                  className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[var(--pf-paper)] border border-[var(--pf-line)] text-[16px] font-normal leading-[24px] text-[var(--pf-ink)] placeholder:text-[var(--pf-text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--pf-blue)] focus:border-transparent"
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <label className="text-[14px] font-semibold leading-[22px] text-[#383637]">Confirm new password</label>
+                <label className="text-[14px] font-semibold leading-[22px] text-[var(--pf-ink)]">Confirm new password</label>
                 <input
                   type="password"
                   value={passwordForm.confirm}
                   onChange={(e) => setPasswordForm((p) => ({ ...p, confirm: e.target.value }))}
                   placeholder="Confirm new password"
-                  className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[#242424]/[0.04] border border-[#242424]/[0.08] text-[16px] font-normal leading-[24px] text-[#242424] placeholder:text-[#383637]/[0.72] focus:outline-none focus:ring-2 focus:ring-[#4F8AF7] focus:border-transparent"
+                  className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[var(--pf-paper)] border border-[var(--pf-line)] text-[16px] font-normal leading-[24px] text-[var(--pf-ink)] placeholder:text-[var(--pf-text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--pf-blue)] focus:border-transparent"
                 />
               </div>
               <button
                 type="button"
                 disabled={savingPassword || !passwordForm.current || !passwordForm.new_password}
                 onClick={handlePasswordChange}
-                className="self-start h-[40px] px-5 rounded-[110px] text-[14px] font-medium text-[#242424] bg-[#4F8AF7]/20 hover:bg-[#4F8AF7]/30 transition disabled:opacity-50"
+                className="self-start h-[40px] px-5 rounded-[110px] text-[14px] font-medium text-[var(--pf-ink)] bg-[var(--pf-blue-tint)] hover:opacity-80 transition disabled:opacity-50"
               >
                 {savingPassword ? "Updating..." : "Update password"}
               </button>
@@ -483,7 +483,7 @@ export default function ProfilePage() {
               <button
                 type="button"
                 onClick={() => { setEditing(false); setError("") }}
-                className="flex-1 lg:flex-none h-[48px] px-6 rounded-[110px] text-[16px] font-medium text-[#242424] bg-[#4F8AF7]/8 hover:bg-[#4F8AF7]/12 transition"
+                className="flex-1 lg:flex-none h-[48px] px-6 rounded-[110px] text-[16px] font-medium text-[var(--pf-ink)] bg-[var(--pf-paper)] hover:bg-[var(--pf-blue-tint)] transition"
               >
                 Cancel
               </button>
@@ -499,13 +499,13 @@ export default function ProfilePage() {
         ) : (
           <div className="flex flex-col gap-5">
             <ProfileField label="Full Name" value={fullName} />
-            <ProfileField label="Email" value={customer?.email || "—"} />
-            <ProfileField label="Phone Number" value={customer?.phone || "—"} />
-            <ProfileField label="Company" value={(customer as unknown as Record<string, unknown>)?.company_name as string || "—"} />
-            <ProfileField label="City" value={(metadata.city as string) || "—"} />
+            <ProfileField label="Email" value={customer?.email || "-"} />
+            <ProfileField label="Phone Number" value={customer?.phone || "-"} />
+            <ProfileField label="Company" value={(customer as unknown as Record<string, unknown>)?.company_name as string || "-"} />
+            <ProfileField label="City" value={(metadata.city as string) || "-"} />
             <ProfileField label="Password" value="••••••••" />
-            <ProfileField label="Date of Birth" value={(metadata.date_of_birth as string) || "—"} />
-            <ProfileField label="Bio" value={(metadata.bio as string) || "—"} />
+            <ProfileField label="Date of Birth" value={(metadata.date_of_birth as string) || "-"} />
+            <ProfileField label="Bio" value={(metadata.bio as string) || "-"} />
           </div>
         )}
       </div>
@@ -517,10 +517,10 @@ export default function ProfilePage() {
 function ProfileField({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-[2px]">
-      <span className="text-[12px] lg:text-[14px] font-normal leading-[18px] lg:leading-[20px] tracking-[-0.02em] text-[#595959]">
+      <span className="text-[12px] lg:text-[14px] font-normal leading-[18px] lg:leading-[20px] tracking-[-0.02em] text-[var(--pf-text-2)]">
         {label}
       </span>
-      <span className="text-[14px] lg:text-[16px] font-semibold leading-[22px] lg:leading-[24px] tracking-[-0.01em] text-[#0F0502]">
+      <span className="text-[14px] lg:text-[16px] font-semibold leading-[22px] lg:leading-[24px] tracking-[-0.01em] text-[var(--pf-ink)]">
         {value}
       </span>
     </div>

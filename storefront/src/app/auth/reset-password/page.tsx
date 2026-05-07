@@ -54,10 +54,10 @@ function ResetPasswordForm() {
   if (!token) {
     return (
       <div className="text-center">
-        <h1 className="text-[36px] font-semibold leading-[48px] text-[#383637] mb-4">
+        <h1 className="text-[36px] font-semibold leading-[48px] text-[var(--pf-ink)] mb-4">
           Invalid Reset Link
         </h1>
-        <p className="text-[16px] text-[#52525B] mb-6">
+        <p className="text-[16px] text-[var(--pf-text-2)] mb-6">
           This password reset link is invalid or has expired. Please request a new one.
         </p>
         <Link
@@ -89,10 +89,10 @@ function ResetPasswordForm() {
             />
           </svg>
         </div>
-        <h2 className="text-lg font-semibold text-[#383637] mb-2">
+        <h2 className="text-lg font-semibold text-[var(--pf-ink)] mb-2">
           Password Reset Successfully
         </h2>
-        <p className="text-[14px] text-[#52525B] mb-6">
+        <p className="text-[14px] text-[var(--pf-text-2)] mb-6">
           Your password has been updated. You can now sign in with your new password.
         </p>
         <Link
@@ -107,10 +107,10 @@ function ResetPasswordForm() {
 
   return (
     <>
-      <h1 className="text-[36px] font-semibold leading-[48px] text-[#383637] mb-2">
+      <h1 className="text-[36px] font-semibold leading-[48px] text-[var(--pf-ink)] mb-2">
         Reset password
       </h1>
-      <p className="text-[16px] font-normal leading-[24px] text-[#383637] mb-8">
+      <p className="text-[16px] font-normal leading-[24px] text-[var(--pf-ink)] mb-8">
         {email ? `Enter a new password for ${email}` : "Enter your new password below."}
       </p>
 
@@ -124,7 +124,7 @@ function ResetPasswordForm() {
         <div className="flex flex-col gap-1.5">
           <label
             htmlFor="password"
-            className="text-[14px] font-normal leading-[20px] text-[#52525B]"
+            className="text-[14px] font-normal leading-[20px] text-[var(--pf-text-2)]"
           >
             New password
           </label>
@@ -136,7 +136,7 @@ function ResetPasswordForm() {
             placeholder="Enter new password"
             required
             minLength={8}
-            className="w-full h-[38px] px-3 rounded-[12px] border-2 border-[#E4E4E7] text-[14px] text-[#141414] placeholder-[#71717A] focus:outline-none focus:border-[#4F8AF7] transition"
+            className="w-full h-[38px] px-3 rounded-[12px] border-2 border-[var(--pf-line)] text-[14px] text-[var(--pf-ink)] placeholder-[var(--pf-text-3)] focus:outline-none focus:border-[var(--pf-blue)] transition"
             style={{
               filter: "drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.05))",
             }}
@@ -146,7 +146,7 @@ function ResetPasswordForm() {
         <div className="flex flex-col gap-1.5">
           <label
             htmlFor="confirmPassword"
-            className="text-[14px] font-normal leading-[20px] text-[#52525B]"
+            className="text-[14px] font-normal leading-[20px] text-[var(--pf-text-2)]"
           >
             Confirm password
           </label>
@@ -158,7 +158,7 @@ function ResetPasswordForm() {
             placeholder="Confirm new password"
             required
             minLength={8}
-            className="w-full h-[38px] px-3 rounded-[12px] border-2 border-[#E4E4E7] text-[14px] text-[#141414] placeholder-[#71717A] focus:outline-none focus:border-[#4F8AF7] transition"
+            className="w-full h-[38px] px-3 rounded-[12px] border-2 border-[var(--pf-line)] text-[14px] text-[var(--pf-ink)] placeholder-[var(--pf-text-3)] focus:outline-none focus:border-[var(--pf-blue)] transition"
             style={{
               filter: "drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.05))",
             }}
@@ -174,11 +174,11 @@ function ResetPasswordForm() {
         </button>
       </form>
 
-      <p className="mt-8 text-center text-[14px] text-[#52525B]">
+      <p className="mt-8 text-center text-[14px] text-[var(--pf-text-2)]">
         Remember your password?{" "}
         <Link
           href="/auth/login"
-          className="text-[#4F8AF7] hover:underline font-semibold"
+          className="text-[var(--pf-blue)] hover:underline font-semibold"
         >
           Sign in
         </Link>
@@ -191,7 +191,7 @@ export default function ResetPasswordPage() {
   return (
     <Suspense fallback={
       <div className="text-center">
-        <p className="text-[16px] text-[#52525B]">Loading...</p>
+        <p className="text-[16px] text-[var(--pf-text-2)]">Loading...</p>
       </div>
     }>
       <ResetPasswordForm />

@@ -150,7 +150,7 @@ function SearchProductCard({
         style={{
           padding: "6px 16px",
           height: "34px",
-          background: "#242424",
+          background: "var(--pf-ink)",
           borderRadius: "110px",
           fontWeight: 700,
           fontSize: "12px",
@@ -307,7 +307,10 @@ export default function SearchOverlay({ onClose }: SearchOverlayProps) {
             pointerEvents: "auto",
           }}
         >
-          <Image src="/icons/search-01.svg" alt="" width={32} height={32} className="shrink-0 w-6 h-6 md:w-8 md:h-8" />
+          <svg className="shrink-0 w-6 h-6 md:w-8 md:h-8" viewBox="0 0 24 24" fill="none">
+            <circle cx="11" cy="11" r="7" stroke="#A1A1AA" strokeWidth="1.5" />
+            <path d="M16 16l4 4" stroke="#A1A1AA" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
           <label htmlFor="search-input" className="sr-only">Search for products</label>
           <input
             id="search-input"
@@ -320,7 +323,7 @@ export default function SearchOverlay({ onClose }: SearchOverlayProps) {
             className="no-focus-ring flex-1 bg-transparent text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]"
             style={{
               fontWeight: 500,
-              color: "#242424",
+              color: "var(--pf-ink)",
               border: "none",
               outline: "none",
               boxShadow: "none",
@@ -364,7 +367,7 @@ export default function SearchOverlay({ onClose }: SearchOverlayProps) {
                 style={{
                   fontWeight: 700,
                   letterSpacing: "-0.03em",
-                  color: "#242424",
+                  color: "var(--pf-ink)",
                 }}
               >
                 Trending
@@ -378,7 +381,7 @@ export default function SearchOverlay({ onClose }: SearchOverlayProps) {
                     className="flex items-center justify-center hover:opacity-80 transition-opacity py-1 px-2 md:py-2 md:px-3 h-[26px] md:h-[38px]"
                     style={{
                       gap: "4px",
-                      background: "#E9F4F6",
+                      background: "var(--pf-blue-tint)",
                       borderRadius: "99px",
                     }}
                   >
@@ -393,13 +396,9 @@ export default function SearchOverlay({ onClose }: SearchOverlayProps) {
                     >
                       {p.title}
                     </span>
-                    <Image
-                      src="/icons/arrow-right-up.svg"
-                      alt=""
-                      width={20}
-                      height={20}
-                      className="shrink-0 w-4 h-4 md:w-5 md:h-5"
-                    />
+                    <svg className="shrink-0 w-4 h-4 md:w-5 md:h-5" viewBox="0 0 20 20" fill="none">
+                      <path d="M5.833 14.167L14.167 5.833M14.167 5.833H7.5M14.167 5.833v6.667" stroke="#52525B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
                   </Link>
                 ))}
               </div>
@@ -412,11 +411,11 @@ export default function SearchOverlay({ onClose }: SearchOverlayProps) {
               style={{
                 fontWeight: 700,
                 letterSpacing: "-0.03em",
-                color: "#242424",
+                color: "var(--pf-ink)",
               }}
             >
               {query ? "Search " : "Relevant "}
-              <span style={{ color: "#4F8AF7" }}>
+              <span style={{ color: "var(--pf-blue-soft)" }}>
                 {query ? "Results" : "Products"}
               </span>
             </h3>

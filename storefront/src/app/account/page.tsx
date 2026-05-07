@@ -107,7 +107,7 @@ export default function AccountOverviewPage() {
     <div className="w-full max-w-[1280px] flex flex-col gap-4 lg:gap-6">
       <section className="flex flex-col gap-6">
         <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-1 text-[14px] font-medium leading-[22px] tracking-[0.02em] text-[#242424]">
+          <div className="flex items-center gap-1 text-[14px] font-medium leading-[22px] tracking-[0.02em] text-[var(--pf-ink)]">
             <Link href="/" className="hover:underline">Home</Link>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.67} stroke="currentColor" className="w-3.5 h-3.5 -rotate-90">
               <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -119,11 +119,11 @@ export default function AccountOverviewPage() {
             <span>Overview</span>
           </div>
 
-          <h1 className="text-[20px] lg:text-[24px] font-semibold leading-[30px] lg:leading-[36px] tracking-[-0.03em] text-[#242424]">
+          <h1 className="text-[20px] lg:text-[24px] font-semibold leading-[30px] lg:leading-[36px] tracking-[-0.03em] text-[var(--pf-ink)]">
             Welcome back, {firstName}.
           </h1>
 
-          <p className="text-[12px] lg:text-[14px] font-medium leading-[18px] lg:leading-[22px] tracking-[-0.02em] text-[#595959]">
+          <p className="text-[12px] lg:text-[14px] font-medium leading-[18px] lg:leading-[22px] tracking-[-0.02em] text-[var(--pf-text-2)]">
             You can manage your account and orders here.
           </p>
         </div>
@@ -131,22 +131,22 @@ export default function AccountOverviewPage() {
       </section>
 
       <section className="flex flex-col gap-4 lg:gap-6">
-        <h2 className="text-[20px] lg:text-[24px] font-semibold leading-[30px] lg:leading-[36px] tracking-[-0.03em] text-[#242424]">
+        <h2 className="text-[20px] lg:text-[24px] font-semibold leading-[30px] lg:leading-[36px] tracking-[-0.03em] text-[var(--pf-ink)]">
           Orders
         </h2>
 
         {loadingOrders ? (
           <div className="flex justify-center py-12">
-            <div className="w-8 h-8 border-2 border-[#4F8AF7] border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-[var(--pf-blue)] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : recentOrders.length === 0 ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="flex flex-col items-center justify-center p-8 border border-black/12 rounded-[24px] text-center" style={{ boxShadow: "inset 0px 4px 74px rgba(34, 138, 227, 0.05)" }}>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-[#D4D4D8] mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-[var(--pf-line)] mb-3">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
               </svg>
-              <p className="text-[16px] font-semibold text-[#242424] mb-1">No orders yet</p>
-              <p className="text-[14px] text-[#595959]">When you make a purchase, your orders will appear here.</p>
+              <p className="text-[16px] font-semibold text-[var(--pf-ink)] mb-1">No orders yet</p>
+              <p className="text-[14px] text-[var(--pf-text-2)]">When you make a purchase, your orders will appear here.</p>
               <Link
                 href="/products"
                 className="btn-primary mt-4 inline-flex items-center justify-center px-5 py-3 h-[48px] rounded-[110px] text-[16px] font-bold text-white"
@@ -185,19 +185,19 @@ function StatCard({ label, value, badge }: { label: string; value: string; badge
   }
 
   return (
-    <div className="flex flex-col gap-1 lg:gap-2 p-2 px-3 lg:px-5 lg:py-4 bg-white border border-[#E0E0E0] rounded-[12px] lg:rounded-[20px]">
-      <span className="text-[11px] lg:text-[16px] font-normal leading-[18px] lg:leading-[24px] tracking-[-0.01em] text-[#242424]/70">
+    <div className="flex flex-col gap-1 lg:gap-2 p-2 px-3 lg:px-5 lg:py-4 bg-white border border-[var(--pf-line)] rounded-[12px] lg:rounded-[20px]">
+      <span className="text-[11px] lg:text-[16px] font-normal leading-[18px] lg:leading-[24px] tracking-[-0.01em] text-[var(--pf-ink)]/70">
         {label}
       </span>
       {badge ? (
         <span className={`inline-flex items-center gap-1 w-fit px-2 lg:px-3 py-1 ${statusColors[value]?.bg || "bg-gray-100"} rounded-[20px]`}>
           <span className={`w-1 h-1 rounded-full ${statusColors[value]?.dot || "bg-gray-400"}`} />
-          <span className="text-[10px] lg:text-[12px] font-medium leading-[12px] lg:leading-[16px] tracking-[-0.01em] text-[#242424] capitalize">
+          <span className="text-[10px] lg:text-[12px] font-medium leading-[12px] lg:leading-[16px] tracking-[-0.01em] text-[var(--pf-ink)] capitalize">
             {value}
           </span>
         </span>
       ) : (
-        <span className="text-[14px] lg:text-[16px] font-semibold leading-[22px] lg:leading-[28px] tracking-[-0.01em] text-[#242424]">
+        <span className="text-[14px] lg:text-[16px] font-semibold leading-[22px] lg:leading-[28px] tracking-[-0.01em] text-[var(--pf-ink)]">
           {value}
         </span>
       )}
@@ -213,8 +213,8 @@ function BenefitCard({ title, description, hasIcon }: { title: string; descripti
     >
       {hasIcon && <Image src="/icons/laurel-wreath.svg" alt="" width={24} height={24} className="lg:w-10 lg:h-10" />}
       <div className="flex flex-col gap-3">
-        <h3 className="text-[16px] lg:text-[20px] font-semibold leading-[24px] tracking-[-0.03em] text-[#242424]">{title}</h3>
-        <p className="text-[14px] lg:text-[16px] font-normal leading-[20px] lg:leading-[24px] tracking-[-0.01em] text-[#242424]">{description}</p>
+        <h3 className="text-[16px] lg:text-[20px] font-semibold leading-[24px] tracking-[-0.03em] text-[var(--pf-ink)]">{title}</h3>
+        <p className="text-[14px] lg:text-[16px] font-normal leading-[20px] lg:leading-[24px] tracking-[-0.01em] text-[var(--pf-ink)]">{description}</p>
       </div>
     </div>
   )
@@ -230,7 +230,7 @@ function OrderCard({ order }: { order: Order }) {
       className="flex flex-col items-start p-3 lg:p-6 lg:py-8 gap-3 lg:gap-4 bg-white border border-black/12 rounded-[24px]"
       style={{ boxShadow: "inset 0px 4px 74px rgba(34, 138, 227, 0.05)" }}
     >
-      <h3 className="text-[16px] lg:text-[24px] font-semibold leading-[24px] lg:leading-[36px] tracking-[-0.03em] text-[#242424]">
+      <h3 className="text-[16px] lg:text-[24px] font-semibold leading-[24px] lg:leading-[36px] tracking-[-0.03em] text-[var(--pf-ink)]">
         Order of {itemCount} item{itemCount !== 1 ? "s" : ""} is being processed
       </h3>
 
@@ -248,18 +248,18 @@ function OrderCard({ order }: { order: Order }) {
 
       <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full">
         <div className="flex flex-col gap-2 flex-1">
-          <span className="text-[12px] lg:text-[16px] font-normal leading-[18px] lg:leading-[24px] tracking-[-0.01em] text-[#242424]/70">Order date</span>
-          <span className="text-[14px] lg:text-[16px] font-semibold leading-[22px] lg:leading-[24px] tracking-[-0.01em] text-[#242424]">{orderDate}</span>
+          <span className="text-[12px] lg:text-[16px] font-normal leading-[18px] lg:leading-[24px] tracking-[-0.01em] text-[var(--pf-ink)]/70">Order date</span>
+          <span className="text-[14px] lg:text-[16px] font-semibold leading-[22px] lg:leading-[24px] tracking-[-0.01em] text-[var(--pf-ink)]">{orderDate}</span>
         </div>
         <div className="flex flex-col gap-2 flex-1">
-          <span className="text-[12px] lg:text-[16px] font-normal leading-[18px] lg:leading-[24px] tracking-[-0.01em] text-[#242424]/70">Order number</span>
-          <span className="text-[14px] lg:text-[16px] font-semibold leading-[22px] lg:leading-[24px] tracking-[-0.01em] text-[#242424]">{order.display_id + ORDER_NUMBER_OFFSET}</span>
+          <span className="text-[12px] lg:text-[16px] font-normal leading-[18px] lg:leading-[24px] tracking-[-0.01em] text-[var(--pf-ink)]/70">Order number</span>
+          <span className="text-[14px] lg:text-[16px] font-semibold leading-[22px] lg:leading-[24px] tracking-[-0.01em] text-[var(--pf-ink)]">{order.display_id + ORDER_NUMBER_OFFSET}</span>
         </div>
       </div>
 
       <Link
         href={`/account/orders/${order.id}`}
-        className="group inline-flex items-center justify-center self-stretch lg:self-start h-[48px] rounded-[110px] text-[16px] font-medium lg:font-bold leading-[24px] tracking-[-0.01em] text-[#242424] bg-[#4F8AF7]/20 hover:bg-[#4F8AF7]/25 transition-colors"
+        className="group inline-flex items-center justify-center self-stretch lg:self-start h-[48px] rounded-[110px] text-[16px] font-medium lg:font-bold leading-[24px] tracking-[-0.01em] text-[var(--pf-ink)] bg-[var(--pf-blue-tint)] hover:bg-[var(--pf-blue-tint)] transition-colors"
         style={{ padding: "12px 28px 12px 24px" }}
       >
         View order details

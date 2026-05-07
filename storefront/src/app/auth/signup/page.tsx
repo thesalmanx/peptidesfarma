@@ -75,11 +75,11 @@ function SignupPageInner() {
   return (
     <>
       <h1
-        className="text-[36px] font-bold leading-[44px] tracking-[-0.03em] text-[#141414] mb-2"
+        className="text-[36px] font-bold leading-[44px] tracking-[-0.03em] text-[var(--pf-ink)] mb-2"
       >
         Sign Up
       </h1>
-      <p className="text-[16px] font-normal leading-[24px] text-[#52525B] mb-8">
+      <p className="text-[16px] font-normal leading-[24px] text-[var(--pf-text-2)] mb-8">
         Create your account to get started
       </p>
 
@@ -94,7 +94,7 @@ function SignupPageInner() {
           <div className="flex flex-col gap-1.5 flex-1">
             <label
               htmlFor="firstName"
-              className="text-[14px] font-medium leading-[20px] text-[#52525B]"
+              className="text-[14px] font-medium leading-[20px] text-[var(--pf-text-2)]"
             >
               First Name <span className="text-red-500">*</span>
             </label>
@@ -106,13 +106,13 @@ function SignupPageInner() {
               onChange={(e) => setFirstName(e.target.value)}
               placeholder="Enter your first name"
               required
-              className="w-full h-[48px] px-4 rounded-[12px] border-2 border-[#E4E4E7] text-[16px] text-[#141414] placeholder-[#A1A1AA] focus:outline-none focus:border-[#4F8AF7] transition"
+              className="w-full h-[48px] px-4 rounded-[12px] border-2 border-[var(--pf-line)] text-[16px] text-[var(--pf-ink)] placeholder-[var(--pf-text-3)] focus:outline-none focus:border-[var(--pf-blue)] transition"
             />
           </div>
           <div className="flex flex-col gap-1.5 flex-1">
             <label
               htmlFor="lastName"
-              className="text-[14px] font-medium leading-[20px] text-[#52525B]"
+              className="text-[14px] font-medium leading-[20px] text-[var(--pf-text-2)]"
             >
               Last Name <span className="text-red-500">*</span>
             </label>
@@ -124,7 +124,7 @@ function SignupPageInner() {
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Enter your last name"
               required
-              className="w-full h-[48px] px-4 rounded-[12px] border-2 border-[#E4E4E7] text-[16px] text-[#141414] placeholder-[#A1A1AA] focus:outline-none focus:border-[#4F8AF7] transition"
+              className="w-full h-[48px] px-4 rounded-[12px] border-2 border-[var(--pf-line)] text-[16px] text-[var(--pf-ink)] placeholder-[var(--pf-text-3)] focus:outline-none focus:border-[var(--pf-blue)] transition"
             />
           </div>
         </div>
@@ -132,7 +132,7 @@ function SignupPageInner() {
         <div className="flex flex-col gap-1.5">
           <label
             htmlFor="email"
-            className="text-[14px] font-medium leading-[20px] text-[#52525B]"
+            className="text-[14px] font-medium leading-[20px] text-[var(--pf-text-2)]"
           >
             Email <span className="text-red-500">*</span>
           </label>
@@ -143,14 +143,14 @@ function SignupPageInner() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
             required
-            className="w-full h-[48px] px-4 rounded-[12px] border-2 border-[#E4E4E7] text-[16px] text-[#141414] placeholder-[#A1A1AA] focus:outline-none focus:border-[#4F8AF7] transition"
+            className="w-full h-[48px] px-4 rounded-[12px] border-2 border-[var(--pf-line)] text-[16px] text-[var(--pf-ink)] placeholder-[var(--pf-text-3)] focus:outline-none focus:border-[var(--pf-blue)] transition"
           />
         </div>
 
         <div className="flex flex-col gap-1.5">
           <label
             htmlFor="password"
-            className="text-[14px] font-medium leading-[20px] text-[#52525B]"
+            className="text-[14px] font-medium leading-[20px] text-[var(--pf-text-2)]"
           >
             Password <span className="text-red-500">*</span>
           </label>
@@ -162,13 +162,13 @@ function SignupPageInner() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Create a password"
               required
-              className="w-full h-[48px] px-4 pr-12 rounded-[12px] border-2 border-[#E4E4E7] text-[16px] text-[#141414] placeholder-[#A1A1AA] focus:outline-none focus:border-[#4F8AF7] transition"
+              className="w-full h-[48px] px-4 pr-12 rounded-[12px] border-2 border-[var(--pf-line)] text-[16px] text-[var(--pf-ink)] placeholder-[var(--pf-text-3)] focus:outline-none focus:border-[var(--pf-blue)] transition"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Hide password" : "Show password"}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#A1A1AA] hover:text-[#52525B]"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--pf-text-3)] hover:text-[var(--pf-ink)]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -206,7 +206,7 @@ function SignupPageInner() {
         <div className="flex flex-col gap-1.5">
           <label
             htmlFor="confirmPassword"
-            className="text-[14px] font-medium leading-[20px] text-[#52525B]"
+            className="text-[14px] font-medium leading-[20px] text-[var(--pf-text-2)]"
           >
             Confirm Password <span className="text-red-500">*</span>
           </label>
@@ -218,13 +218,13 @@ function SignupPageInner() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm your password"
               required
-              className="w-full h-[48px] px-4 pr-12 rounded-[12px] border-2 border-[#E4E4E7] text-[16px] text-[#141414] placeholder-[#A1A1AA] focus:outline-none focus:border-[#4F8AF7] transition"
+              className="w-full h-[48px] px-4 pr-12 rounded-[12px] border-2 border-[var(--pf-line)] text-[16px] text-[var(--pf-ink)] placeholder-[var(--pf-text-3)] focus:outline-none focus:border-[var(--pf-blue)] transition"
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#A1A1AA] hover:text-[#52525B]"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--pf-text-3)] hover:text-[var(--pf-ink)]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -264,15 +264,15 @@ function SignupPageInner() {
             type="checkbox"
             checked={agreeTerms}
             onChange={(e) => setAgreeTerms(e.target.checked)}
-            className="w-[18px] h-[18px] mt-0.5 rounded-[4px] border-2 border-[#E4E4E7] text-[#4F8AF7] focus:ring-[#4F8AF7] cursor-pointer"
+            className="w-[18px] h-[18px] mt-0.5 rounded-[4px] border-2 border-[var(--pf-line)] text-[var(--pf-blue)] focus:ring-[var(--pf-blue)] cursor-pointer"
           />
-          <span className="text-[14px] leading-[20px] text-[#52525B]">
+          <span className="text-[14px] leading-[20px] text-[var(--pf-text-2)]">
             I agree to the{" "}
-            <Link href="#" className="text-[#4F8AF7] hover:underline font-medium">
+            <Link href="#" className="text-[var(--pf-blue)] hover:underline font-medium">
               Terms of Service
             </Link>{" "}
             and{" "}
-            <Link href="#" className="text-[#4F8AF7] hover:underline font-medium">
+            <Link href="#" className="text-[var(--pf-blue)] hover:underline font-medium">
               Privacy Policy
             </Link>
           </span>
@@ -283,9 +283,9 @@ function SignupPageInner() {
             type="checkbox"
             checked={marketingConsent}
             onChange={(e) => setMarketingConsent(e.target.checked)}
-            className="w-[18px] h-[18px] mt-0.5 rounded-[4px] border-2 border-[#E4E4E7] text-[#4F8AF7] focus:ring-[#4F8AF7] cursor-pointer"
+            className="w-[18px] h-[18px] mt-0.5 rounded-[4px] border-2 border-[var(--pf-line)] text-[var(--pf-blue)] focus:ring-[var(--pf-blue)] cursor-pointer"
           />
-          <span className="text-[14px] leading-[20px] text-[#52525B]">
+          <span className="text-[14px] leading-[20px] text-[var(--pf-text-2)]">
             Send me research updates, new product alerts, and exclusive offers from Peptidesfarma. Unsubscribe anytime.
           </span>
         </label>
@@ -301,10 +301,10 @@ function SignupPageInner() {
 
       <div className="relative my-6">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-[#E4E4E7]" />
+          <div className="w-full border-t border-[var(--pf-line)]" />
         </div>
         <div className="relative flex justify-center">
-          <span className="bg-white px-4 text-[14px] font-medium text-[#A1A1AA]">
+          <span className="bg-white px-4 text-[14px] font-medium text-[var(--pf-text-3)]">
             OR
           </span>
         </div>
@@ -315,7 +315,7 @@ function SignupPageInner() {
           type="button"
           onClick={() => loginWithGoogle()}
           aria-label="Sign up with Google"
-          className="w-full h-[48px] flex items-center justify-center gap-3 rounded-[99px] border border-[#DADADA] text-[16px] font-medium text-[#141414] hover:bg-gray-50 transition cursor-pointer"
+          className="w-full h-[48px] flex items-center justify-center gap-3 rounded-[99px] border border-[var(--pf-line)] text-[16px] font-medium text-[var(--pf-ink)] hover:bg-gray-50 transition cursor-pointer"
         >
           <Image src="/icons/social/google.svg" alt="" width={24} height={24} />
           Sign up with Google
@@ -324,18 +324,18 @@ function SignupPageInner() {
           type="button"
           onClick={() => loginWithApple()}
           aria-label="Sign up with Apple"
-          className="w-full h-[48px] flex items-center justify-center gap-3 rounded-[99px] border border-[#DADADA] text-[16px] font-medium text-[#141414] hover:bg-gray-50 transition cursor-pointer"
+          className="w-full h-[48px] flex items-center justify-center gap-3 rounded-[99px] border border-[var(--pf-line)] text-[16px] font-medium text-[var(--pf-ink)] hover:bg-gray-50 transition cursor-pointer"
         >
           <Image src="/icons/social/apple.svg" alt="" width={24} height={24} />
           Sign up with Apple
         </button>
       </div>
 
-      <p className="mt-8 text-center text-[14px] text-[#52525B]">
+      <p className="mt-8 text-center text-[14px] text-[var(--pf-text-2)]">
         Already have an account?{" "}
         <Link
           href={redirectTo !== "/account" ? `/auth/login?redirect=${encodeURIComponent(redirectTo)}` : "/auth/login"}
-          className="text-[#4F8AF7] hover:underline font-semibold"
+          className="text-[var(--pf-blue)] hover:underline font-semibold"
         >
           Sign in
         </Link>

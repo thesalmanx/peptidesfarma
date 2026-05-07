@@ -259,68 +259,68 @@ export default function ProductDetailClient({ product, images, options, variants
   return (
     <div>
       {/* Hero + Buy bar in one 100vh dark section */}
-      <section className="pf-starfield pf-pdp-hero" style={{ minHeight: "calc(100vh - 104px)", display: "flex", flexDirection: "column", justifyContent: "space-between", paddingTop: 40, paddingBottom: 0 }}>
-        {/* Top: product info + vial */}
-        <div className="pf-wrap" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }}>
-          <div>
-            <div style={{ fontSize: 12, color: "var(--pf-dark-text-2)", marginBottom: 16, marginTop: 66, fontFamily: "var(--pf-mono)", letterSpacing: "0.08em" }}>
-              <Link href="/" style={{ cursor: "pointer", opacity: 0.7 }}>HOME</Link>
-              <span style={{ margin: "0 8px", opacity: 0.5 }}>/</span>
-              <Link href="/products" style={{ cursor: "pointer", opacity: 0.7 }}>PRODUCTS</Link>
-              <span style={{ margin: "0 8px", opacity: 0.5 }}>/</span>
-              <span style={{ color: "#fff" }}>{product.title.toUpperCase()}</span>
-            </div>
-
-            <h1 style={{ fontSize: 64, fontWeight: 600, letterSpacing: "-0.03em", color: "#fff", margin: "0 0 12px", lineHeight: 1 }}>
-              {product.title}
-            </h1>
-
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 24, marginTop: 20 }}>
-              <span className="pf-chip">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--pf-blue-soft)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7" /></svg>
-                99%+ purity
-              </span>
-              <span className="pf-chip">HPLC verified</span>
-              <span className="pf-chip">Lot-traced</span>
-            </div>
-
-            <dl className="pf-spec" style={{ color: "var(--pf-dark-text)", marginBottom: 24 }}>
-              <dt style={{ color: "var(--pf-dark-text-2)" }}>Form</dt><dd style={{ color: "#fff" }}>Lyophilized powder</dd>
-              <dt style={{ color: "var(--pf-dark-text-2)" }}>Storage</dt><dd style={{ color: "#fff" }}>-20 C, dark</dd>
-              <dt style={{ color: "var(--pf-dark-text-2)" }}>Tested</dt><dd style={{ color: "#fff" }}>Freedom Diagnostics, 3rd party</dd>
-            </dl>
-          </div>
-
-          <div className="pf-pdp-vial" style={{ display: "flex", alignItems: "center", justifyContent: "center", overflow: "visible" }}>
-            {mainImage ? (
-              <Image
-                src={mainImage}
-                alt={product.title}
-                width={800}
-                height={1100}
-                className="object-contain animate-variant-swap"
-                style={{ width: "158%", height: "auto", maxWidth: "none", marginRight: -361, zIndex: 2, pointerEvents: "none" }}
-                priority
-              />
-            ) : (
-              <div style={{ position: "relative", width: 200, height: 370 }}>
-                <svg viewBox="0 0 200 370" width="200" height="370" style={{ opacity: 0.8 }}>
-                  <rect x="68" y="6" width="64" height="22" rx="3" fill="#2D4174" />
-                  <rect x="62" y="26" width="76" height="18" rx="2" fill="#A4B0C5" />
-                  <path d="M62 44 L62 320 Q62 340 82 340 L118 340 Q138 340 138 320 L138 44 Z" fill="rgba(159,190,232,0.4)" />
-                  <rect x="68" y="118" width="64" height="190" rx="4" fill="#13234A" />
-                  <text x="100" y="150" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="700">{product.title.slice(0, 9)}</text>
-                </svg>
+      <section className="pf-pdp-hero" style={{ minHeight: "calc(100vh - 104px)", display: "flex", flexDirection: "column", justifyContent: "space-between", paddingTop: 40, paddingBottom: 0, background: "linear-gradient(180deg, #1B2A4A 0%, #243660 100%)" }}>
+        <div style={{ maxWidth: 1180, margin: "0 auto", width: "100%", padding: "0 24px", flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          {/* Top: product info + vial */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }}>
+            <div style={{ paddingLeft: 42 }}>
+              <div style={{ fontSize: 12, color: "var(--pf-dark-text-2)", marginBottom: 16, marginTop: 66, fontFamily: "var(--pf-mono)", letterSpacing: "0.08em" }}>
+                <Link href="/" style={{ cursor: "pointer", opacity: 0.7 }}>HOME</Link>
+                <span style={{ margin: "0 8px", opacity: 0.5 }}>/</span>
+                <Link href="/products" style={{ cursor: "pointer", opacity: 0.7 }}>PRODUCTS</Link>
+                <span style={{ margin: "0 8px", opacity: 0.5 }}>/</span>
+                <span style={{ color: "#fff" }}>{product.title.toUpperCase()}</span>
               </div>
-            )}
-          </div>
-        </div>
 
-        {/* Bottom: buy bar pinned to bottom of this 100vh section */}
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.10)", background: "rgba(255,255,255,0.06)", backdropFilter: "blur(10px)" }}>
-        <div className="pf-wrap pf-pdp-buybar" style={{ padding: "24px 0", display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 40, alignItems: "center" }}>
+              <h1 style={{ fontSize: 64, fontWeight: 600, letterSpacing: "-0.03em", color: "#fff", margin: "0 0 12px", lineHeight: 1 }}>
+                {product.title}
+              </h1>
+
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 24, marginTop: 20 }}>
+                <span className="pf-chip">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--pf-blue-soft)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7" /></svg>
+                  99%+ purity
+                </span>
+                <span className="pf-chip">HPLC verified</span>
+                <span className="pf-chip">Lot-traced</span>
+              </div>
+
+              <dl className="pf-spec" style={{ color: "var(--pf-dark-text)", marginBottom: 24, fontSize: 16 }}>
+                <dt style={{ color: "var(--pf-dark-text-2)", fontSize: 15 }}>Form</dt><dd style={{ color: "#fff", fontSize: 16 }}>Lyophilized powder</dd>
+                <dt style={{ color: "var(--pf-dark-text-2)", fontSize: 15 }}>Storage</dt><dd style={{ color: "#fff", fontSize: 16 }}>-20 C, dark</dd>
+                <dt style={{ color: "var(--pf-dark-text-2)", fontSize: 15 }}>Tested</dt><dd style={{ color: "#fff", fontSize: 16 }}>Freedom Diagnostics, 3rd party</dd>
+              </dl>
+            </div>
+
+            <div className="pf-pdp-vial" style={{ display: "flex", alignItems: "center", justifyContent: "center", overflow: "visible" }}>
+              {mainImage ? (
+                <Image
+                  src={mainImage}
+                  alt={product.title}
+                  width={800}
+                  height={1100}
+                  className="object-contain animate-variant-swap"
+                  style={{ width: "158%", height: "auto", maxWidth: "none", marginRight: -60, zIndex: 2, pointerEvents: "none" }}
+                  priority
+                />
+              ) : (
+                <div style={{ position: "relative", width: 200, height: 370 }}>
+                  <svg viewBox="0 0 200 370" width="200" height="370" style={{ opacity: 0.8 }}>
+                    <rect x="68" y="6" width="64" height="22" rx="3" fill="#2D4174" />
+                    <rect x="62" y="26" width="76" height="18" rx="2" fill="#A4B0C5" />
+                    <path d="M62 44 L62 320 Q62 340 82 340 L118 340 Q138 340 138 320 L138 44 Z" fill="rgba(159,190,232,0.4)" />
+                    <rect x="68" y="118" width="64" height="190" rx="4" fill="#13234A" />
+                    <text x="100" y="150" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="700">{product.title.slice(0, 9)}</text>
+                  </svg>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Bottom: buy bar - matches hero */}
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.10)", background: "rgba(255,255,255,0.04)", margin: "0 -24px", padding: "0 24px" }}>
+          <div className="pf-pdp-buybar" style={{ padding: "24px 0", display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 40, alignItems: "center" }}>
           <div>
-            <div style={{ fontFamily: "var(--pf-mono)", fontSize: 11, letterSpacing: "0.12em", color: "rgba(255,255,255,0.7)", textTransform: "uppercase", marginBottom: 10 }}>Select size</div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
               {options.map((opt) =>
                 opt.values.map((val) => {
@@ -339,9 +339,9 @@ export default function ProductDetailClient({ product, images, options, variants
                         height: 72,
                         padding: isShort ? 0 : "0 20px",
                         borderRadius: "50%",
-                        border: active ? "2px solid rgba(79,138,247,0.4)" : "1px solid rgba(255,255,255,0.15)",
+                        border: active ? "2px solid rgba(79,138,247,0.6)" : "1px solid rgba(255,255,255,0.18)",
                         background: active ? "#fff" : "rgba(255,255,255,0.06)",
-                        color: active ? "var(--pf-ink)" : "rgba(255,255,255,0.5)",
+                        color: active ? "var(--pf-ink)" : "rgba(255,255,255,0.6)",
                         cursor: oos ? "not-allowed" : "pointer",
                         fontFamily: "inherit",
                         textDecoration: oos ? "line-through" : "none",
@@ -366,15 +366,15 @@ export default function ProductDetailClient({ product, images, options, variants
 
           <div className="pf-pdp-buybar-right" style={{ display: "flex", alignItems: "center", gap: 16, justifyContent: "flex-end" }}>
             <div style={{ textAlign: "right" }}>
-              <div style={{ fontFamily: "var(--pf-mono)", fontSize: 11, letterSpacing: "0.12em", color: "rgba(255,255,255,0.7)", textTransform: "uppercase", marginBottom: 4 }}>Price</div>
+              <div style={{ fontFamily: "var(--pf-mono)", fontSize: 11, letterSpacing: "0.12em", color: "rgba(255,255,255,0.6)", textTransform: "uppercase", marginBottom: 4 }}>Price</div>
               <div style={{ fontFamily: "var(--pf-mono)", fontSize: 32, fontWeight: 700, color: "#fff" }}>
                 {selectedVariant?.calculated_price
                   ? formatPrice(selectedVariant.calculated_price.calculated_amount * qty, selectedVariant.calculated_price.currency_code)
-                  : "—"
+                  : "-"
                 }
               </div>
             </div>
-            <div style={{ display: "inline-flex", alignItems: "center", border: "1px solid rgba(255,255,255,0.25)", borderRadius: 999, height: 44, background: "rgba(255,255,255,0.06)" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 999, height: 44, background: "rgba(255,255,255,0.06)" }}>
               <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: 40, height: 42, border: "none", background: "transparent", color: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14" /></svg>
               </button>
@@ -386,17 +386,42 @@ export default function ProductDetailClient({ product, images, options, variants
             <button
               disabled={outOfStock || adding}
               onClick={handleAdd}
-              className="pf-btn pf-btn--primary pf-btn--lg"
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                width: 180, height: 44, borderRadius: 999, padding: "12px 24px",
+                background: addError ? "#ef4444" : added ? "var(--pf-blue)" : "#fff",
+                border: addError ? "none" : added ? "none" : "1px solid rgba(0,0,0,0.24)",
+                cursor: adding ? "wait" : "pointer",
+                transition: "all 300ms ease",
+              }}
             >
-              {adding ? "Adding..." : added ? "Added!" : (
+              {adding ? (
+                <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="var(--pf-ink)" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="50 20" />
+                </svg>
+              ) : addError ? (
+                <span style={{ fontWeight: 700, fontSize: 14, color: "#fff" }}>Failed, try again</span>
+              ) : added ? (
+                <svg className="animate-check-pop" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 13l4 4L19 7" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              ) : (
                 <>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M6 7h12l-1 13H7L6 7Z" /><path d="M9 7V5a3 3 0 0 1 6 0v2" /></svg>
-                  Add to cart
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M6.6665 13.3333L13.9333 12.7277C16.207 12.5383 16.7174 12.0417 16.9694 9.77408L17.4998 5" stroke="var(--pf-ink)" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M5 5H18.3333" stroke="var(--pf-ink)" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M5.00016 18.3333C5.92064 18.3333 6.66683 17.5871 6.66683 16.6667C6.66683 15.7462 5.92064 15 5.00016 15C4.07969 15 3.3335 15.7462 3.3335 16.6667C3.3335 17.5871 4.07969 18.3333 5.00016 18.3333Z" stroke="var(--pf-ink)" strokeWidth="1.5"/>
+                    <path d="M14.1667 18.3333C15.0871 18.3333 15.8333 17.5871 15.8333 16.6667C15.8333 15.7462 15.0871 15 14.1667 15C13.2462 15 12.5 15.7462 12.5 16.6667C12.5 17.5871 13.2462 18.3333 14.1667 18.3333Z" stroke="var(--pf-ink)" strokeWidth="1.5"/>
+                    <path d="M6.6665 16.6667H12.4998" stroke="var(--pf-ink)" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M1.6665 1.66666H2.4715C3.25874 1.66666 3.94495 2.18715 4.13589 2.9291L6.61527 12.5637C6.74056 13.0507 6.63334 13.5664 6.32337 13.968L5.52661 15" stroke="var(--pf-ink)" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                  <span style={{ fontWeight: 700, fontSize: 14, letterSpacing: "-0.01em", color: "var(--pf-ink)" }}>Add to cart</span>
                 </>
               )}
             </button>
           </div>
         </div>
+          </div>
         </div>
       </section>
 

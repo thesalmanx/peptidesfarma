@@ -124,7 +124,7 @@ export default function AddressesPage() {
 
   return (
     <div className="w-full max-w-[1280px] flex flex-col gap-4">
-      <div className="flex items-center gap-1 text-[14px] font-medium leading-[22px] tracking-[0.02em] text-[#242424]">
+      <div className="flex items-center gap-1 text-[14px] font-medium leading-[22px] tracking-[0.02em] text-[var(--pf-ink)]">
         <Link href="/" className="hover:underline">Home</Link>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.67} stroke="currentColor" className="w-3.5 h-3.5 -rotate-90">
           <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -137,16 +137,16 @@ export default function AddressesPage() {
       </div>
       <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-6">
         <div className="flex flex-col gap-1 flex-1">
-          <h1 className="text-[20px] lg:text-[24px] font-semibold leading-[30px] lg:leading-[36px] tracking-[-0.03em] text-[#242424]">
+          <h1 className="text-[20px] lg:text-[24px] font-semibold leading-[30px] lg:leading-[36px] tracking-[-0.03em] text-[var(--pf-ink)]">
             My Addresses
           </h1>
-          <p className="text-[12px] lg:text-[14px] font-medium leading-[18px] lg:leading-[22px] tracking-[-0.02em] text-[#595959]">
+          <p className="text-[12px] lg:text-[14px] font-medium leading-[18px] lg:leading-[22px] tracking-[-0.02em] text-[var(--pf-text-2)]">
             Manage your shipping and billing addresses.
           </p>
         </div>
         <button
           onClick={openAdd}
-          className="inline-flex items-center justify-center self-stretch lg:self-start px-5 py-3 h-[48px] rounded-[110px] text-[16px] font-medium lg:font-bold leading-[24px] tracking-[-0.01em] text-[#242424] bg-[#4F8AF7]/20"
+          className="inline-flex items-center justify-center self-stretch lg:self-start px-5 py-3 h-[48px] rounded-[110px] text-[16px] font-medium lg:font-bold leading-[24px] tracking-[-0.01em] text-[var(--pf-ink)] bg-[var(--pf-blue-tint)]"
         >
           Add new address
         </button>
@@ -154,16 +154,16 @@ export default function AddressesPage() {
 
       {loading ? (
         <div className="flex justify-center py-12">
-          <div className="w-8 h-8 border-2 border-[#4F8AF7] border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[var(--pf-blue)] border-t-transparent rounded-full animate-spin" />
         </div>
       ) : addresses.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 px-6 border border-[#E0E0E0] rounded-[24px]">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-[#D4D4D8] mb-3">
+        <div className="flex flex-col items-center justify-center py-16 px-6 border border-[var(--pf-line)] rounded-[24px]">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-[var(--pf-line)] mb-3">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
           </svg>
-          <p className="text-[16px] font-semibold text-[#242424] mb-1">No addresses saved</p>
-          <p className="text-[14px] text-[#595959]">Add a shipping address to speed up checkout.</p>
+          <p className="text-[16px] font-semibold text-[var(--pf-ink)] mb-1">No addresses saved</p>
+          <p className="text-[14px] text-[var(--pf-text-2)]">Add a shipping address to speed up checkout.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -185,18 +185,18 @@ export default function AddressesPage() {
             className="absolute inset-0 bg-black/30"
             onClick={() => setShowModal(false)}
           />
-          <div className="relative bg-white w-full max-w-[640px] h-full border-l border-black/12 flex flex-col animate-[slideInRight_0.3s_ease-out]"
+          <div className="relative bg-white w-full max-w-[640px] h-full border-l border-[var(--pf-line)] flex flex-col animate-[slideInRight_0.3s_ease-out]"
             style={{ boxShadow: "-20px 0px 74px rgba(0,0,0,0.12)" }}
           >
-            <div className="flex items-center justify-between px-6 py-4 border-b border-black/8">
-              <h3 className="text-[24px] font-semibold leading-[36px] tracking-[-0.03em] text-[#242424]">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--pf-line)]">
+              <h3 className="text-[24px] font-semibold leading-[36px] tracking-[-0.03em] text-[var(--pf-ink)]">
                 {editingId ? "Edit Address" : "Add New Address"}
               </h3>
               <button
                 onClick={() => setShowModal(false)}
-                className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#F4F4F5] transition"
+                className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[var(--pf-paper)] transition"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-[#383637]">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-[var(--pf-ink)]">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -222,13 +222,13 @@ export default function AddressesPage() {
                 <FormField label="City" placeholder="Enter your city" value={form.city} onChange={(v) => updateField("city", v)} required />
                 <FormField label="Postal Code" placeholder="Enter your postal code" value={form.postal_code} onChange={(v) => updateField("postal_code", v)} required />
                 <div className="flex flex-col gap-1">
-                  <label className="text-[14px] font-semibold leading-[22px] text-[#383637]">
+                  <label className="text-[14px] font-semibold leading-[22px] text-[var(--pf-ink)]">
                     Country
                   </label>
                   <select
                     value={form.country_code}
                     onChange={(e) => updateField("country_code", e.target.value)}
-                    className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[#242424]/[0.04] border border-[#242424]/[0.08] text-[16px] font-normal leading-[24px] text-[#242424] focus:outline-none focus:ring-2 focus:ring-[#4F8AF7] focus:border-transparent"
+                    className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[var(--pf-paper)] border border-[var(--pf-line)] text-[16px] font-normal leading-[24px] text-[var(--pf-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--pf-blue)] focus:border-transparent"
                   >
                     <option value="us">United States</option>
                     <option value="ca">Canada</option>
@@ -240,11 +240,11 @@ export default function AddressesPage() {
                 </div>
               </div>
 
-              <div className="flex gap-3 px-6 py-4 border-t border-black/8">
+              <div className="flex gap-3 px-6 py-4 border-t border-[var(--pf-line)]">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="flex-1 h-[48px] rounded-[110px] text-[16px] font-medium text-[#242424] bg-[#4F8AF7]/8 hover:bg-[#4F8AF7]/12 transition"
+                  className="flex-1 h-[48px] rounded-[110px] text-[16px] font-medium text-[var(--pf-ink)] bg-[var(--pf-paper)] hover:bg-[var(--pf-blue-tint)] transition"
                 >
                   Cancel
                 </button>
@@ -274,7 +274,7 @@ function FormField({ label, placeholder, value, onChange, required, type = "text
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-[14px] font-semibold leading-[22px] text-[#383637]">
+      <label className="text-[14px] font-semibold leading-[22px] text-[var(--pf-ink)]">
         {label}
       </label>
       <input
@@ -283,7 +283,7 @@ function FormField({ label, placeholder, value, onChange, required, type = "text
         onChange={(e) => onChange(e.target.value)}
         required={required}
         placeholder={placeholder}
-        className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[#242424]/[0.04] border border-[#242424]/[0.08] text-[16px] font-normal leading-[24px] text-[#242424] placeholder:text-[#383637]/[0.72] focus:outline-none focus:ring-2 focus:ring-[#4F8AF7] focus:border-transparent"
+        className="w-full h-[48px] px-4 py-3 rounded-[16px] bg-[var(--pf-paper)] border border-[var(--pf-line)] text-[16px] font-normal leading-[24px] text-[var(--pf-ink)] placeholder:text-[var(--pf-text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--pf-blue)] focus:border-transparent"
       />
     </div>
   )
@@ -301,9 +301,9 @@ function AddressCard({ addr, index, onEdit, onDelete }: {
   const addressLine = [addr.address_1, addr.address_2, addr.city, addr.province, addr.postal_code, addr.country_code?.toUpperCase()].filter(Boolean).join(", ")
 
   return (
-    <div className="flex flex-col gap-5 p-5 px-6 lg:p-5 lg:px-6 pb-6 bg-white border border-[#E0E0E0] rounded-[24px]">
+    <div className="flex flex-col gap-5 p-5 px-6 lg:p-5 lg:px-6 pb-6 bg-white border border-[var(--pf-line)] rounded-[24px]">
       <div className="flex items-center justify-between">
-        <h3 className="text-[20px] lg:text-[24px] font-semibold leading-[30px] lg:leading-[36px] tracking-[-0.03em] text-[#242424]">
+        <h3 className="text-[20px] lg:text-[24px] font-semibold leading-[30px] lg:leading-[36px] tracking-[-0.03em] text-[var(--pf-ink)]">
           Address {index}
         </h3>
         <button onClick={onDelete} className="p-2 hover:bg-red-50 rounded-[8px] transition">
@@ -316,31 +316,31 @@ function AddressCard({ addr, index, onEdit, onDelete }: {
       <div className="flex flex-col gap-3">
         {fullName && (
           <div className="flex flex-col gap-[2px]">
-            <span className="text-[12px] lg:text-[14px] font-normal leading-[18px] lg:leading-[20px] tracking-[-0.02em] text-[#595959]">Full name</span>
-            <span className="text-[14px] lg:text-[16px] font-semibold leading-[22px] lg:leading-[24px] tracking-[-0.01em] text-[#242424]">{fullName}</span>
+            <span className="text-[12px] lg:text-[14px] font-normal leading-[18px] lg:leading-[20px] tracking-[-0.02em] text-[var(--pf-text-2)]">Full name</span>
+            <span className="text-[14px] lg:text-[16px] font-semibold leading-[22px] lg:leading-[24px] tracking-[-0.01em] text-[var(--pf-ink)]">{fullName}</span>
           </div>
         )}
         {phone && (
           <div className="flex flex-col gap-[2px]">
-            <span className="text-[12px] lg:text-[14px] font-normal leading-[18px] lg:leading-[20px] tracking-[-0.02em] text-[#595959]">Phone number</span>
-            <span className="text-[14px] lg:text-[16px] font-semibold leading-[22px] lg:leading-[24px] tracking-[-0.01em] text-[#242424]">{phone}</span>
+            <span className="text-[12px] lg:text-[14px] font-normal leading-[18px] lg:leading-[20px] tracking-[-0.02em] text-[var(--pf-text-2)]">Phone number</span>
+            <span className="text-[14px] lg:text-[16px] font-semibold leading-[22px] lg:leading-[24px] tracking-[-0.01em] text-[var(--pf-ink)]">{phone}</span>
           </div>
         )}
         {company && (
           <div className="flex flex-col gap-[2px]">
-            <span className="text-[12px] lg:text-[14px] font-normal leading-[18px] lg:leading-[20px] tracking-[-0.02em] text-[#595959]">Company</span>
-            <span className="text-[14px] lg:text-[16px] font-semibold leading-[22px] lg:leading-[24px] tracking-[-0.01em] text-[#242424]">{company}</span>
+            <span className="text-[12px] lg:text-[14px] font-normal leading-[18px] lg:leading-[20px] tracking-[-0.02em] text-[var(--pf-text-2)]">Company</span>
+            <span className="text-[14px] lg:text-[16px] font-semibold leading-[22px] lg:leading-[24px] tracking-[-0.01em] text-[var(--pf-ink)]">{company}</span>
           </div>
         )}
         <div className="flex flex-col gap-[2px]">
-          <span className="text-[12px] lg:text-[14px] font-normal leading-[18px] lg:leading-[20px] tracking-[-0.02em] text-[#595959]">Address</span>
-          <span className="text-[14px] lg:text-[16px] font-semibold leading-[22px] lg:leading-[24px] tracking-[-0.01em] text-[#242424]">{addressLine}</span>
+          <span className="text-[12px] lg:text-[14px] font-normal leading-[18px] lg:leading-[20px] tracking-[-0.02em] text-[var(--pf-text-2)]">Address</span>
+          <span className="text-[14px] lg:text-[16px] font-semibold leading-[22px] lg:leading-[24px] tracking-[-0.01em] text-[var(--pf-ink)]">{addressLine}</span>
         </div>
       </div>
 
       <button
         onClick={onEdit}
-        className="inline-flex items-center justify-center self-stretch lg:self-start px-5 py-3 h-[48px] rounded-[110px] text-[16px] font-medium leading-[24px] tracking-[-0.01em] text-[#242424] bg-[#4F8AF7]/8"
+        className="inline-flex items-center justify-center self-stretch lg:self-start px-5 py-3 h-[48px] rounded-[110px] text-[16px] font-medium leading-[24px] tracking-[-0.01em] text-[var(--pf-ink)] bg-[var(--pf-paper)]"
       >
         Edit address
       </button>

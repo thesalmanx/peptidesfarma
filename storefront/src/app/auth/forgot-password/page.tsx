@@ -32,10 +32,10 @@ export default function ForgotPasswordPage() {
 
   return (
     <>
-      <h1 className="text-[36px] font-semibold leading-[48px] text-[#383637] mb-2">
+      <h1 className="text-[36px] font-semibold leading-[48px] text-[var(--pf-ink)] mb-2">
         Forgot password?
       </h1>
-      <p className="text-[16px] font-normal leading-[24px] text-[#383637] mb-8">
+      <p className="text-[16px] font-normal leading-[24px] text-[var(--pf-ink)] mb-8">
         Enter your email so we can send a reset password link.
       </p>
 
@@ -63,10 +63,10 @@ export default function ForgotPasswordPage() {
               />
             </svg>
           </div>
-          <h2 className="text-lg font-semibold text-[#383637] mb-2">
+          <h2 className="text-lg font-semibold text-[var(--pf-ink)] mb-2">
             Check your email
           </h2>
-          <p className="text-[14px] text-[#52525B] mb-6">
+          <p className="text-[14px] text-[var(--pf-text-2)] mb-6">
             If an account exists for <strong>{email}</strong>, we&apos;ve sent
             password reset instructions.
           </p>
@@ -82,7 +82,7 @@ export default function ForgotPasswordPage() {
           <div className="flex flex-col gap-1.5">
             <label
               htmlFor="email"
-              className="text-[14px] font-normal leading-[20px] text-[#52525B]"
+              className="text-[14px] font-normal leading-[20px] text-[var(--pf-text-2)]"
             >
               Email
             </label>
@@ -93,7 +93,7 @@ export default function ForgotPasswordPage() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email address"
               required
-              className="w-full h-[38px] px-3 rounded-[12px] border-2 border-[#E4E4E7] text-[14px] text-[#141414] placeholder-[#71717A] focus:outline-none focus:border-[#4F8AF7] transition"
+              className="w-full h-[38px] px-3 rounded-[12px] border-2 border-[var(--pf-line)] text-[14px] text-[var(--pf-ink)] placeholder-[var(--pf-text-3)] focus:outline-none focus:border-[var(--pf-blue)] transition"
               style={{
                 filter: "drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.05))",
               }}
@@ -110,11 +110,11 @@ export default function ForgotPasswordPage() {
         </form>
       )}
 
-      <p className="mt-8 text-center text-[14px] text-[#52525B]">
+      <p className="mt-8 text-center text-[14px] text-[var(--pf-text-2)]">
         Remember your password?{" "}
         <Link
           href="/auth/login"
-          className="text-[#4F8AF7] hover:underline font-semibold"
+          className="text-[var(--pf-blue)] hover:underline font-semibold"
         >
           Sign in
         </Link>

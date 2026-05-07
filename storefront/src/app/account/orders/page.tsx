@@ -67,7 +67,7 @@ export default function OrdersPage() {
 
   return (
     <div className="w-full max-w-[960px]">
-      <div className="flex items-center gap-1 text-[14px] font-medium leading-[22px] tracking-[0.02em] text-[#242424] mb-4">
+      <div className="flex items-center gap-1 text-[14px] font-medium leading-[22px] tracking-[0.02em] text-[var(--pf-ink)] mb-4">
         <Link href="/" className="hover:underline">Home</Link>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.67} stroke="currentColor" className="w-3.5 h-3.5 -rotate-90">
           <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -79,28 +79,28 @@ export default function OrdersPage() {
         <span>My orders</span>
       </div>
       <div className="mb-6">
-        <h1 className="text-[24px] leading-[36px] font-semibold text-[#242424] mb-1">My orders</h1>
-        <p className="text-[14px] leading-[22px] text-[#242424]/72">
+        <h1 className="text-[24px] leading-[36px] font-semibold text-[var(--pf-ink)] mb-1">My orders</h1>
+        <p className="text-[14px] leading-[22px] text-[var(--pf-ink)]/72">
           View and track all your orders in one place.
         </p>
       </div>
 
       {loading ? (
         <div className="flex justify-center py-16">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4F8AF7]" />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--pf-blue)]" />
         </div>
       ) : orders.length === 0 ? (
         <div className="text-center py-16">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-16 h-16 mx-auto text-[#242424]/20 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-16 h-16 mx-auto text-[var(--pf-ink)]/20 mb-4">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
           </svg>
-          <h3 className="text-[18px] font-semibold text-[#242424] mb-1">No orders yet</h3>
-          <p className="text-[14px] text-[#242424]/72 mb-4">
+          <h3 className="text-[18px] font-semibold text-[var(--pf-ink)] mb-1">No orders yet</h3>
+          <p className="text-[14px] text-[var(--pf-ink)]/72 mb-4">
             When you make a purchase, your orders will appear here.
           </p>
           <Link
             href="/products"
-            className="inline-flex items-center justify-center h-[48px] px-8 rounded-[110px] bg-[#4F8AF7] text-white font-semibold text-[14px] hover:bg-[#3B6FD9] transition"
+            className="inline-flex items-center justify-center h-[48px] px-8 rounded-[110px] bg-[var(--pf-blue)] text-white font-semibold text-[14px] hover:opacity-90 transition"
           >
             Start Shopping
           </Link>
@@ -111,16 +111,16 @@ export default function OrdersPage() {
             <Link
               key={order.id}
               href={`/account/orders/${order.id}`}
-              className="block border border-[#E0E0E0] rounded-[24px] p-5 hover:border-[#4F8AF7]/30 transition group"
+              className="block border border-[var(--pf-line)] rounded-[24px] p-5 hover:border-[var(--pf-blue-soft)] transition group"
             >
               <div className="flex flex-wrap items-start gap-y-3 gap-x-6 lg:gap-x-10 mb-3">
                 <div className="min-w-[120px]">
-                  <p className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424]/72 font-normal">Order ID</p>
-                  <p className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424] font-semibold">#{order.display_id + ORDER_NUMBER_OFFSET}</p>
+                  <p className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)]/72 font-normal">Order ID</p>
+                  <p className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)] font-semibold">#{order.display_id + ORDER_NUMBER_OFFSET}</p>
                 </div>
                 <div className="min-w-[120px]">
-                  <p className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424]/72 font-normal">Order Date</p>
-                  <p className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424] font-semibold">
+                  <p className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)]/72 font-normal">Order Date</p>
+                  <p className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)] font-semibold">
                     {new Date(order.created_at).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "short",
@@ -129,16 +129,16 @@ export default function OrdersPage() {
                   </p>
                 </div>
                 <div className="min-w-[140px]">
-                  <p className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424]/72 font-normal">Order Status</p>
+                  <p className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)]/72 font-normal">Order Status</p>
                   <div className="flex items-center gap-2">
-                    <p className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424] font-semibold">{getTrackingLabel(order.fulfillment_status, order.payment_status)}</p>
+                    <p className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)] font-semibold">{getTrackingLabel(order.fulfillment_status, order.payment_status)}</p>
                     {getTrackingId(order) && (
                       <span
                         onClick={(e) => {
                           e.preventDefault()
                           window.location.href = `/track/${getTrackingId(order)}`
                         }}
-                        className="text-[12px] leading-[18px] text-[#4F8AF7] font-medium hover:underline cursor-pointer"
+                        className="text-[12px] leading-[18px] text-[var(--pf-blue)] font-medium hover:underline cursor-pointer"
                       >
                         {getTrackingId(order)}
                       </span>
@@ -146,8 +146,8 @@ export default function OrdersPage() {
                   </div>
                 </div>
                 <div className="min-w-[80px]">
-                  <p className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424]/72 font-normal">Total</p>
-                  <p className="text-[14px] lg:text-[16px] leading-[24px] text-[#4F8AF7] font-semibold">
+                  <p className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)]/72 font-normal">Total</p>
+                  <p className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-blue)] font-semibold">
                     {(() => {
                       const customerPaid = order.metadata?.customer_paid_total
                       if (customerPaid != null && Number(customerPaid) > 0) {
@@ -165,22 +165,22 @@ export default function OrdersPage() {
               </div>
 
               {order.items.length > 0 && (
-                <div className="flex items-center gap-2 pt-3 border-t border-[#E0E0E0]/60">
+                <div className="flex items-center gap-2 pt-3 border-t border-[var(--pf-line)]/60">
                   <div className="flex -space-x-2">
                     {order.items.slice(0, 3).map((item) => (
-                      <div key={item.id} className="w-[40px] h-[40px] rounded-[8px] bg-[#4F8AF7]/8 overflow-hidden border-2 border-white shrink-0">
+                      <div key={item.id} className="w-[40px] h-[40px] rounded-[8px] bg-[var(--pf-blue)]/8 overflow-hidden border-2 border-white shrink-0">
                         {item.thumbnail ? (
                           <img src={item.thumbnail} alt={item.title} className="w-full h-full object-cover" />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-[#4F8AF7]/40 text-[10px]">?</div>
+                          <div className="w-full h-full flex items-center justify-center text-[var(--pf-blue)]/40 text-[10px]">?</div>
                         )}
                       </div>
                     ))}
                   </div>
-                  <span className="text-[13px] text-[#242424]/60">
+                  <span className="text-[13px] text-[var(--pf-ink)]/60">
                     {order.items.length} item{order.items.length !== 1 ? "s" : ""}
                   </span>
-                  <span className="ml-auto text-[13px] text-[#4F8AF7] font-medium group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
+                  <span className="ml-auto text-[13px] text-[var(--pf-blue)] font-medium group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
                     View details
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />

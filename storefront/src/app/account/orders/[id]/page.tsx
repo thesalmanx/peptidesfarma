@@ -96,7 +96,7 @@ export default function OrderDetailPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-16 w-full">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4F8AF7]" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--pf-blue)]" />
       </div>
     )
   }
@@ -105,10 +105,10 @@ export default function OrderDetailPage() {
     return (
       <div className="w-full max-w-[960px]">
         <div className="text-center py-16">
-          <p className="text-[#242424]/72 text-[16px] mb-3">Order not found.</p>
+          <p className="text-[var(--pf-ink)]/72 text-[16px] mb-3">Order not found.</p>
           <Link
             href="/account/orders"
-            className="text-[#4F8AF7] hover:text-[#3B6FD9] text-[14px] font-medium"
+            className="text-[var(--pf-blue)] hover:opacity-80 text-[14px] font-medium"
           >
             Back to orders
           </Link>
@@ -312,7 +312,7 @@ export default function OrderDetailPage() {
 
   return (
     <div className="w-full max-w-[960px]">
-      <div className="flex items-center gap-1 text-[14px] font-medium leading-[22px] tracking-[0.02em] text-[#242424] mb-4">
+      <div className="flex items-center gap-1 text-[14px] font-medium leading-[22px] tracking-[0.02em] text-[var(--pf-ink)] mb-4">
         <Link href="/" className="hover:underline">Home</Link>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.67} stroke="currentColor" className="w-3.5 h-3.5 -rotate-90">
           <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -329,21 +329,21 @@ export default function OrderDetailPage() {
       </div>
 
       <div className="mb-6">
-        <h1 className="text-[24px] leading-[36px] font-semibold text-[#242424] mb-1">My orders</h1>
-        <p className="text-[14px] leading-[22px] text-[#242424]/72">
+        <h1 className="text-[24px] leading-[36px] font-semibold text-[var(--pf-ink)] mb-1">My orders</h1>
+        <p className="text-[14px] leading-[22px] text-[var(--pf-ink)]/72">
           View and track all your orders in one place.
         </p>
       </div>
 
-      <div className="border border-[#E0E0E0] rounded-[24px] p-5 mb-6">
+      <div className="border border-[var(--pf-line)] rounded-[24px] p-5 mb-6">
         <div className="flex flex-wrap gap-y-3 gap-x-6 lg:gap-x-10">
           <div className="min-w-[120px]">
-            <p className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424]/72 font-normal">Order ID</p>
-            <p className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424] font-semibold">#{order.display_id + ORDER_NUMBER_OFFSET}</p>
+            <p className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)]/72 font-normal">Order ID</p>
+            <p className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)] font-semibold">#{order.display_id + ORDER_NUMBER_OFFSET}</p>
           </div>
           <div className="min-w-[120px]">
-            <p className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424]/72 font-normal">Order Date</p>
-            <p className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424] font-semibold">
+            <p className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)]/72 font-normal">Order Date</p>
+            <p className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)] font-semibold">
               {new Date(order.created_at).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "short",
@@ -352,13 +352,13 @@ export default function OrderDetailPage() {
             </p>
           </div>
           <div className="min-w-[140px]">
-            <p className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424]/72 font-normal">Order Status</p>
-            <p className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424] font-semibold">{getTrackingLabel(order.fulfillment_status, order.payment_status)}</p>
+            <p className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)]/72 font-normal">Order Status</p>
+            <p className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)] font-semibold">{getTrackingLabel(order.fulfillment_status, order.payment_status)}</p>
             {(() => {
               const trackingId = order.fulfillments?.flatMap((f) => f.labels || [])?.[0]?.tracking_number
                 || order.fulfillments?.flatMap((f) => f.tracking_links || [])?.[0]?.tracking_number
               return trackingId ? (
-                <Link href={`/track/${trackingId}`} className="text-[12px] leading-[18px] text-[#4F8AF7] font-medium mt-0.5 hover:underline block">
+                <Link href={`/track/${trackingId}`} className="text-[12px] leading-[18px] text-[var(--pf-blue)] font-medium mt-0.5 hover:underline block">
                   Tracking ID: {trackingId}
                 </Link>
               ) : null
@@ -368,7 +368,7 @@ export default function OrderDetailPage() {
       </div>
 
       <div className="mb-6">
-        <h2 className="text-[18px] lg:text-[20px] leading-[28px] font-semibold text-[#242424] mb-6">Track your order</h2>
+        <h2 className="text-[18px] lg:text-[20px] leading-[28px] font-semibold text-[var(--pf-ink)] mb-6">Track your order</h2>
 
         <div className="flex items-center w-full h-[64px]">
           {trackingSteps.map((step, i) => {
@@ -418,13 +418,13 @@ export default function OrderDetailPage() {
                     <div
                       className="w-[40px] h-[40px] rounded-full flex items-center justify-center shrink-0"
                       style={{
-                        border: `2px solid ${isCurrent ? "#4F8AF7" : "#71717A"}`,
+                        border: `2px solid ${isCurrent ? "var(--pf-blue)" : "var(--pf-text-3)"}`,
                         opacity: isFuture ? 0.5 : 1,
                       }}
                     >
                       <span
                         className="text-[18px] leading-[28px] font-semibold"
-                        style={{ color: isCurrent ? "#4F8AF7" : "#71717A" }}
+                        style={{ color: isCurrent ? "var(--pf-blue)" : "var(--pf-text-3)" }}
                       >
                         {i + 1}
                       </span>
@@ -434,7 +434,7 @@ export default function OrderDetailPage() {
                   <span
                     className="text-[18px] leading-[28px] font-medium whitespace-nowrap"
                     style={{
-                      color: isFuture ? "#71717A" : "#000000",
+                      color: isFuture ? "var(--pf-text-3)" : "var(--pf-ink)",
                       opacity: isFuture ? 0.5 : 1,
                     }}
                   >
@@ -446,7 +446,7 @@ export default function OrderDetailPage() {
                   <div
                     className="flex-1 h-0"
                     style={{
-                      borderTop: `2px solid ${lineCompleted ? "#4F8AF7" : "#E4E4E7"}`,
+                      borderTop: `2px solid ${lineCompleted ? "var(--pf-blue)" : "var(--pf-line)"}`,
                       minWidth: 20,
                     }}
                   />
@@ -479,7 +479,7 @@ export default function OrderDetailPage() {
                 }
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#4F8AF7] hover:underline"
+                className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[var(--pf-blue)] hover:underline"
               >
                 View on carrier website
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
@@ -492,13 +492,13 @@ export default function OrderDetailPage() {
       </div>
 
       <div className="mb-6">
-        <h2 className="text-[18px] lg:text-[20px] leading-[28px] font-semibold text-[#242424] mb-4">Ordered items</h2>
+        <h2 className="text-[18px] lg:text-[20px] leading-[28px] font-semibold text-[var(--pf-ink)] mb-4">Ordered items</h2>
         <div className="space-y-3">
           {order.items.map((item) => (
             <div
               key={item.id}
               className="flex items-center gap-4 p-4 lg:p-5 rounded-[20px]"
-              style={{ background: "rgba(17, 92, 111, 0.08)" }}
+              style={{ background: "var(--pf-paper)" }}
             >
               <div className="w-[80px] h-[80px] lg:w-[141px] lg:h-[141px] rounded-[8px] bg-white overflow-hidden shrink-0">
                 {item.thumbnail ? (
@@ -508,7 +508,7 @@ export default function OrderDetailPage() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-[#242424]/20">
+                  <div className="w-full h-full flex items-center justify-center text-[var(--pf-ink)]/20">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
                       <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z" />
                     </svg>
@@ -517,13 +517,13 @@ export default function OrderDetailPage() {
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="text-[16px] lg:text-[20px] leading-[24px] lg:leading-[30px] font-semibold text-[#0F0502] mb-2 truncate">
+                <p className="text-[16px] lg:text-[20px] leading-[24px] lg:leading-[30px] font-semibold text-[var(--pf-ink)] mb-2 truncate">
                   {item.title}
                 </p>
-                <p className="text-[13px] lg:text-[14px] text-[#242424]/72 mb-2">
-                  Qty: <span className="text-[14px] font-semibold text-[#242424]">{item.quantity}</span>
+                <p className="text-[13px] lg:text-[14px] text-[var(--pf-ink)]/72 mb-2">
+                  Qty: <span className="text-[14px] font-semibold text-[var(--pf-ink)]">{item.quantity}</span>
                 </p>
-                <p className="text-[16px] lg:text-[20px] leading-[26px] lg:leading-[32px] font-semibold text-[#4F8AF7]">
+                <p className="text-[16px] lg:text-[20px] leading-[26px] lg:leading-[32px] font-semibold text-[var(--pf-blue)]">
                   {formatPrice(item.unit_price * item.quantity, order.currency_code)}
                 </p>
               </div>
@@ -534,22 +534,22 @@ export default function OrderDetailPage() {
 
       <div className="mb-6 space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-[16px] lg:text-[18px] leading-[26px] text-[#242424]/72 font-normal">Subtotal</span>
-          <span className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424] font-semibold">
+          <span className="text-[16px] lg:text-[18px] leading-[26px] text-[var(--pf-ink)]/72 font-normal">Subtotal</span>
+          <span className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)] font-semibold">
             {formatPrice(order.subtotal, order.currency_code)}
           </span>
         </div>
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
-            <span className="text-[16px] lg:text-[18px] leading-[26px] text-[#242424]/72 font-normal">Shipping</span>
+            <span className="text-[16px] lg:text-[18px] leading-[26px] text-[var(--pf-ink)]/72 font-normal">Shipping</span>
             {(order.metadata?.shippo_shipping_provider || order.metadata?.shippo_shipping_service) && (
-              <span className="text-[12px] text-[#4F8AF7] font-medium">
+              <span className="text-[12px] text-[var(--pf-blue)] font-medium">
                 {[order.metadata.shippo_shipping_provider, order.metadata.shippo_shipping_service].filter(Boolean).join(" ")}
                 {order.metadata.shippo_shipping_estimated_days && ` — ${order.metadata.shippo_shipping_estimated_days} business days`}
               </span>
             )}
           </div>
-          <span className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424] font-semibold">
+          <span className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)] font-semibold">
             {(() => {
               const shippo = order.metadata?.shippo_shipping_cost
               const cost = shippo != null ? Number(shippo) : (order.shipping_total || 0)
@@ -558,22 +558,22 @@ export default function OrderDetailPage() {
           </span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-[16px] lg:text-[18px] leading-[26px] text-[#242424]/72 font-normal">Tax</span>
-          <span className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424] font-semibold">
+          <span className="text-[16px] lg:text-[18px] leading-[26px] text-[var(--pf-ink)]/72 font-normal">Tax</span>
+          <span className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)] font-semibold">
             {formatPrice(order.metadata?.tax_amount != null ? Number(order.metadata.tax_amount) : order.tax_total, order.currency_code)}
           </span>
         </div>
         {((order as any).discount_total || 0) > 0 && (
           <div className="flex items-center justify-between">
-            <span className="text-[16px] lg:text-[18px] leading-[26px] text-[#16a34a] font-normal">Discount</span>
-            <span className="text-[14px] lg:text-[16px] leading-[24px] text-[#16a34a] font-semibold">
+            <span className="text-[16px] lg:text-[18px] leading-[26px] text-[var(--pf-ok)] font-normal">Discount</span>
+            <span className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ok)] font-semibold">
               -{formatPrice((order as any).discount_total, order.currency_code)}
             </span>
           </div>
         )}
-        <div className="border-t border-[#E0E0E0] pt-3 flex items-center justify-between">
-          <span className="text-[16px] lg:text-[18px] leading-[26px] text-[#242424] font-semibold">Net total</span>
-          <span className="text-[16px] lg:text-[18px] leading-[26px] text-[#242424] font-bold">
+        <div className="border-t border-[var(--pf-line)] pt-3 flex items-center justify-between">
+          <span className="text-[16px] lg:text-[18px] leading-[26px] text-[var(--pf-ink)] font-semibold">Net total</span>
+          <span className="text-[16px] lg:text-[18px] leading-[26px] text-[var(--pf-ink)] font-bold">
             {(() => {
               const customerPaid = order.metadata?.customer_paid_total
               if (customerPaid != null && Number(customerPaid) > 0) {
@@ -591,24 +591,24 @@ export default function OrderDetailPage() {
       </div>
 
       {order.shipping_address && (
-        <div className="border border-[#E0E0E0] rounded-[24px] p-5 mb-6">
-          <h2 className="text-[18px] lg:text-[20px] leading-[28px] font-semibold text-[#242424] mb-3">Delivery address</h2>
-          <div className="text-[14px] lg:text-[16px] leading-[24px] text-[#242424] space-y-0.5">
+        <div className="border border-[var(--pf-line)] rounded-[24px] p-5 mb-6">
+          <h2 className="text-[18px] lg:text-[20px] leading-[28px] font-semibold text-[var(--pf-ink)] mb-3">Delivery address</h2>
+          <div className="text-[14px] lg:text-[16px] leading-[24px] text-[var(--pf-ink)] space-y-0.5">
             <p className="font-semibold">
               {order.shipping_address.first_name} {order.shipping_address.last_name}
             </p>
-            <p className="text-[#242424]/72">{order.shipping_address.address_1}</p>
+            <p className="text-[var(--pf-ink)]/72">{order.shipping_address.address_1}</p>
             {order.shipping_address.address_2 && (
-              <p className="text-[#242424]/72">{order.shipping_address.address_2}</p>
+              <p className="text-[var(--pf-ink)]/72">{order.shipping_address.address_2}</p>
             )}
-            <p className="text-[#242424]/72">
+            <p className="text-[var(--pf-ink)]/72">
               {order.shipping_address.city}
               {order.shipping_address.province ? `, ${order.shipping_address.province}` : ""}{" "}
               {order.shipping_address.postal_code}
             </p>
-            <p className="text-[#242424]/72 uppercase">{order.shipping_address.country_code}</p>
+            <p className="text-[var(--pf-ink)]/72 uppercase">{order.shipping_address.country_code}</p>
             {order.shipping_address.phone && (
-              <p className="text-[#242424]/72">{order.shipping_address.phone}</p>
+              <p className="text-[var(--pf-ink)]/72">{order.shipping_address.phone}</p>
             )}
           </div>
         </div>
@@ -616,8 +616,8 @@ export default function OrderDetailPage() {
 
       <button
         onClick={handleDownloadInvoice}
-        className="inline-flex items-center justify-center h-[48px] px-8 rounded-[110px] text-[16px] leading-[24px] font-bold text-[#4F8AF7] transition hover:bg-[#4F8AF7]/15"
-        style={{ background: "rgba(17, 92, 111, 0.2)" }}
+        className="inline-flex items-center justify-center h-[48px] px-8 rounded-[110px] text-[16px] leading-[24px] font-bold transition"
+        style={{ color: "var(--pf-blue)", background: "var(--pf-blue-tint)" }}
       >
         Download invoice
       </button>

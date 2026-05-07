@@ -53,7 +53,7 @@ function LoginForm() {
   return (
     <div className="flex flex-col" style={{ gap: "40px" }}>
       <div>
-        <h1 className="text-[36px] font-semibold leading-[48px] text-[#383637]">
+        <h1 className="text-[36px] font-semibold leading-[48px] text-[var(--pf-ink)]">
           Login
         </h1>
         {error && (
@@ -65,7 +65,7 @@ function LoginForm() {
 
       <form id="login-form" onSubmit={handleSubmit} className="flex flex-col gap-6">
         <div className="flex flex-col">
-          <label htmlFor="email" className="text-[14px] font-normal leading-[20px] text-[#52525B] pb-3">
+          <label htmlFor="email" className="text-[14px] font-normal leading-[20px] text-[var(--pf-text-2)] pb-3">
             Email
           </label>
           <input
@@ -75,13 +75,13 @@ function LoginForm() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
             required
-            className="w-full h-[38px] px-3 rounded-[12px] border-2 border-[#E4E4E7] text-[14px] text-[#141414] placeholder-[#71717A] focus:outline-none focus:border-[#4F8AF7] transition"
+            className="w-full h-[38px] px-3 rounded-[12px] border-2 border-[var(--pf-line)] text-[14px] text-[var(--pf-ink)] placeholder-[var(--pf-text-3)] focus:outline-none focus:border-[var(--pf-blue)] transition"
             style={{ filter: "drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.05))" }}
           />
         </div>
 
         <div className="flex flex-col">
-          <label htmlFor="password" className="text-[14px] font-normal leading-[20px] text-[#52525B] pb-3">
+          <label htmlFor="password" className="text-[14px] font-normal leading-[20px] text-[var(--pf-text-2)] pb-3">
             Password
           </label>
           <div className="relative">
@@ -92,14 +92,14 @@ function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               required
-              className="w-full h-[38px] px-3 pr-10 rounded-[12px] border-2 border-[#E4E4E7] text-[14px] text-[#141414] placeholder-[#71717A] focus:outline-none focus:border-[#4F8AF7] transition"
+              className="w-full h-[38px] px-3 pr-10 rounded-[12px] border-2 border-[var(--pf-line)] text-[14px] text-[var(--pf-ink)] placeholder-[var(--pf-text-3)] focus:outline-none focus:border-[var(--pf-blue)] transition"
               style={{ filter: "drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.05))" }}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Hide password" : "Show password"}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#A1A1AA] hover:text-[#52525B]"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--pf-text-3)] hover:text-[var(--pf-ink)]"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-[22px] h-[22px]">
                 {showPassword ? (
@@ -121,9 +121,9 @@ function LoginForm() {
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="w-4 h-4 rounded-[6px] border-2 border-[#D4D4D8] text-[#006FEE] focus:ring-[#006FEE] cursor-pointer"
+              className="w-4 h-4 rounded-[6px] border-2 border-[var(--pf-line)] text-[var(--pf-blue)] focus:ring-[var(--pf-blue)] cursor-pointer"
             />
-            <span className="text-[14px] font-normal leading-[20px] text-[#3F3F46]">Remember me</span>
+            <span className="text-[14px] font-normal leading-[20px] text-[var(--pf-ink)]">Remember me</span>
           </label>
           <Link href="/auth/forgot-password" className="text-[14px] font-medium leading-[20px] text-[#71717A] hover:underline">
             Forgot password?
@@ -143,10 +143,10 @@ function LoginForm() {
 
         <div className="relative py-1">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-[#ECECEC]" />
+            <div className="w-full border-t border-[var(--pf-line)]" />
           </div>
           <div className="relative flex justify-center">
-            <span className="bg-white px-3 text-[10px] font-medium leading-[16px] text-[#AFAFAF]">or</span>
+            <span className="bg-white px-3 text-[10px] font-medium leading-[16px] text-[var(--pf-text-3)]">or</span>
           </div>
         </div>
 
@@ -154,7 +154,7 @@ function LoginForm() {
           type="button"
           onClick={() => loginWithGoogle()}
           aria-label="Sign in with Google"
-          className="w-full h-[52px] flex items-center justify-center gap-3 rounded-[99px] border border-[#DADADA] text-[18px] font-semibold leading-[28px] tracking-[-0.02em] text-[#595959] hover:bg-gray-50 transition cursor-pointer"
+          className="w-full h-[52px] flex items-center justify-center gap-3 rounded-[99px] border border-[var(--pf-line)] text-[18px] font-semibold leading-[28px] tracking-[-0.02em] text-[var(--pf-text-2)] hover:bg-gray-50 transition cursor-pointer"
         >
           <Image src="/icons/social/google.svg" alt="" width={24} height={24} />
           Sign in with Google
@@ -163,16 +163,16 @@ function LoginForm() {
           type="button"
           onClick={() => loginWithApple()}
           aria-label="Sign in with Apple"
-          className="w-full h-[52px] flex items-center justify-center gap-3 rounded-[99px] border border-[#DADADA] text-[18px] font-semibold leading-[28px] tracking-[-0.02em] text-[#595959] hover:bg-gray-50 transition cursor-pointer"
+          className="w-full h-[52px] flex items-center justify-center gap-3 rounded-[99px] border border-[var(--pf-line)] text-[18px] font-semibold leading-[28px] tracking-[-0.02em] text-[var(--pf-text-2)] hover:bg-gray-50 transition cursor-pointer"
         >
           <Image src="/icons/social/apple.svg" alt="" width={24} height={24} />
           Sign in with Apple
         </button>
       </div>
 
-      <p className="text-center text-[16px] leading-[24px] text-[#383637]">
+      <p className="text-center text-[16px] leading-[24px] text-[var(--pf-ink)]">
         Don&apos;t have an account?{" "}
-        <Link href="/auth/signup" className="text-[#4F8AF7] hover:underline font-semibold">
+        <Link href="/auth/signup" className="text-[var(--pf-blue)] hover:underline font-semibold">
           Sign up
         </Link>
       </p>
