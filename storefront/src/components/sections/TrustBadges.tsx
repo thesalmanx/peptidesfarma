@@ -27,8 +27,8 @@ export default function TrustBadges({ transparent }: { transparent?: boolean } =
           key={badge.title}
           className="card-hover flex flex-col items-center md:items-start p-5 md:p-6 gap-3 w-full md:flex-1 rounded-[16px] md:rounded-[20px]"
           style={{
-            background: "linear-gradient(135deg, rgba(17, 92, 111, 0.06) 0%, rgba(54, 132, 142, 0.03) 100%), #FFFFFF",
-            border: "2px solid rgba(17, 92, 111, 0.12)",
+            background: "linear-gradient(135deg, rgba(79, 138, 247, 0.06) 0%, rgba(122, 162, 255, 0.03) 100%), #FFFFFF",
+            border: "2px solid rgba(79, 138, 247, 0.12)",
           }}
         >
           <Image src={badge.icon} alt="" width={40} height={40} className="w-9 h-9 md:w-10 md:h-10" />

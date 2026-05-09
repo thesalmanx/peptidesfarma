@@ -259,7 +259,7 @@ export default function ProductDetailClient({ product, images, options, variants
   return (
     <div>
       {/* Hero + Buy bar in one 100vh dark section */}
-      <section className="pf-pdp-hero" style={{ minHeight: "calc(100vh - 104px)", display: "flex", flexDirection: "column", justifyContent: "space-between", paddingTop: 40, paddingBottom: 0, background: "linear-gradient(180deg, #1B2A4A 0%, #243660 100%)" }}>
+      <section className="pf-pdp-hero" style={{ minHeight: "calc(100vh - 104px)", display: "flex", flexDirection: "column", justifyContent: "space-between", paddingTop: 40, paddingBottom: 0, background: "linear-gradient(180deg, #f7f8fa 0%, #c8d5e5 100%)" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto", width: "100%", padding: "0 24px", flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
           {/* Top: product info + vial */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }}>
@@ -269,10 +269,10 @@ export default function ProductDetailClient({ product, images, options, variants
                 <span style={{ margin: "0 8px", opacity: 0.5 }}>/</span>
                 <Link href="/products" style={{ cursor: "pointer", opacity: 0.7 }}>PRODUCTS</Link>
                 <span style={{ margin: "0 8px", opacity: 0.5 }}>/</span>
-                <span style={{ color: "#fff" }}>{product.title.toUpperCase()}</span>
+                <span style={{ color: "var(--pf-ink)" }}>{product.title.toUpperCase()}</span>
               </div>
 
-              <h1 style={{ fontSize: 64, fontWeight: 600, letterSpacing: "-0.03em", color: "#fff", margin: "0 0 12px", lineHeight: 1 }}>
+              <h1 style={{ fontSize: 64, fontWeight: 600, letterSpacing: "-0.03em", color: "var(--pf-ink)", margin: "0 0 12px", lineHeight: 1 }}>
                 {product.title}
               </h1>
 
@@ -286,9 +286,9 @@ export default function ProductDetailClient({ product, images, options, variants
               </div>
 
               <dl className="pf-spec" style={{ color: "var(--pf-dark-text)", marginBottom: 24, fontSize: 16 }}>
-                <dt style={{ color: "var(--pf-dark-text-2)", fontSize: 15 }}>Form</dt><dd style={{ color: "#fff", fontSize: 16 }}>Lyophilized powder</dd>
-                <dt style={{ color: "var(--pf-dark-text-2)", fontSize: 15 }}>Storage</dt><dd style={{ color: "#fff", fontSize: 16 }}>-20 C, dark</dd>
-                <dt style={{ color: "var(--pf-dark-text-2)", fontSize: 15 }}>Tested</dt><dd style={{ color: "#fff", fontSize: 16 }}>Freedom Diagnostics, 3rd party</dd>
+                <dt style={{ color: "var(--pf-text-3)", fontSize: 15 }}>Form</dt><dd style={{ color: "var(--pf-ink)", fontSize: 16 }}>Lyophilized powder</dd>
+                <dt style={{ color: "var(--pf-text-3)", fontSize: 15 }}>Storage</dt><dd style={{ color: "var(--pf-ink)", fontSize: 16 }}>-20 C, dark</dd>
+                <dt style={{ color: "var(--pf-text-3)", fontSize: 15 }}>Tested</dt><dd style={{ color: "var(--pf-ink)", fontSize: 16 }}>Freedom Diagnostics, 3rd party</dd>
               </dl>
             </div>
 
@@ -318,7 +318,7 @@ export default function ProductDetailClient({ product, images, options, variants
           </div>
 
           {/* Bottom: buy bar - matches hero */}
-          <div style={{ borderTop: "1px solid rgba(255,255,255,0.10)", background: "rgba(255,255,255,0.04)", margin: "0 -24px", padding: "0 24px" }}>
+          <div style={{ borderTop: "1px solid var(--pf-line)", margin: "0 -24px", padding: "0 24px" }}>
           <div className="pf-pdp-buybar" style={{ padding: "24px 0", display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 40, alignItems: "center" }}>
           <div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
@@ -339,9 +339,9 @@ export default function ProductDetailClient({ product, images, options, variants
                         height: 72,
                         padding: isShort ? 0 : "0 20px",
                         borderRadius: "50%",
-                        border: active ? "2px solid rgba(79,138,247,0.6)" : "1px solid rgba(255,255,255,0.18)",
-                        background: active ? "#fff" : "rgba(255,255,255,0.06)",
-                        color: active ? "var(--pf-ink)" : "rgba(255,255,255,0.6)",
+                        border: active ? "2px solid var(--pf-blue)" : "1px solid var(--pf-line)",
+                        background: active ? "var(--pf-blue-tint)" : "#fff",
+                        color: active ? "var(--pf-ink)" : "var(--pf-text-2)",
                         cursor: oos ? "not-allowed" : "pointer",
                         fontFamily: "inherit",
                         textDecoration: oos ? "line-through" : "none",
@@ -366,20 +366,20 @@ export default function ProductDetailClient({ product, images, options, variants
 
           <div className="pf-pdp-buybar-right" style={{ display: "flex", alignItems: "center", gap: 16, justifyContent: "flex-end" }}>
             <div style={{ textAlign: "right" }}>
-              <div style={{ fontFamily: "var(--pf-mono)", fontSize: 11, letterSpacing: "0.12em", color: "rgba(255,255,255,0.6)", textTransform: "uppercase", marginBottom: 4 }}>Price</div>
-              <div style={{ fontFamily: "var(--pf-mono)", fontSize: 32, fontWeight: 700, color: "#fff" }}>
+              <div style={{ fontFamily: "var(--pf-mono)", fontSize: 11, letterSpacing: "0.12em", color: "var(--pf-text-3)", textTransform: "uppercase", marginBottom: 4 }}>Price</div>
+              <div style={{ fontFamily: "var(--pf-mono)", fontSize: 32, fontWeight: 700, color: "var(--pf-ink)" }}>
                 {selectedVariant?.calculated_price
                   ? formatPrice(selectedVariant.calculated_price.calculated_amount * qty, selectedVariant.calculated_price.currency_code)
                   : "-"
                 }
               </div>
             </div>
-            <div style={{ display: "inline-flex", alignItems: "center", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 999, height: 44, background: "rgba(255,255,255,0.06)" }}>
-              <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: 40, height: 42, border: "none", background: "transparent", color: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", border: "1px solid var(--pf-line)", borderRadius: 999, height: 44, background: "#fff" }}>
+              <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: 40, height: 42, border: "none", background: "transparent", color: "var(--pf-ink)", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14" /></svg>
               </button>
-              <span style={{ minWidth: 32, textAlign: "center", fontSize: 15, fontWeight: 700, fontFamily: "var(--pf-mono)", color: "#fff" }}>{qty}</span>
-              <button onClick={() => setQty(Math.min(99, qty + 1))} style={{ width: 40, height: 42, border: "none", background: "transparent", color: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+              <span style={{ minWidth: 32, textAlign: "center", fontSize: 15, fontWeight: 700, fontFamily: "var(--pf-mono)", color: "var(--pf-ink)" }}>{qty}</span>
+              <button onClick={() => setQty(Math.min(99, qty + 1))} style={{ width: 40, height: 42, border: "none", background: "transparent", color: "var(--pf-ink)", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 5v14" /><path d="M5 12h14" /></svg>
               </button>
             </div>

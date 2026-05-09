@@ -9,7 +9,7 @@ import { useCart } from "@/lib/cart-context"
 import { useAuth } from "@/lib/auth-context"
 import { formatPrice } from "@/lib/format-price"
 import { sdk } from "@/lib/medusa"
-import { trackBeginCheckout, trackPurchase } from "@/lib/gtag"
+import { trackBeginCheckout, trackPurchase, trackAddShippingInfo, trackAddPaymentInfo } from "@/lib/gtag"
 import AddressAutocomplete from "@/components/AddressAutocomplete"
 import SquareCardForm from "@/components/checkout/SquareCardForm"
 import CouponInput from "@/components/CouponInput"
@@ -240,7 +240,123 @@ function VenmoPaymentForm({ calculatedTotal, currencyCode, form, cart, items, sh
   )
 }
 
-// ── Card Payment Form — redirects to vulaskin.com, order created AFTER payment ──
+// ── Whop Checkout Button — creates a Whop plan for exact amount, redirects to Whop hosted checkout ──
+function WhopCheckoutButton({ calculatedTotal, cartId, form, selectedShippoRate, tax, taxRate, taxJurisdiction, agreed, setAgreed, DisclaimerSection }: any) {
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const bothAgreed = agreed[0] && agreed[1]
+
+  const handleWhopCheckout = async () => {
+    if (submitting || !bothAgreed || !cartId) return
+    setSubmitting(true)
+    setError(null)
+
+    try {
+      // Pre-setup cart (address + shipping + payment session) before redirecting
+      const [first_name, ...rest] = form.full_name.trim().split(" ")
+      const last_name = rest.join(" ") || first_name
+      const countryCode = (form.country_code || "us").toLowerCase()
+
+      await sdk.store.cart.update(cartId, {
+        email: form.email,
+        shipping_address: {
+          first_name, last_name,
+          address_1: form.address_1, address_2: form.address_2 || undefined,
+          city: form.city, province: form.province, postal_code: form.postal_code,
+          country_code: countryCode, phone: form.phone || undefined,
+        },
+        billing_address: {
+          first_name, last_name,
+          address_1: form.address_1, address_2: form.address_2 || undefined,
+          city: form.city, province: form.province, postal_code: form.postal_code,
+          country_code: countryCode, phone: form.phone || undefined,
+        },
+        metadata: {
+          payment_method: "card",
+          payment_provider: "whop",
+          tax_amount: String(tax || 0),
+          tax_rate: String(taxRate || 0),
+          tax_jurisdiction: taxJurisdiction || "",
+          customer_paid_total: String(calculatedTotal),
+          shippo_shipping_cost: selectedShippoRate?.amount != null ? String(selectedShippoRate.amount) : undefined,
+          shippo_shipping_service: selectedShippoRate?.servicelevel?.name || selectedShippoRate?.servicelevel?.token || undefined,
+          shippo_shipping_provider: selectedShippoRate?.provider || undefined,
+          shippo_shipping_estimated_days: selectedShippoRate?.estimated_days || undefined,
+        },
+      })
+
+      // Add shipping method
+      const { shipping_options } = await sdk.store.fulfillment.listCartOptions({ cart_id: cartId }) as any
+      for (const opt of shipping_options || []) {
+        try { await sdk.store.cart.addShippingMethod(cartId, { option_id: opt.id }); break } catch {}
+      }
+
+      // Init payment session
+      await sdk.store.payment.initiatePaymentSession({ id: cartId } as any, { provider_id: "pp_system_default" })
+
+      // Create Whop checkout
+      const cartData = btoa(encodeURIComponent(JSON.stringify({
+        cartId, form, selectedShippoRate, calculatedTotal,
+        tax, taxRate, taxJurisdiction, preSetup: true,
+      })))
+
+      const res = await fetch("/api/checkout/whop-create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cartId, amount: calculatedTotal, cartData, email: form.email, name: form.full_name }),
+      })
+
+      const data = await res.json()
+      if (!data.checkoutUrl) {
+        setError(data.error || "Failed to create checkout. Please try again.")
+        setSubmitting(false)
+        return
+      }
+
+      // Redirect to Whop hosted checkout
+      window.location.href = data.checkoutUrl
+    } catch (err: any) {
+      setError(err?.message || "Something went wrong. Please try again.")
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-4">
+      {error && <div className="bg-red-50 border border-red-200 text-red-700 rounded-[16px] p-4 text-[14px]">{error}</div>}
+
+      <div className="flex items-center gap-2.5 px-4 py-3 rounded-[12px] border border-[#4F8AF7]/15 bg-[#4F8AF7]/[0.04]">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#4F8AF7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        <p className="text-[13px] leading-[20px] text-[#555]">
+          Your payment will be processed by <span className="font-semibold text-[#242424]">PTL Ventures LLC</span>. This may appear on your card statement.
+        </p>
+      </div>
+
+      <DisclaimerSection agreed={agreed} setAgreed={setAgreed} />
+
+      <button
+        type="button"
+        onClick={handleWhopCheckout}
+        disabled={!bothAgreed || submitting}
+        className="btn-primary w-full h-[52px] rounded-[110px] text-[16px] font-bold text-white disabled:opacity-50 cursor-pointer"
+      >
+        {submitting ? (
+          <span className="flex items-center justify-center gap-2">
+            <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            Processing...
+          </span>
+        ) : "Pay with Card"}
+      </button>
+    </div>
+  )
+}
+
+// ── Card Payment Form — redirects to summerteez.com, order created AFTER payment ──
 function CardPaymentForm({ calculatedTotal, currencyCode, form, cart, items, shippingCost, tax, taxRate, taxJurisdiction, selectedShippoRate, shippingRates, selectedRate, customer, agreed, setAgreed }: any) {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -248,7 +364,7 @@ function CardPaymentForm({ calculatedTotal, currencyCode, form, cart, items, shi
   const submittedRef = useRef(false)
 
   const redirectToPayment = async () => {
-    const PAYMENT_DOMAIN = process.env.NEXT_PUBLIC_PAYMENT_DOMAIN || "https://vulaskin.com"
+    const PAYMENT_DOMAIN = process.env.NEXT_PUBLIC_PAYMENT_DOMAIN || "https://summerteez.com"
     const returnUrl = `${PAYMENT_DOMAIN}/r?to=/checkout/success`
     const cancelUrl = `${PAYMENT_DOMAIN}/r?to=/checkout&resume=1`
 
@@ -942,10 +1058,11 @@ function CheckoutPageInner() {
   const router = useRouter()
   const { cart, isLoading, refreshCart, updateItem, removeItem } = useCart()
   const { customer } = useAuth()
-  // If returning from vulaskin (cancel), skip to payment step and restore shipping state
+  // If returning from summerteez (cancel), skip to payment step and restore shipping state
   const isResume = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("resume") === "1"
-  // Quiklie S2S card payments — LIVE for all customers
-  const useQuiklie = true
+  // Card payments: Quiklie disabled. Whop enabled only via ?cc=true for internal testing.
+  const useQuiklie = false
+  const useWhop = true
   const [step, setStep] = useState<1 | 2 | 3>(isResume ? 3 : 1)
   const [shippingRates, setShippingRates] = useState<any[]>(() => {
     if (!isResume || typeof window === "undefined") return []
@@ -1172,7 +1289,7 @@ function CheckoutPageInner() {
   // Free shipping for internal test product (test-order-qa)
   const hasTestProduct = items.some((i: any) => i.product_handle === "test-order-qa" || i.product_title === "Test Order QA")
   const shippingCost = (hasFreeShippingPromo || hasTestProduct) ? 0 : (selectedShippoRate ? selectedShippoRate.amount : (cart?.shipping_total ?? 0))
-  // Venmo 5% discount + @valtosi deep link — LIVE for all customers
+  // Venmo 5% discount + @valtosi deep link -- LIVE for all customers
   const useNewVenmo = true
   const venmoDiscountRate = (useNewVenmo && paymentMethod === "venmo") ? 0.05 : 0
   const venmoDiscountAmount = Math.round((subtotal - discount) * venmoDiscountRate * 100) / 100
@@ -1307,6 +1424,16 @@ function CheckoutPageInner() {
       setStepError("No shipping options available. Please go back and check your address.")
       return
     }
+
+    // GA4: add_shipping_info
+    const shippingItems = (items || []).map((item: any) => ({
+      id: item.product_id || item.id,
+      name: item.product_title || "",
+      variant: item.variant_title,
+      price: item.unit_price ?? 0,
+      quantity: item.quantity,
+    }))
+    trackAddShippingInfo(shippingItems, currencyCode.toUpperCase(), subtotal, selectedShippoRate?.servicelevel?.name || "Standard")
 
     setStep(3)
     setTimeout(() => step3Ref.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 100)
@@ -1737,17 +1864,17 @@ function CheckoutPageInner() {
                 <div className="flex flex-col gap-2">
                   {/* Credit / Debit Card */}
                   <label
-                    aria-disabled={!useQuiklie}
-                    onClick={useQuiklie ? () => setPaymentMethod("stripe") : (e) => e.preventDefault()}
+                    aria-disabled={!useQuiklie && !useWhop}
+                    onClick={(useQuiklie || useWhop) ? () => setPaymentMethod("stripe") : (e) => e.preventDefault()}
                     className={`flex items-center gap-3 p-3.5 rounded-[12px] border-2 transition-colors ${
-                      useQuiklie
+                      (useQuiklie || useWhop)
                         ? paymentMethod === "stripe"
                           ? "border-[#4F8AF7] bg-[#4F8AF7]/5 cursor-pointer"
                           : "border-[#242424]/8 hover:border-[#4F8AF7]/40 cursor-pointer"
                         : "border-[#242424]/8 cursor-not-allowed opacity-60 select-none pointer-events-none"
                     }`}
                   >
-                    <input type="radio" name="payment_method" checked={useQuiklie ? paymentMethod === "stripe" : false} readOnly disabled={!useQuiklie} className={`w-4 h-4 shrink-0 accent-[#4F8AF7] ${useQuiklie ? "cursor-pointer" : "cursor-not-allowed"}`} />
+                    <input type="radio" name="payment_method" checked={(useQuiklie || useWhop) ? paymentMethod === "stripe" : false} readOnly disabled={!useQuiklie && !useWhop} className={`w-4 h-4 shrink-0 accent-[#4F8AF7] ${(useQuiklie || useWhop) ? "cursor-pointer" : "cursor-not-allowed"}`} />
                     <div className="w-9 h-9 rounded-[8px] flex items-center justify-center shrink-0" style={{ background: "linear-gradient(135deg, #14213D 0%, #2A4A8C 50%, #4F8AF7 100%)" }}>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" stroke="white" strokeWidth="1.5"/><path d="M2 10h20" stroke="white" strokeWidth="1.5"/><path d="M6 14h4" stroke="white" strokeWidth="1.5" strokeLinecap="round"/></svg>
                     </div>
@@ -1756,7 +1883,6 @@ function CheckoutPageInner() {
                       <div className="flex flex-wrap items-center gap-2 mt-1">
                         <Image src="/icons/Visa_Inc.-Logo.wine.svg" alt="Visa" width={40} height={26} />
                         <Image src="/icons/mastercard.svg" alt="Mastercard" width={32} height={22} />
-                        <Image src="/icons/American_Express-Logo.wine.svg" alt="Amex" width={40} height={26} />
                         {!useQuiklie && <Image src="/icons/applepay.svg" alt="Apple Pay" width={36} height={22} />}
                         {!useQuiklie && <Image src="/icons/gpay.svg" alt="Google Pay" width={36} height={22} />}
                       </div>
@@ -1788,7 +1914,29 @@ function CheckoutPageInner() {
 
                 {/* Selected payment method content */}
                 {paymentMethod === "stripe" ? (
-                  useQuiklie ? (
+                  useWhop ? (
+                    <WhopCheckoutButton
+                      calculatedTotal={calculatedTotal}
+                      cartId={cart?.id}
+                      form={form}
+                      selectedShippoRate={selectedShippoRate}
+                      tax={tax}
+                      taxRate={taxRate}
+                      taxJurisdiction={taxJurisdiction}
+                      agreed={agreed}
+                      setAgreed={setAgreed}
+                      DisclaimerSection={DisclaimerSection}
+                    />
+                  ) : useQuiklie ? (
+                    <>
+                    <div className="flex items-center gap-2.5 px-4 py-3 rounded-[12px] border border-[#4F8AF7]/15 bg-[#4F8AF7]/[0.04]">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#4F8AF7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <p className="text-[13px] leading-[20px] text-[#555]">
+                        Your payment will be processed by <span className="font-semibold text-[#242424]">Horizon - Lupa Group</span>. This may appear on your card statement.
+                      </p>
+                    </div>
                     <QuikliePaymentForm
                       calculatedTotal={calculatedTotal}
                       currencyCode={currencyCode}
@@ -1805,6 +1953,7 @@ function CheckoutPageInner() {
                       setAgreed={setAgreed}
                       DisclaimerSection={DisclaimerSection}
                     />
+                    </>
                   ) : (
                     <CardPaymentForm
                       calculatedTotal={calculatedTotal}

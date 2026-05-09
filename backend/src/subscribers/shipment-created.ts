@@ -5,8 +5,8 @@ import { render } from "@react-email/render"
 import ShippingConfirmation from "../email-templates/shipping-confirmation"
 import { getCarrierTrackingUrl } from "../utils/carrier-tracking-url"
 
-const ADMIN_EMAIL = "salman@neuroscript.co"
-const ADMIN_CC = "salman@neuroscript.co"
+const ADMIN_EMAIL = "workbysalman@gmail.com"
+const ADMIN_CC = "workbysalman@gmail.com"
 
 export default async function shipmentCreatedHandler({
   event: { data },

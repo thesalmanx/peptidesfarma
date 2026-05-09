@@ -8,6 +8,10 @@ import Footer from "@/components/layout/Footer"
 import LayoutShell from "@/components/layout/LayoutShell"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
+import PasswordGate from "@/components/PasswordGate"
+import StoryblokProvider from "@/components/StoryblokProvider"
+import IntercomMessenger from "@/components/Intercom"
+import EmailCapturePopup from "@/components/EmailCapturePopup"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -144,6 +148,8 @@ export default function RootLayout({
       >
         {/* Google Tag Manager (noscript) */}
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TWD8M6F2" height="0" width="0" style={{ display: "none", visibility: "hidden" }} /></noscript>
+        <PasswordGate>
+        <StoryblokProvider>
         <AuthProvider>
           <CartProvider>
             <LayoutShell
@@ -152,10 +158,14 @@ export default function RootLayout({
             >
               {children}
             </LayoutShell>
+            <IntercomMessenger />
+            <EmailCapturePopup />
             <SpeedInsights />
             <Analytics />
           </CartProvider>
         </AuthProvider>
+        </StoryblokProvider>
+        </PasswordGate>
       </body>
     </html>
   )

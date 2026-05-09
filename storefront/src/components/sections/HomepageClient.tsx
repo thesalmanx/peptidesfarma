@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import ProductCard from "@/components/product/ProductCard"
+import HeroParticles from "@/components/HeroParticles"
 
 /* ─── Scroll Reveal Hook ─── */
 function useReveal(opts?: { threshold?: number }) {
@@ -56,76 +57,62 @@ function Hero() {
         position: "relative",
         overflow: "hidden",
         marginTop: -1,
-        background: "linear-gradient(180deg, #2D4570 0%, #365088 100%)",
-        color: "#fff",
+        background: "linear-gradient(180deg, #f7f8fa 0%, #c8d5e5 100%)",
+        color: "var(--pf-ink)",
       }}
     >
       <div style={{ position: "absolute", right: "-10%", top: "10%", width: 720, height: 720, background: "radial-gradient(circle, rgba(79,138,247,0.15), transparent 60%)", filter: "blur(40px)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", left: "-10%", bottom: "-10%", width: 600, height: 600, background: "radial-gradient(circle, rgba(122,162,255,0.10), transparent 60%)", pointerEvents: "none" }} />
+      <HeroParticles />
 
-      <div className="pf-wrap pf-hero-grid" style={{ position: "relative", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center", minHeight: 720, paddingBlock: "80px 96px" }}>
-        {/* LEFT */}
-        <div>
-          <div className="hero-stagger-1" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "6px 16px 6px 6px", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 999, marginBottom: 28 }}>
-            <span style={{ width: 22, height: 22, borderRadius: 999, background: "var(--pf-blue)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7" /></svg>
-            </span>
-            <span style={{ fontSize: 12, fontWeight: 500, color: "rgba(255,255,255,0.75)", letterSpacing: "0.01em" }}>Third-party HPLC &middot; 99.2% avg purity</span>
-          </div>
+      {/* Centered content with vials inside container */}
+      <div className="pf-wrap" style={{ position: "relative", minHeight: 680, paddingBlock: "80px 96px" }}>
+        {/* Floating vials - inside container */}
+        <img src="/icons/glp-3.png" alt="" className="absolute pointer-events-none hidden md:block" style={{ width: 200, left: 0, top: 80, objectFit: "contain", animation: "pf-float-y 7s ease-in-out infinite", zIndex: 1 }} />
+        <img src="/icons/nad+.png" alt="" className="absolute pointer-events-none hidden md:block" style={{ width: 170, right: 0, top: 60, objectFit: "contain", animation: "pf-float-y 8s ease-in-out 1s infinite", zIndex: 1 }} />
+        <img src="/icons/ghk-cu.png" alt="" className="absolute pointer-events-none hidden md:block" style={{ width: 150, left: 60, bottom: 60, objectFit: "contain", animation: "pf-float-y 6s ease-in-out 0.5s infinite", zIndex: 1 }} />
+        <img src="/icons/glp-3.png" alt="" className="absolute pointer-events-none hidden md:block" style={{ width: 140, right: 60, bottom: 80, objectFit: "contain", animation: "pf-float-y 9s ease-in-out 2s infinite", zIndex: 1, transform: "scaleX(-1)" }} />
 
-          <h1 className="hero-stagger-2" style={{ fontFamily: "var(--pf-display)", fontWeight: 600, fontSize: "clamp(44px, 5.6vw, 78px)", lineHeight: 1.02, letterSpacing: "-0.032em", margin: "0 0 24px", color: "#fff" }}>
-            Research-grade peptides.<br />
-            <span style={{ fontFamily: "var(--pf-serif)", fontStyle: "italic", fontWeight: 400, letterSpacing: "-0.015em", background: "linear-gradient(135deg, #4F8AF7 0%, #7AA2FF 60%, #4F8AF7 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-              Verified before they ship.
-            </span>
-          </h1>
-
-          <p className="hero-stagger-3" style={{ fontSize: 17, lineHeight: 1.6, color: "rgba(255,255,255,0.7)", maxWidth: 520, margin: "0 0 36px" }}>
-            Pharmaceutical-grade compounds for laboratory research. Lyophilized, sealed under nitrogen, lot-traced and shipped with a third-party Certificate of Analysis on every order.
-          </p>
-
-          <div className="hero-stagger-4" style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 40 }}>
-            <Link href="/products" className="pf-btn pf-btn--primary pf-btn--lg" style={{ padding: "0 28px" }}>
-              Shop the catalog
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
-            </Link>
-            <Link href="/about" className="pf-btn pf-btn--ghost-dark pf-btn--lg">View lab reports</Link>
-          </div>
-
-          {/* Trust pills */}
-          <div className="pf-hero-stats hero-stagger-5" style={{ display: "flex", gap: 24, flexWrap: "wrap", paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.12)" }}>
-            {[
-              { v: "99.2%", l: "Avg purity" },
-              { v: "27", l: "Compounds" },
-              { v: "48hr", l: "Median ship" },
-            ].map((t) => (
-              <div key={t.l}>
-                <div style={{ fontSize: 24, fontWeight: 600, color: "#fff", letterSpacing: "-0.02em" }}>{t.v}</div>
-                <div style={{ fontSize: 11, fontFamily: "var(--pf-mono)", color: "rgba(255,255,255,0.5)", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 2 }}>{t.l}</div>
-              </div>
-            ))}
-          </div>
+        <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", justifyContent: "center", minHeight: 520 }}>
+        <div className="hero-stagger-1" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "6px 16px 6px 6px", background: "#fff", border: "1px solid var(--pf-line)", borderRadius: 999, marginBottom: 28 }}>
+          <span style={{ width: 22, height: 22, borderRadius: 999, background: "var(--pf-blue)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7" /></svg>
+          </span>
+          <span style={{ fontSize: 12, fontWeight: 500, color: "var(--pf-text-2)", letterSpacing: "0.01em" }}>Third-party HPLC &middot; 99.2% avg purity</span>
         </div>
 
-        {/* RIGHT — 3 vial cluster like peptora */}
-        <div className="pf-hero-vials" style={{ position: "relative", width: 608, height: 528 }}>
-          {/* Glow effects */}
+        <h1 className="hero-stagger-2" style={{ fontFamily: "var(--pf-display)", fontWeight: 700, fontSize: "clamp(40px, 5.2vw, 72px)", lineHeight: 1.05, letterSpacing: "-0.032em", margin: "0 0 20px", color: "var(--pf-ink)", maxWidth: 740 }}>
+          Research-Grade Peptides.{" "}
+          <span style={{ fontFamily: "var(--pf-serif)", fontStyle: "italic", fontWeight: 400, letterSpacing: "-0.015em", background: "linear-gradient(135deg, #4F8AF7 0%, #7AA2FF 60%, #4F8AF7 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+            Elevated.
+          </span>
+        </h1>
+
+        <p className="hero-stagger-3" style={{ fontSize: 17, lineHeight: 1.6, color: "var(--pf-text-2)", maxWidth: 520, margin: "0 0 32px" }}>
+          High-purity peptide compounds manufactured for advanced research and innovation.
+        </p>
+
+        <div className="hero-stagger-4" style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", marginBottom: 48 }}>
+          <Link href="/products" className="pf-btn pf-btn--primary pf-btn--lg" style={{ padding: "0 28px" }}>
+            Shop products
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+          </Link>
+          <Link href="/about" className="pf-btn pf-btn--ghost pf-btn--lg">See how it works &rarr;</Link>
+        </div>
+
+        {/* Trust pills */}
+        <div className="pf-hero-stats hero-stagger-5" style={{ display: "flex", gap: 24, flexWrap: "wrap", justifyContent: "center" }}>
           {[
-            { left: 199, top: 343, rotate: "4.71deg" },
-            { left: 53, top: 283, rotate: "-17.39deg" },
-            { left: 310, top: 492, rotate: "0deg" },
-            { left: 416, top: 275, rotate: "123.89deg" },
-            { left: 349, top: 133, rotate: "91.36deg" },
-            { left: 17, top: 56, rotate: "91.36deg" },
-          ].map((e, i) => (
-            <div key={i} className="absolute pointer-events-none" style={{ width: 168, height: 36, left: e.left, top: e.top, background: "rgba(79,138,247,0.5)", filter: "blur(40px)", transform: `rotate(${e.rotate})` }} />
+            { v: "99%+ verified purity", icon: <Image src="/icons/checkmark-badge.svg" alt="" width={20} height={20} /> },
+            { v: "Lab-Tested & Documented", icon: <Image src="/icons/license-third-party.svg" alt="" width={20} height={20} /> },
+            { v: "Controlled Manufacturing", icon: <Image src="/icons/laurel-wreath.svg" alt="" width={20} height={20} /> },
+          ].map((t) => (
+            <div key={t.v} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 16px", background: "rgba(255,255,255,0.65)", borderRadius: 999, border: "1px solid rgba(79,138,247,0.12)" }}>
+              {t.icon}
+              <span style={{ fontSize: 13, color: "var(--pf-ink)", fontWeight: 500 }}>{t.v}</span>
+            </div>
           ))}
-          {/* Vial 1 — back left */}
-          <img src="/vial-blue-nobg.png" alt="Peptidesfarma vial" className="absolute pointer-events-none" style={{ width: 520, height: "auto", left: -160, top: 60, objectFit: "contain", animation: "pf-float-y 7s ease-in-out infinite", opacity: 0.7 }} />
-          {/* Vial 2 — back right */}
-          <img src="/vial-blue-nobg.png" alt="Peptidesfarma vial" className="absolute pointer-events-none" style={{ width: 480, height: "auto", left: 160, top: 140, objectFit: "contain", animation: "pf-float-y 8s ease-in-out 1s infinite", opacity: 0.7 }} />
-          {/* Vial 3 — front center (main) */}
-          <img src="/vial-blue-nobg.png" alt="Peptidesfarma vial" className="absolute pointer-events-none" style={{ width: 500, height: "auto", left: 20, top: 30, objectFit: "contain", zIndex: 2, animation: "pf-float-y 6s ease-in-out 0.5s infinite" }} />
+        </div>
         </div>
       </div>
     </section>

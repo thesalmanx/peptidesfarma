@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from "next/server"
 const RESEND_API_KEY = process.env.RESEND_API_KEY
 const KLAVIYO_PRIVATE_KEY = process.env.KLAVIYO_PRIVATE_KEY
 const FROM_EMAIL = "Peptidesfarma <contact@peptidesfarma.com>"
-const ADMIN_EMAIL = "contact@peptidesfarma.com"
-const ORDER_ADMIN_EMAIL = "peptidesfarma@gmail.com"
+const ADMIN_EMAIL = "workbysalman@gmail.com"
+const ORDER_ADMIN_EMAIL = "workbysalman@gmail.com"
 const ORDER_ADMIN_CC = "salmann.dev2@gmail.com"
 
 const KLAVIYO_REVISION = "2024-10-15"

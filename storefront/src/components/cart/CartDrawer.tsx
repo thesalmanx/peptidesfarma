@@ -20,21 +20,56 @@ function FreeShippingBar({ subtotal }: { subtotal: number }) {
   const dollars = subtotal
   const reachedStandard = dollars >= FREE_STANDARD_THRESHOLD
   const reached2Day = dollars >= FREE_2DAY_THRESHOLD
-  const progressPercent = reached2Day
-    ? 100
-    : reachedStandard
-      ? ((dollars - FREE_STANDARD_THRESHOLD) / (FREE_2DAY_THRESHOLD - FREE_STANDARD_THRESHOLD)) * 50 + 50
-      : (dollars / FREE_STANDARD_THRESHOLD) * 50
-  const freeShipRemaining = Math.max(0, FREE_STANDARD_THRESHOLD - dollars)
+
+  let message: React.ReactNode
+  let progressPercent: number
+
+  if (reached2Day) {
+    message = (
+      <span className="text-[14px] leading-[20px] text-[#16a34a] font-medium">
+        <span className="font-semibold">Free 2-day shipping</span> unlocked!
+      </span>
+    )
+    progressPercent = 100
+  } else if (reachedStandard) {
+    const remaining = FREE_2DAY_THRESHOLD - dollars
+    message = (
+      <span className="text-[14px] leading-[20px] text-[#333]">
+        <span className="font-semibold text-[#16a34a]">Free shipping unlocked!</span> &middot; <span className="font-semibold text-[#16a34a]">${remaining.toFixed(2)}</span> to free 2-day
+      </span>
+    )
+    progressPercent = ((dollars - FREE_STANDARD_THRESHOLD) / (FREE_2DAY_THRESHOLD - FREE_STANDARD_THRESHOLD)) * 50 + 50
+  } else {
+    const remaining = FREE_STANDARD_THRESHOLD - dollars
+    message = (
+      <span className="text-[14px] leading-[20px] text-[#333]">
+        <span className="font-semibold text-[#16a34a]">${remaining.toFixed(2)}</span> away from free shipping
+      </span>
+    )
+    progressPercent = (dollars / FREE_STANDARD_THRESHOLD) * 50
+  }
 
   return (
-    <div style={{ padding: "12px 0", display: "flex", flexDirection: "column", gap: 8 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "var(--pf-text-2)" }}>
-        <span>{freeShipRemaining > 0 ? `Add $${freeShipRemaining.toFixed(2)} for free shipping` : "Free shipping unlocked"}</span>
-        <span style={{ fontFamily: "var(--pf-mono)" }}>{Math.round(progressPercent)}%</span>
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-2">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="shrink-0 text-[#16a34a]">
+          <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M14 9h4l4 4v4a1 1 0 0 1-1 1h-1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <circle cx="7" cy="18" r="2" stroke="currentColor" strokeWidth="1.5"/>
+          <circle cx="17" cy="18" r="2" stroke="currentColor" strokeWidth="1.5"/>
+        </svg>
+        {message}
       </div>
-      <div style={{ height: 4, background: "var(--pf-line)", borderRadius: 2, overflow: "hidden" }}>
-        <div style={{ height: "100%", width: `${Math.min(progressPercent, 100)}%`, background: "var(--pf-blue)", transition: "width 300ms ease" }} />
+      <div className="relative w-full h-[6px] rounded-full bg-[#e5e7eb] overflow-hidden">
+        <div className="absolute left-0 top-0 h-full rounded-full bg-[#16a34a] transition-all duration-500 ease-out" style={{ width: `${Math.min(progressPercent, 100)}%` }} />
+      </div>
+      <div className="flex items-center justify-between">
+        <span className={`text-[11px] leading-[16px] ${reachedStandard ? "text-[#16a34a] font-medium" : "text-[#999]"}`}>
+          Free standard &middot; ${FREE_STANDARD_THRESHOLD}
+        </span>
+        <span className={`text-[11px] leading-[16px] ${reached2Day ? "text-[#16a34a] font-medium" : "text-[#999]"}`}>
+          Free 2-day &middot; ${FREE_2DAY_THRESHOLD}
+        </span>
       </div>
     </div>
   )

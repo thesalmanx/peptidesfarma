@@ -195,13 +195,13 @@ export default function ProductCard({ product }: ProductCardProps) {
           </button>
 
           {/* Product image or placeholder */}
-          <div style={{ position: "absolute", inset: 0, zIndex: 1 }}>
+          <div style={{ position: "absolute", inset: 12, zIndex: 1 }}>
             {product.thumbnail ? (
               <Image
                 src={product.thumbnail}
                 alt={product.title}
                 fill
-                className="object-cover"
+                className="object-contain"
                 sizes="(max-width: 768px) 50vw, 33vw"
               />
             ) : (

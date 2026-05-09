@@ -113,6 +113,49 @@ export function trackPurchase(order: {
   })
 }
 
+// ── E-commerce: add_shipping_info ──
+export function trackAddShippingInfo(
+  items: { id: string; name: string; variant?: string; price?: number; quantity: number }[],
+  currency: string,
+  value: number,
+  shippingTier?: string
+) {
+  gtag("event", "add_shipping_info", {
+    currency,
+    value,
+    shipping_tier: shippingTier,
+    items: items.map((item) => ({
+      item_id: item.id,
+      item_name: item.name,
+      item_variant: item.variant,
+      price: item.price || 0,
+      quantity: item.quantity,
+    })),
+  })
+}
+
+// ── E-commerce: add_payment_info ──
+export function trackAddPaymentInfo(
+  items: { id: string; name: string; variant?: string; price?: number; quantity: number }[],
+  currency: string,
+  value: number,
+  paymentType?: string
+) {
+  gtag("event", "add_payment_info", {
+    currency,
+    value,
+    payment_type: paymentType,
+    items: items.map((item) => ({
+      item_id: item.id,
+      item_name: item.name,
+      item_variant: item.variant,
+      price: item.price || 0,
+      quantity: item.quantity,
+    })),
+  })
+}
+
+// ── Generic event ──
 export function trackEvent(eventName: string, params?: Record<string, unknown>) {
   gtag("event", eventName, params)
 }

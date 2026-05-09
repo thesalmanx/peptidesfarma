@@ -15,6 +15,21 @@ function QuiklieCallbackInner() {
   const [orderNumber, setOrderNumber] = useState<string>("")
   const completingRef = useRef(false)
 
+  // The 3DS bank window opens inside an iframe. After verification it
+  // redirects to this callback URL inside that same iframe. Break out to the
+  // top window so the customer sees the real thank-you page in their main
+  // browser tab, not nested in the bank's frame.
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    if (window.self !== window.top && window.top) {
+      try {
+        window.top.location.href = window.location.href
+      } catch {
+        // Cross-origin protection; nothing else to do.
+      }
+    }
+  }, [])
+
   useEffect(() => {
     if (completingRef.current) return
     completingRef.current = true
@@ -72,6 +87,16 @@ function QuiklieCallbackInner() {
             sessionStorage.removeItem("quiklie_cart_data")
             sessionStorage.removeItem("quiklie_payment_id")
             sessionStorage.removeItem("quiklie_tx_ref")
+            // Backfill orderNumber onto the receipt the QuikliePaymentForm
+            // stashed before the 3DS bank round-trip.
+            try {
+              const raw = sessionStorage.getItem("peptidesfarma_last_order_summary")
+              if (raw) {
+                const parsed = JSON.parse(raw)
+                parsed.orderNumber = String(result.orderNumber)
+                sessionStorage.setItem("peptidesfarma_last_order_summary", JSON.stringify(parsed))
+              }
+            } catch {}
           }
           setOrderNumber(result.orderNumber)
           setStatus("success")

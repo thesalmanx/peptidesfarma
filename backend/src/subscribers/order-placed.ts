@@ -8,8 +8,8 @@ import VenmoPaymentInstructions from "../email-templates/venmo-payment-instructi
 import { debugLog } from "../utils/debug-log"
 import { firePlacedOrder } from "../utils/klaviyo-events"
 
-const ADMIN_EMAIL = "salman@neuroscript.co"
-const ADMIN_CC = "salman@neuroscript.co"
+const ADMIN_EMAIL = "workbysalman@gmail.com"
+const ADMIN_CC = "workbysalman@gmail.com"
 
 export default async function orderPlacedHandler({
   event: { data },
@@ -449,10 +449,10 @@ export default async function orderPlacedHandler({
         },
         from_address: {
           name: "Peptidesfarma",
-          street1: "123 Commerce St",
-          city: "San Francisco",
-          state: "CA",
-          zip: "94105",
+          street1: "451 S. State St",
+          city: "Salt Lake City",
+          state: "UT",
+          zip: "84111",
           country: "US",
           phone: "+10000000000",
           email: "support@peptidesfarma.com",
@@ -499,10 +499,10 @@ export default async function orderPlacedHandler({
           body: JSON.stringify({
             address_from: {
               name: "Peptidesfarma",
-              street1: "123 Commerce St",
-              city: "San Francisco",
-              state: "CA",
-              zip: "94105",
+              street1: "451 S. State St",
+              city: "Salt Lake City",
+              state: "UT",
+              zip: "84111",
               country: "US",
               phone: "+10000000000",
               email: "support@peptidesfarma.com",

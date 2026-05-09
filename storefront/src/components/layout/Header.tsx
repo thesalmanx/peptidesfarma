@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useState } from "react"
+import { usePathname } from "next/navigation"
 import dynamic from "next/dynamic"
 import HeaderCartButton from "./HeaderCartButton"
 import HeaderAccountButton from "./HeaderAccountButton"
@@ -65,6 +66,8 @@ const navLinks = [
 ]
 
 export default function Header() {
+  const pathname = usePathname()
+  const isProductPage = pathname.startsWith("/product-page/")
   const [catalogOpen, setCatalogOpen] = useState(false)
   const [catalogHover, setCatalogHover] = useState(false)
   const hoverTimer = useState<ReturnType<typeof setTimeout> | null>(null)
@@ -99,7 +102,7 @@ export default function Header() {
       {/* Header */}
       <header
         className="relative h-16 md:h-[88px]"
-        style={{ background: "#1B2A4A", borderBottom: "none" }}
+        style={{ background: "#216283" }}
       >
         <div
           className="h-full flex items-center justify-between mx-auto px-5 md:px-20"
@@ -173,6 +176,9 @@ export default function Header() {
           </div>
         )}
       </header>
+      {!isProductPage && (
+        <div style={{ height: 1, background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0.2) 80%, transparent 100%)" }} />
+      )}
     </>
   )
 }

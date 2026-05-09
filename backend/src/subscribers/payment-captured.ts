@@ -5,8 +5,8 @@ import { render } from "@react-email/render"
 import OrderConfirmation from "../email-templates/order-confirmation"
 import { debugLog } from "../utils/debug-log"
 
-const ADMIN_EMAIL = "salman@neuroscript.co"
-const ADMIN_CC = "salman@neuroscript.co"
+const ADMIN_EMAIL = "workbysalman@gmail.com"
+const ADMIN_CC = "workbysalman@gmail.com"
 
 /**
  * payment.captured fires when admin manually captures payment (Venmo)
@@ -281,10 +281,10 @@ export default async function paymentCapturedHandler({
         },
         from_address: {
           name: "Peptidesfarma",
-          street1: "123 Commerce St",
-          city: "San Francisco",
-          state: "CA",
-          zip: "94105",
+          street1: "451 S. State St",
+          city: "Salt Lake City",
+          state: "UT",
+          zip: "84111",
           country: "US",
           phone: "+10000000000",
           email: "support@peptidesfarma.com",
@@ -342,10 +342,10 @@ export default async function paymentCapturedHandler({
           body: JSON.stringify({
             address_from: {
               name: "Peptidesfarma",
-              street1: "123 Commerce St",
-              city: "San Francisco",
-              state: "CA",
-              zip: "94105",
+              street1: "451 S. State St",
+              city: "Salt Lake City",
+              state: "UT",
+              zip: "84111",
               country: "US",
               phone: "+10000000000",
               email: "support@peptidesfarma.com",
