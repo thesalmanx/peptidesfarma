@@ -1,40 +1,107 @@
-import { storyblokEditable } from "@storyblok/react/rsc"
-import Link from "next/link"
+import { storyblokEditable, type SbBlokData } from "@storyblok/react/rsc"
 
-interface CtaBannerBlok {
-  title?: string
+interface CtaBannerBlok extends SbBlokData {
+  heading?: string
   subtitle?: string
-  button_text?: string
-  button_link?: string
-  _uid: string
-  component: string
-  [key: string]: any
+  primary_text?: string
+  primary_url?: string
+  secondary_text?: string
+  secondary_url?: string
 }
 
 export default function CtaBannerBlock({ blok }: { blok: CtaBannerBlok }) {
-  const href = blok.button_link || "/products"
+  const heading = blok.heading || "Still have questions?"
+  const subtitle =
+    blok.subtitle ||
+    "Can't find what you're looking for? Our support team is ready to help with any questions about your research needs."
+  const primaryText = blok.primary_text || "Email support"
+  const primaryUrl = blok.primary_url || "mailto:support@peptidesfarma.com"
+  const secondaryText = blok.secondary_text || "Join community"
+  const secondaryUrl = blok.secondary_url || "#"
 
   return (
-    <section
-      {...storyblokEditable(blok)}
-      className="py-16 md:py-20"
-      style={{
-        background: "linear-gradient(135deg, #4F8AF7 0%, #7AA2FF 100%)",
-      }}
-    >
-      <div className="max-w-[800px] mx-auto px-5 text-center">
-        <h2 className="text-2xl md:text-4xl font-bold text-white tracking-[-0.03em] mb-4">
-          {blok.title || "Ready to Advance Your Research?"}
-        </h2>
-        {blok.subtitle && (
-          <p className="text-lg text-white/80 mb-8">{blok.subtitle}</p>
-        )}
-        <Link
-          href={href}
-          className="inline-flex items-center justify-center h-14 px-10 rounded-full bg-white text-[#4F8AF7] font-bold text-lg hover:opacity-90 transition-opacity"
+    <section className="py-5 lg:py-8 px-4 md:px-20 bg-white" {...storyblokEditable(blok)}>
+      <div
+        className="w-full max-w-[720px] mx-auto flex flex-col justify-center items-center"
+        style={{
+          padding: "40px",
+          gap: "20px",
+          background:
+            "linear-gradient(95.01deg, rgba(79, 138, 247, 0.16) 16.35%, rgba(122, 162, 255, 0.16) 68.78%), rgba(79, 138, 247, 0.08)",
+          border: "1px solid rgba(79, 138, 247, 0.2)",
+          borderRadius: "24px",
+        }}
+      >
+        <h2
+          style={{
+            fontWeight: 600,
+            fontSize: "48px",
+            lineHeight: "56px",
+            textAlign: "center",
+            letterSpacing: "-0.8px",
+            color: "#131315",
+          }}
+          className="text-[32px] leading-[40px] md:text-[48px] md:leading-[56px]"
         >
-          {blok.button_text || "Browse Products"}
-        </Link>
+          {heading}
+        </h2>
+
+        <p
+          style={{
+            fontWeight: 400,
+            fontSize: "18px",
+            lineHeight: "30px",
+            textAlign: "center",
+            color: "#383637",
+          }}
+        >
+          {subtitle}
+        </p>
+
+        <div
+          className="flex flex-row items-start"
+          style={{ gap: "8px", width: "100%", maxWidth: "400px" }}
+        >
+          <a
+            href={primaryUrl}
+            className="btn-primary flex items-center justify-center hover:opacity-90 transition-opacity"
+            style={{
+              padding: "8px 24px",
+              gap: "8px",
+              height: "40px",
+              flex: "1",
+              borderRadius: "110px",
+              fontWeight: 700,
+              fontSize: "14px",
+              lineHeight: "24px",
+              letterSpacing: "-0.01em",
+              color: "#FFFFFF",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {primaryText}
+          </a>
+          <a
+            href={secondaryUrl}
+            className="flex items-center justify-center hover:opacity-90 transition-opacity"
+            style={{
+              padding: "8px 24px",
+              gap: "8px",
+              height: "40px",
+              flex: "1",
+              background: "#14213D",
+              borderRadius: "110px",
+              fontWeight: 700,
+              fontSize: "14px",
+              lineHeight: "24px",
+              letterSpacing: "-0.01em",
+              color: "#FFFFFF",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {secondaryText}
+          </a>
+        </div>
       </div>
     </section>
   )

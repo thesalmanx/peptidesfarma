@@ -16,12 +16,15 @@ function fetchStory(slug: string[]) {
   const path = slug.length ? slug.join("/") : "home"
 
   if (
+    path === "home" ||
     path.startsWith("products") ||
     path.startsWith("product") ||
     path.startsWith("auth") ||
     path.startsWith("account") ||
     path.startsWith("cart") ||
-    path.startsWith("checkout")
+    path.startsWith("checkout") ||
+    path.startsWith("theme-preview") ||
+    path.startsWith("track")
   ) {
     return Promise.resolve(null)
   }
