@@ -87,7 +87,7 @@ export default function ShippingConfirmation({
         <Link
           href={`${storefrontUrl}/account/orders`}
           style={{
-            background: "linear-gradient(90deg, #0B59A2 0%, #1174BF 50%, #0D92CF 100%)",
+            background: "linear-gradient(90deg, #14213D 0%, #2A4A8C 50%, #4F8AF7 100%)",
             color: "#ffffff",
             fontSize: "15px",
             fontWeight: 600,
@@ -166,7 +166,7 @@ export default function ShippingConfirmation({
 
       {/* ── Items ── */}
       <Section style={{ padding: "28px 24px" }}>
-        <Text style={{ color: "#115C6F", fontSize: "11px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase" as const, margin: "0 0 24px" }}>
+        <Text style={{ color: "#4F8AF7", fontSize: "11px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase" as const, margin: "0 0 24px" }}>
           Shipped Items
         </Text>
 
@@ -249,13 +249,13 @@ export default function ShippingConfirmation({
             <Text style={{ color: "#242424", fontSize: "14px", fontWeight: 500, margin: 0 }}>${taxTotal}</Text>
           </Column>
         </Row>
-        <Hr style={{ borderColor: "#115C6F", borderWidth: "2px", margin: "12px 0" }} />
+        <Hr style={{ borderColor: "#4F8AF7", borderWidth: "2px", margin: "12px 0" }} />
         <Row>
           <Column>
-            <Text style={{ color: "#115C6F", fontSize: "18px", fontWeight: 700, margin: 0 }}>Total</Text>
+            <Text style={{ color: "#4F8AF7", fontSize: "18px", fontWeight: 700, margin: 0 }}>Total</Text>
           </Column>
           <Column style={{ textAlign: "right" as const }}>
-            <Text style={{ color: "#115C6F", fontSize: "18px", fontWeight: 700, margin: 0 }}>${total} {currency}</Text>
+            <Text style={{ color: "#4F8AF7", fontSize: "18px", fontWeight: 700, margin: 0 }}>${total} {currency}</Text>
           </Column>
         </Row>
       </Section>

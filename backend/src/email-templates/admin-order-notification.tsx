@@ -17,7 +17,7 @@ import {
 import * as React from "react"
 
 const LOGO_URL =
-  "https://a.storyblok.com/f/290513376833907/28535/e1de827e26/peptora-email-logo.png"
+  "https://peptidesfarma.com/icons/peptidesfarma-email-logo.png"
 
 interface OrderItem {
   title: string
@@ -101,7 +101,7 @@ export default function AdminOrderNotification({
           <Container style={{ margin: "0 auto", maxWidth: "600px", backgroundColor: "#ffffff", borderRadius: "8px", overflow: "hidden" }}>
 
             {/* ── Header ── */}
-            <Section style={{ background: "linear-gradient(135deg, #3D94B5 0%, #2E7089 100%)", padding: "40px 24px", textAlign: "center" as const }}>
+            <Section style={{ background: "linear-gradient(135deg, #2A4A8C 0%, #4F8AF7 100%)", padding: "40px 24px", textAlign: "center" as const }}>
               <Img
                 src={LOGO_URL}
                 alt="Peptidesfarma"

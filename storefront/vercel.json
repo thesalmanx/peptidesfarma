@@ -9,6 +9,16 @@
       "source": "/product",
       "destination": "/products",
       "permanent": true
+    },
+    {
+      "source": "/shop",
+      "destination": "/products",
+      "permanent": true
+    },
+    {
+      "source": "/shop/:handle",
+      "destination": "/product-page/:handle",
+      "permanent": true
     }
   ],
   "crons": [

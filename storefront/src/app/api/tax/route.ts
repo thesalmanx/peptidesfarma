@@ -3,11 +3,11 @@ import { NextRequest, NextResponse } from "next/server"
 const ZIPTAX_API_KEY = process.env.ZIPTAX_API_KEY || ""
 
 // States where we have nexus — use full combined rate (state + county + city + zip)
-const FULL_RATE_STATES = ["CA", "WY"]
+const FULL_RATE_STATES = ["UT", "CA", "WY"]
 
 /**
- * GET /api/tax?zip=92612
- * GET /api/tax?address=200+Spectrum+Center+Dr+Irvine+CA+92618
+ * GET /api/tax?zip=84111
+ * GET /api/tax?address=451+S+State+St+Salt+Lake+City+UT+84111
  *
  * Returns sales tax rate:
  * - CA & WY: full combined rate (state + county + city)

@@ -141,7 +141,7 @@ export default function OrderDetailPage() {
           resolve()
         }
         img.onerror = () => resolve()
-        img.src = "/icons/peptora-invoice-logo.svg"
+        img.src = "/icons/peptidesfarma-invoice-logo.svg"
       })
     } catch {
     }

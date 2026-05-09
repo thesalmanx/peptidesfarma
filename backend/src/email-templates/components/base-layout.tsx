@@ -16,10 +16,11 @@ import {
 } from "@react-email/components"
 import * as React from "react"
 
+// Logo URLs — update these once peptidesfarma logos are uploaded to Storyblok/CDN
 const LOGO_URL =
-  "https://a.storyblok.com/f/290513376833907/28535/e1de827e26/peptora-email-logo.png"
+  "https://peptidesfarma.com/icons/peptidesfarma-email-logo.png"
 const LOGO_DARK_URL =
-  "https://a.storyblok.com/f/290513376833907/28443/6901c37df6/peptora-email-logo-dark.png"
+  "https://peptidesfarma.com/icons/peptidesfarma-email-logo-dark.png"
 
 interface BaseLayoutProps {
   preview: string
@@ -48,7 +49,7 @@ export function BaseLayout({ preview, storefrontUrl, children }: BaseLayoutProps
           <Container style={{ margin: "0 auto", maxWidth: "600px", backgroundColor: "#ffffff", borderRadius: "8px", overflow: "hidden" }}>
 
             {/* ── Header ── */}
-            <Section style={{ background: "linear-gradient(135deg, #3D94B5 0%, #2E7089 100%)", padding: "28px 24px", textAlign: "center" as const }}>
+            <Section style={{ background: "linear-gradient(135deg, #2A4A8C 0%, #4F8AF7 100%)", padding: "28px 24px", textAlign: "center" as const }}>
               <Img
                 src={LOGO_URL}
                 alt="Peptidesfarma"
@@ -70,17 +71,17 @@ export function BaseLayout({ preview, storefrontUrl, children }: BaseLayoutProps
                 We're here to help with any questions about your order.
               </Text>
               <Text style={{ margin: "0 0 10px" }}>
-                <Link href={`${storefrontUrl}/shipping-policy`} style={{ color: "#115C6F", fontSize: "13px", fontWeight: 500, textDecoration: "none" }}>
+                <Link href={`${storefrontUrl}/shipping-policy`} style={{ color: "#4F8AF7", fontSize: "13px", fontWeight: 500, textDecoration: "none" }}>
                   Shipping Info
                 </Link>
               </Text>
               <Text style={{ margin: "0 0 10px" }}>
-                <Link href={`${storefrontUrl}/refund-policy`} style={{ color: "#115C6F", fontSize: "13px", fontWeight: 500, textDecoration: "none" }}>
+                <Link href={`${storefrontUrl}/refund-policy`} style={{ color: "#4F8AF7", fontSize: "13px", fontWeight: 500, textDecoration: "none" }}>
                   Returns &amp; Exchanges
                 </Link>
               </Text>
               <Text style={{ margin: 0 }}>
-                <Link href="mailto:support@peptidesfarma.com" style={{ color: "#115C6F", fontSize: "13px", fontWeight: 500, textDecoration: "none" }}>
+                <Link href="mailto:support@peptidesfarma.com" style={{ color: "#4F8AF7", fontSize: "13px", fontWeight: 500, textDecoration: "none" }}>
                   support@peptidesfarma.com
                 </Link>
               </Text>

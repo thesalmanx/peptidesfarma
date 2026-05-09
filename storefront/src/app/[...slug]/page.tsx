@@ -93,6 +93,16 @@ const PAGE_SEO: Record<string, { title: string; description: string }> = {
     description:
       "Find answers to common questions about Peptidesfarma research peptides, ordering, shipping, returns, storage, and more.",
   },
+  "shipping-policy": {
+    title: "Shipping Policy",
+    description:
+      "Learn about Peptidesfarma shipping options, estimated delivery times, and packaging for research peptides.",
+  },
+  "refund-policy": {
+    title: "Refund Policy",
+    description:
+      "Read about Peptidesfarma refund and return policy for research peptides and compounds.",
+  },
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

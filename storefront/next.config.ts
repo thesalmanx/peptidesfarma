@@ -78,6 +78,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "admin.peptidesfarma.com",
       },
+      {
+        protocol: "https",
+        hostname: "a.storyblok.com",
+      },
+      {
+        protocol: "https",
+        hostname: "**.storyblok.com",
+      },
     ],
   },
 };

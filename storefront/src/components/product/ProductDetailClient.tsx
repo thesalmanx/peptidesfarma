@@ -100,7 +100,7 @@ export default function ProductDetailClient({ product, images, options, variants
   if (isMobile) {
     return (
       <div>
-        {/* Mobile Hero - peptora style */}
+        {/* Mobile Hero */}
         <section className="pf-starfield" style={{ minHeight: "calc(100svh - 104px)", display: "flex", flexDirection: "column", padding: "16px 0 0" }}>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, padding: "0 20px", flexShrink: 0 }}>
             <h1 style={{ fontWeight: 700, fontSize: 40, lineHeight: "48px", letterSpacing: "-0.03em", color: "#fff", textAlign: "center", margin: 0 }}>

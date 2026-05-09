@@ -5,10 +5,10 @@ const SHIPPO_API_KEY = process.env.SHIPPO_API_KEY
 
 const FROM_ADDRESS = {
   name: "Peptidesfarma",
-  street1: "1 Park Plaza",
-  city: "Irvine",
-  state: "CA",
-  zip: "92612",
+  street1: "451 S. State St",
+  city: "Salt Lake City",
+  state: "UT",
+  zip: "84111",
   country: "US",
   phone: "+19492347217",
   email: "support@peptidesfarma.com",
