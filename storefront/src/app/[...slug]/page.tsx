@@ -16,7 +16,6 @@ function fetchStory(slug: string[]) {
   const path = slug.length ? slug.join("/") : "home"
 
   if (
-    path === "home" ||
     path.startsWith("products") ||
     path.startsWith("product") ||
     path.startsWith("auth") ||
@@ -215,7 +214,20 @@ function getStructuredData(path: string, title: string, description: string, can
         url: SITE_URL,
       },
     })
-  } else if (["privacy-policy", "terms-of-service", "shipping-and-returns"].includes(path)) {
+  } else if (path === "faq") {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      name: title,
+      description,
+      url: canonical,
+      mainEntity: {
+        "@type": "Organization",
+        name: "Peptidesfarma",
+        url: SITE_URL,
+      },
+    })
+  } else if (["privacy-policy", "terms-of-service", "shipping-and-returns", "shipping-policy", "refund-policy"].includes(path)) {
     schemas.push({
       "@context": "https://schema.org",
       "@type": "WebPage",

@@ -2,6 +2,21 @@ import { NextRequest, NextResponse } from "next/server"
 
 const WHOP_API_KEY = process.env.WHOP_API_KEY || ""
 const MEDUSA_BACKEND_URL = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || "https://admin.peptidesfarma.com"
+const MEDUSA_PUB_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || ""
+const ORDER_NUMBER_OFFSET = 11000
+
+async function medusa(path: string, options: RequestInit = {}) {
+  const res = await fetch(`${MEDUSA_BACKEND_URL}${path}`, {
+    ...options,
+    headers: {
+      "x-publishable-api-key": MEDUSA_PUB_KEY,
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
+  })
+  const data = await res.json().catch(() => null)
+  return { ok: res.ok, data }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,89 +26,161 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: "Missing planId or cartId" }, { status: 400 })
     }
 
-    // Check if any membership exists for this plan (payment went through)
-    const membershipsRes = await fetch(
-      `https://api.whop.com/api/v5/company/memberships?plan_id=${planId}&per_page=1`,
-      { headers: { Authorization: `Bearer ${WHOP_API_KEY}` } }
-    )
+    // ── Step 1: Verify payment via Whop API ──
+    let paymentVerified = false
 
-    if (!membershipsRes.ok) {
-      return NextResponse.json({ success: false, error: "Could not verify payment" }, { status: 500 })
-    }
-
-    const memberships = await membershipsRes.json()
-    const membership = memberships.data?.[0]
-
-    if (!membership || membership.status !== "active") {
-      // Also check payments directly
-      const paymentsRes = await fetch(
-        `https://api.whop.com/api/v5/company/payments?plan_id=${planId}&per_page=1`,
+    // Check memberships for this plan
+    try {
+      const membershipsRes = await fetch(
+        `https://api.whop.com/api/v5/company/memberships?plan_id=${planId}&per_page=1`,
         { headers: { Authorization: `Bearer ${WHOP_API_KEY}` } }
       )
-      const payments = await paymentsRes.json()
-      const payment = payments.data?.[0]
+      if (membershipsRes.ok) {
+        const memberships = await membershipsRes.json()
+        const membership = memberships.data?.[0]
+        if (membership?.status === "active") {
+          paymentVerified = true
+        }
+      }
+    } catch (e: any) {
+      console.error("[whop-verify] Memberships check failed:", e?.message)
+    }
 
-      if (!payment || payment.status !== "paid") {
-        return NextResponse.json({ success: false, error: "Payment not confirmed yet. If you just paid, please wait a moment and refresh." }, { status: 402 })
+    // Fallback: check payments directly
+    if (!paymentVerified) {
+      try {
+        const paymentsRes = await fetch(
+          `https://api.whop.com/api/v5/company/payments?plan_id=${planId}&per_page=1`,
+          { headers: { Authorization: `Bearer ${WHOP_API_KEY}` } }
+        )
+        if (paymentsRes.ok) {
+          const payments = await paymentsRes.json()
+          const payment = payments.data?.[0]
+          if (payment?.status === "paid") {
+            paymentVerified = true
+          }
+        }
+      } catch (e: any) {
+        console.error("[whop-verify] Payments check failed:", e?.message)
       }
     }
 
-    // Payment verified. Get cart data from plan's internal_notes
-    const planRes = await fetch(`https://api.whop.com/api/v1/plans/${planId}`, {
-      headers: { Authorization: `Bearer ${WHOP_API_KEY}` },
-    })
-    const plan = await planRes.json()
-
-    let cartData = ""
-    try {
-      const notes = JSON.parse(plan.internal_notes || "{}")
-      cartData = notes.cartData || ""
-    } catch {}
-
-    // Complete the order via Medusa card-payment-complete webhook
-    const completeRes = await fetch(`${MEDUSA_BACKEND_URL}/hooks/card-payment-complete`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        cartId,
-        paymentId: `whop_${planId}`,
-        paymentProvider: "whop",
-        cartData,
-      }),
-    })
-
-    const result = await completeRes.json()
-
-    if (result?.orderNumber || result?.success) {
-      return NextResponse.json({
-        success: true,
-        orderNumber: result.orderNumber || "",
-        orderId: result.orderId || "",
-      })
+    if (!paymentVerified) {
+      return NextResponse.json(
+        { success: false, error: "Payment not confirmed yet. If you just paid, please wait a moment and refresh." },
+        { status: 402 }
+      )
     }
 
-    // If card-payment-complete doesn't work, try completing via SDK
-    // (cart might already be set up from checkout pre-setup)
+    // ── Step 2: Retrieve cart data from plan's internal_notes ──
+    let cartData = ""
     try {
-      const sdkCompleteRes = await fetch(`${MEDUSA_BACKEND_URL}/store/carts/${cartId}/complete`, {
+      const planRes = await fetch(`https://api.whop.com/api/v1/plans/${planId}`, {
+        headers: { Authorization: `Bearer ${WHOP_API_KEY}` },
+      })
+      if (planRes.ok) {
+        const plan = await planRes.json()
+        try {
+          const notes = JSON.parse(plan.internal_notes || "{}")
+          cartData = notes.cartData || ""
+        } catch {
+          // internal_notes might be a plain cartId string (legacy format)
+          cartData = plan.internal_notes || ""
+        }
+      }
+    } catch (e: any) {
+      console.error("[whop-verify] Plan retrieval failed:", e?.message)
+    }
+
+    // ── Step 3: Complete the order via Medusa ──
+
+    // Try the card-payment-complete webhook first (handles shipping, payment session, completion)
+    try {
+      const completeRes = await fetch(`${MEDUSA_BACKEND_URL}/hooks/card-payment-complete`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          cartId,
+          paymentId: `whop_${planId}`,
+          paymentProvider: "whop",
+          cartData,
+        }),
       })
-      const sdkResult = await sdkCompleteRes.json()
-      const order = sdkResult?.order
+      const result = await completeRes.json()
+
+      if (result?.orderNumber || result?.success) {
+        return NextResponse.json({
+          success: true,
+          orderNumber: result.orderNumber || "",
+          orderId: result.orderId || "",
+        })
+      }
+    } catch (e: any) {
+      console.error("[whop-verify] card-payment-complete failed:", e?.message)
+    }
+
+    // Fallback: complete via Medusa SDK (init payment session + complete cart)
+    try {
+      // Init payment session
+      const shippingData = await medusa(`/store/shipping-options?cart_id=${cartId}`)
+      const options = shippingData.data?.shipping_options || []
+      if (options.length) {
+        const sorted = [...options].sort((a: any, b: any) => (a.price_type === "calculated" ? 0 : 1) - (b.price_type === "calculated" ? 0 : 1))
+        for (const opt of sorted) {
+          const addResult = await medusa(`/store/carts/${cartId}/shipping-methods`, {
+            method: "POST",
+            body: JSON.stringify({ option_id: opt.id }),
+          })
+          if (addResult.ok) break
+        }
+      }
+
+      // Create payment collection if needed
+      const cartResult = await medusa(`/store/carts/${cartId}`)
+      let pcId = cartResult.data?.cart?.payment_collection?.id
+      if (!pcId) {
+        const pcRes = await medusa(`/store/payment-collections`, {
+          method: "POST",
+          body: JSON.stringify({ cart_id: cartId }),
+        })
+        pcId = pcRes.data?.payment_collection?.id
+      }
+
+      if (pcId) {
+        await medusa(`/store/payment-collections/${pcId}/payment-sessions`, {
+          method: "POST",
+          body: JSON.stringify({ provider_id: "pp_system_default" }),
+        })
+      }
+
+      // Complete cart
+      const completeRes = await medusa(`/store/carts/${cartId}/complete`, { method: "POST" })
+      const order = completeRes.data?.order
+
       if (order?.display_id) {
-        const ORDER_NUMBER_OFFSET = 11000
         return NextResponse.json({
           success: true,
           orderNumber: String(Number(order.display_id) + ORDER_NUMBER_OFFSET),
           orderId: order.id,
         })
       }
-    } catch {}
 
+      if (order?.id) {
+        return NextResponse.json({
+          success: true,
+          orderNumber: "",
+          orderId: order.id,
+        })
+      }
+    } catch (e: any) {
+      console.error("[whop-verify] SDK completion failed:", e?.message)
+    }
+
+    // If we get here, payment was verified but order completion had issues
+    // Still return success since the customer paid
     return NextResponse.json({
       success: true,
-      orderNumber: result?.orderNumber || "",
+      orderNumber: "",
     })
   } catch (error: any) {
     console.error("[whop-verify] Error:", error)

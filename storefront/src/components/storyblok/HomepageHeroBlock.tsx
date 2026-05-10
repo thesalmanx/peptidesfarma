@@ -2,6 +2,7 @@ import { storyblokEditable } from "@storyblok/react/rsc"
 import type { SbBlokData } from "@storyblok/react/rsc"
 import Link from "next/link"
 import Image from "next/image"
+import HeroParticles from "@/components/HeroParticles"
 
 interface HomepageHeroBlok extends SbBlokData {
   rating_text?: string
@@ -29,8 +30,14 @@ export default function HomepageHeroBlock({ blok }: { blok: HomepageHeroBlok }) 
         overflow: "clip",
         paddingBottom: "320px",
         marginBottom: "-320px",
+        background: "linear-gradient(180deg, #f7f8fa 0%, #c8d5e5 100%)",
       }}
     >
+      {/* Ambient glow effects */}
+      <div style={{ position: "absolute", right: "-10%", top: "10%", width: 720, height: 720, background: "radial-gradient(circle, rgba(79,138,247,0.15), transparent 60%)", filter: "blur(40px)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", left: "-10%", bottom: "-10%", width: 600, height: 600, background: "radial-gradient(circle, rgba(122,162,255,0.10), transparent 60%)", pointerEvents: "none" }} />
+      <HeroParticles />
+
       {/* ── Mobile decorative vials (top & bottom edges) ── */}
       <div className="md:hidden absolute inset-0 pointer-events-none" style={{ zIndex: 1 }}>
         <Image

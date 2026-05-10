@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
 
+// ── Required env vars ──
+// WHOP_API_KEY        – Whop company API key (Bearer token)
+// WHOP_PRODUCT_ID     – The Whop product to attach plans to
+// WHOP_COMPANY_ID     – Your Whop company ID
 const WHOP_API_KEY = process.env.WHOP_API_KEY || ""
 const WHOP_PRODUCT_ID = process.env.WHOP_PRODUCT_ID || ""
 const WHOP_COMPANY_ID = process.env.WHOP_COMPANY_ID || ""
-const PAYMENT_DOMAIN = process.env.NEXT_PUBLIC_PAYMENT_DOMAIN || "https://summerteez.com"
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.peptidesfarma.com").trim()
 
 export async function POST(request: NextRequest) {
@@ -19,6 +22,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Whop API key not configured" }, { status: 500 })
     }
 
+    // Store cart metadata in internal_notes for retrieval during verification
+    const notesPayload = JSON.stringify({
+      cartId,
+      cartData: cartData || "",
+      email: email || "",
+      name: name || "",
+    })
+
+    // Create a hidden one-time Whop plan for this exact amount
     const planRes = await fetch("https://api.whop.com/api/v1/plans", {
       method: "POST",
       headers: {
@@ -32,7 +44,7 @@ export async function POST(request: NextRequest) {
         currency: "usd",
         initial_price: String(Number(amount).toFixed(2)),
         visibility: "hidden",
-        internal_notes: cartId,
+        internal_notes: notesPayload,
       }),
     })
 
@@ -44,19 +56,13 @@ export async function POST(request: NextRequest) {
 
     const plan = await planRes.json()
 
-    // Build payment domain URL with all params for embedded checkout
-    const payParams = new URLSearchParams({
-      planId: plan.id,
-      cartId,
-      amount: String(Number(amount).toFixed(2)),
-      email: email || "",
-      name: name || "",
-      cancelUrl: `${SITE_URL}/checkout?resume=1&cc=true`,
-      cartData: cartData || "",
-    })
+    // Whop hosted checkout URL with d2c (direct-to-consumer) flag
+    // Redirect back to our callback page after successful payment
+    const callbackUrl = `${SITE_URL}/checkout/whop-callback?plan_id=${plan.id}&cart_id=${cartId}`
+    const checkoutUrl = `https://whop.com/checkout/${plan.id}/?d2c=true&redirect_url=${encodeURIComponent(callbackUrl)}`
 
     return NextResponse.json({
-      checkoutUrl: `${PAYMENT_DOMAIN}/checkout/whop?${payParams.toString()}`,
+      checkoutUrl,
       planId: plan.id,
     })
   } catch (error: any) {
