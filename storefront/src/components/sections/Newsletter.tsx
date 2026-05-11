@@ -117,7 +117,7 @@ export default function Newsletter() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@company.com"
+                    placeholder="Enter your email"
                     required
                     disabled={loading || added}
                     autoComplete="email"
