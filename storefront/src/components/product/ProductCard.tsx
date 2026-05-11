@@ -220,8 +220,8 @@ export default function ProductCard({ product }: ProductCardProps) {
             onClick={handleWishlistToggle}
             style={{ position: "absolute", right: 10, top: 10, width: 32, height: 32, borderRadius: 999, background: wishlisted ? "#fff" : "rgba(255,255,255,0.7)", backdropFilter: "blur(8px)", border: "none", color: wishlisted ? "var(--pf-blue)" : "var(--pf-text-3)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2, transition: "all 180ms ease" }}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill={wishlisted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10Z" />
+            <svg width="18" height="18" viewBox="0 0 24 24" fill={wishlisted ? "currentColor" : "none"}>
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke={wishlisted ? "none" : "currentColor"} strokeWidth={wishlisted ? 0 : 1.5} />
             </svg>
           </button>
         </Link>

@@ -13,7 +13,7 @@ export default function HeaderAccountButton() {
 
   if (!isAuthenticated) {
     return (
-      <Link href="/auth/login" aria-label="Sign In" className="hover:opacity-80 transition-opacity">
+      <Link href="/auth/login" aria-label="Sign In" className="hover:opacity-80 transition-opacity" style={{ color: "var(--pf-ink)" }}>
         <Image src="/icons/user-circle.svg" alt="Account" width={24} height={24} className="w-6 h-6" />
       </Link>
     )

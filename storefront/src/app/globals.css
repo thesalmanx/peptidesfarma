@@ -330,8 +330,8 @@ select:focus {
   outline: none !important;
 }
 
-.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide, .pf-hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar, .pf-hide-scrollbar::-webkit-scrollbar { display: none; }
 
 /* btn-primary — kept for backward compat in checkout/cart */
 .btn-primary {
