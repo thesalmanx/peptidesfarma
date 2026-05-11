@@ -144,7 +144,7 @@ function UpsellCard({ product, onAdd, adding, layout }: { product: UpsellProduct
         }}
       >
         {product.thumbnail && (
-          <Image src={product.thumbnail} alt={product.title} fill className="object-cover" sizes={`${imgSize}px`} />
+          <Image src={product.thumbnail} alt={product.title} fill className="object-cover" sizes={`${imgSize}px`} style={{ objectPosition: "80% center" }} />
         )}
       </Link>
       <div style={{ fontSize: layout === "sidebar" ? 13 : 11, fontWeight: 500, color: "var(--pf-ink)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", lineHeight: "16px" }}>
