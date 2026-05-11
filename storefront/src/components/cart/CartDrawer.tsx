@@ -68,11 +68,7 @@ function FreeShippingBar({ subtotal }: { subtotal: number }) {
   let progressPercent: number
 
   if (reached2Day) {
-    message = (
-      <span style={{ fontSize: 13, fontWeight: 500, color: "#16a34a" }}>
-        Free 2-day shipping unlocked!
-      </span>
-    )
+    message = <span style={{ fontSize: 13, fontWeight: 500, color: "#16a34a" }}>Free 2-day shipping unlocked!</span>
     progressPercent = 100
   } else if (reachedStandard) {
     const remaining = FREE_2DAY_THRESHOLD - dollars
@@ -113,7 +109,7 @@ function FreeShippingBar({ subtotal }: { subtotal: number }) {
   )
 }
 
-/* ─── Upsell Section ─── */
+/* ─── Upsell Product Card ─── */
 interface UpsellProduct {
   id: string
   handle: string
@@ -124,10 +120,62 @@ interface UpsellProduct {
   currency: string
 }
 
-function UpsellSection({ cartItems, onAdd }: { cartItems: Array<{ product_id?: string | null; variant_id?: string | null }>; onAdd: (variantId: string) => void }) {
+function UpsellCard({ product, onAdd, adding, layout }: { product: UpsellProduct; onAdd: () => void; adding: boolean; layout: "sidebar" | "inline" }) {
+  const imgSize = layout === "sidebar" ? 140 : 110
+
+  return (
+    <div style={{
+      flexShrink: 0,
+      width: layout === "sidebar" ? "100%" : 110,
+      display: "flex",
+      flexDirection: "column",
+      gap: 6,
+    }}>
+      <Link
+        href={`/product/${product.handle}`}
+        style={{
+          display: "block",
+          width: "100%",
+          aspectRatio: "1/1",
+          borderRadius: 14,
+          overflow: "hidden",
+          background: "var(--pf-paper)",
+          position: "relative",
+        }}
+      >
+        {product.thumbnail && (
+          <Image src={product.thumbnail} alt={product.title} fill className="object-cover" sizes={`${imgSize}px`} />
+        )}
+      </Link>
+      <div style={{ fontSize: layout === "sidebar" ? 13 : 11, fontWeight: 500, color: "var(--pf-ink)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", lineHeight: "16px" }}>
+        {product.title}
+      </div>
+      <div style={{ fontSize: layout === "sidebar" ? 14 : 12, fontWeight: 700, color: "var(--pf-ink)", lineHeight: "18px" }}>
+        {formatPrice(product.price, product.currency)}
+      </div>
+      <button
+        onClick={onAdd}
+        disabled={adding}
+        style={{
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 4,
+          width: "100%", height: layout === "sidebar" ? 34 : 30, borderRadius: 999,
+          background: "var(--pf-ink)", color: "#fff", border: "none",
+          fontSize: layout === "sidebar" ? 12 : 11, fontWeight: 600, cursor: "pointer", fontFamily: "inherit",
+          opacity: adding ? 0.6 : 1,
+          transition: "opacity 0.15s ease",
+        }}
+      >
+        <IconAdd />
+        Add
+      </button>
+    </div>
+  )
+}
+
+/* ─── Upsell data hook ─── */
+function useUpsellProducts(cartItems: Array<{ product_id?: string | null; variant_id?: string | null }>) {
   const [products, setProducts] = useState<UpsellProduct[]>([])
   const [loading, setLoading] = useState(true)
-  const [addingId, setAddingId] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -142,9 +190,7 @@ function UpsellSection({ cartItems, onAdd }: { cartItems: Array<{ product_id?: s
           if (rid) sessionStorage.setItem("peptidesfarma_region_id", rid)
         }
         const { products: items } = await sdk.store.product.list({
-          limit: 12,
-          region_id: rid,
-          fields: "+variants.calculated_price",
+          limit: 12, region_id: rid, fields: "+variants.calculated_price",
         })
         if (cancelled) return
 
@@ -156,17 +202,14 @@ function UpsellSection({ cartItems, onAdd }: { cartItems: Array<{ product_id?: s
           .map((p: any) => {
             const v = p.variants?.[0]
             return {
-              id: p.id,
-              handle: p.handle,
-              title: p.title,
-              thumbnail: p.thumbnail,
+              id: p.id, handle: p.handle, title: p.title, thumbnail: p.thumbnail,
               variantId: v?.id || "",
               price: v?.calculated_price?.calculated_amount || 0,
               currency: v?.calculated_price?.currency_code || "usd",
             }
           })
           .filter((p: UpsellProduct) => p.variantId && !cartVariantIds.has(p.variantId))
-          .slice(0, 6)
+          .slice(0, 8)
 
         setProducts(mapped)
       } catch {}
@@ -176,53 +219,7 @@ function UpsellSection({ cartItems, onAdd }: { cartItems: Array<{ product_id?: s
     return () => { cancelled = true }
   }, [cartItems])
 
-  const handleAdd = async (p: UpsellProduct) => {
-    setAddingId(p.variantId)
-    await onAdd(p.variantId)
-    setAddingId(null)
-  }
-
-  if (loading || products.length === 0) return null
-
-  return (
-    <div style={{ padding: "16px 0 0" }}>
-      <div style={{ fontSize: 13, fontWeight: 600, color: "var(--pf-ink)", marginBottom: 10, letterSpacing: "-0.01em" }}>
-        You might also like
-      </div>
-      <div style={{ display: "flex", gap: 10, overflowX: "auto", paddingBottom: 4, scrollbarWidth: "none" }} className="pf-hide-scrollbar">
-        {products.map((p) => (
-          <div key={p.id} style={{ flexShrink: 0, width: 110, display: "flex", flexDirection: "column", gap: 6 }}>
-            <Link href={`/product/${p.handle}`} style={{ display: "block", width: 110, height: 110, borderRadius: 12, overflow: "hidden", background: "var(--pf-paper)", position: "relative" }}>
-              {p.thumbnail && (
-                <Image src={p.thumbnail} alt={p.title} fill className="object-cover" sizes="110px" />
-              )}
-            </Link>
-            <div style={{ fontSize: 11, fontWeight: 500, color: "var(--pf-ink)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", lineHeight: "16px" }}>
-              {p.title}
-            </div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: "var(--pf-ink)", lineHeight: "16px" }}>
-              {formatPrice(p.price, p.currency)}
-            </div>
-            <button
-              onClick={() => handleAdd(p)}
-              disabled={addingId === p.variantId}
-              style={{
-                display: "flex", alignItems: "center", justifyContent: "center", gap: 4,
-                width: "100%", height: 30, borderRadius: 999,
-                background: "var(--pf-ink)", color: "#fff", border: "none",
-                fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "inherit",
-                opacity: addingId === p.variantId ? 0.6 : 1,
-                transition: "opacity 0.15s ease",
-              }}
-            >
-              <IconAdd />
-              Add
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
+  return { products, loading }
 }
 
 /* ─── Express Pay ─── */
@@ -239,11 +236,8 @@ function ExpressPayButton({ amount, currency, onSuccess }: { amount: number; cur
       elements,
       confirmParams: { return_url: `${window.location.origin}/checkout/success` },
     })
-    if (stripeError) {
-      setError(stripeError.message || "Payment failed. Please try again.")
-    } else {
-      onSuccess()
-    }
+    if (stripeError) setError(stripeError.message || "Payment failed. Please try again.")
+    else onSuccess()
   }, [stripe, elements, onSuccess])
 
   return (
@@ -251,11 +245,7 @@ function ExpressPayButton({ amount, currency, onSuccess }: { amount: number; cur
       <ExpressCheckoutElement
         onReady={() => setReady(true)}
         onConfirm={onConfirm}
-        options={{
-          buttonHeight: 48,
-          layout: { maxColumns: 1, maxRows: 3 },
-          paymentMethods: { amazonPay: "never" },
-        }}
+        options={{ buttonHeight: 48, layout: { maxColumns: 1, maxRows: 3 }, paymentMethods: { amazonPay: "never" } }}
       />
       {error && <p style={{ color: "var(--pf-err)", fontSize: 13, marginTop: 8, textAlign: "center" }}>{error}</p>}
     </div>
@@ -325,6 +315,10 @@ export default function CartDrawer() {
   const total = cart?.total ?? subtotal
   const items = cart?.items ?? []
 
+  const { products: upsellProducts, loading: upsellLoading } = useUpsellProducts(items)
+  const [addingId, setAddingId] = useState<string | null>(null)
+  const hasUpsell = items.length > 0 && !upsellLoading && upsellProducts.length > 0
+
   const appliedPromoCode = (() => {
     const promos = (cart as any)?.promotions || []
     if (promos.length > 0) return promos[0].code || null
@@ -344,12 +338,17 @@ export default function CartDrawer() {
   }, [closeDrawer, router])
 
   const handleUpsellAdd = async (variantId: string) => {
+    setAddingId(variantId)
     await addItem(variantId, 1)
+    setAddingId(null)
   }
 
   const onlyBacWater = items.length > 0 && items.every((item: any) =>
     item.product_handle === "bac-water" || item.product_title?.toLowerCase().includes("bac water")
   )
+
+  // Desktop width: 660px when upsell sidebar shown, 440px otherwise
+  const drawerWidth = hasUpsell ? "min(660px, 100vw)" : "min(440px, 100vw)"
 
   return (
     <>
@@ -367,130 +366,172 @@ export default function CartDrawer() {
         }}
       />
 
-      {/* Drawer */}
+      {/* Drawer wrapper */}
       <aside
         role="dialog"
         aria-modal="true"
         aria-label="Shopping cart"
         style={{
           position: "fixed", top: 0, right: 0, bottom: 0,
-          width: "min(440px, 100vw)",
-          background: "#fff",
+          width: drawerWidth,
           zIndex: 91,
           transform: isDrawerOpen ? "translateX(0)" : "translateX(100%)",
-          transition: "transform 420ms cubic-bezier(.22,1,.36,1)",
+          transition: "transform 420ms cubic-bezier(.22,1,.36,1), width 300ms ease",
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "row",
           boxShadow: "-8px 0 40px rgba(5,20,77,0.12)",
         }}
       >
-        {/* Header */}
-        <div style={{
-          padding: "18px 24px",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          borderBottom: "1px solid var(--pf-line)",
-        }}>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--pf-text-3)" }}>Cart</div>
-            <div style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.02em", color: "var(--pf-ink)", marginTop: 2 }}>
-              Your order ({items.length})
-            </div>
-          </div>
-          <button onClick={closeDrawer} style={{ background: "none", border: "none", cursor: "pointer", padding: 6, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }} aria-label="Close cart">
-            <IconClose />
-          </button>
-        </div>
-
-        {/* Scrollable body */}
-        <div style={{ flex: 1, overflowY: "auto", padding: "20px 24px", display: "flex", flexDirection: "column", gap: 12 }}>
-          {items.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "60px 20px", color: "var(--pf-text-3)" }}>
-              <div style={{ width: 64, height: 64, margin: "0 auto 16px", borderRadius: 99, background: "var(--pf-paper)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <IconBag />
+        {/* ─── Desktop upsell sidebar (hidden on mobile) ─── */}
+        {hasUpsell && (
+          <div
+            className="hidden md:flex"
+            style={{
+              width: 220,
+              flexShrink: 0,
+              background: "var(--pf-paper)",
+              borderRight: "1px solid var(--pf-line)",
+              flexDirection: "column",
+              overflow: "hidden",
+            }}
+          >
+            <div style={{ padding: "20px 16px 12px", borderBottom: "1px solid var(--pf-line)" }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: "var(--pf-ink)", letterSpacing: "-0.02em" }}>
+                You might also like
               </div>
-              <div style={{ fontWeight: 600, color: "var(--pf-ink)", marginBottom: 4 }}>Cart is empty</div>
-              <div style={{ fontSize: 13 }}>Browse the catalog to start an order.</div>
-              <Link href="/products" onClick={closeDrawer} className="pf-btn pf-btn--ink" style={{ marginTop: 16 }}>Shop catalog</Link>
             </div>
-          ) : (
-            <>
-              {items.map((item) => <CartItem key={item.id} item={item} variant="drawer" />)}
-
-              {/* BAC Water upsell */}
-              <BacWaterUpsell />
-
-              {/* You might also like */}
-              <UpsellSection cartItems={items} onAdd={handleUpsellAdd} />
-            </>
-          )}
-        </div>
-
-        {/* Footer */}
-        {items.length > 0 && (
-          <div style={{ borderTop: "1px solid var(--pf-line)", padding: "20px 24px", display: "flex", flexDirection: "column", gap: 0 }}>
-            {/* Subtotal */}
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, marginBottom: 4 }}>
-              <span style={{ color: "var(--pf-text-2)" }}>Subtotal</span>
-              <span style={{ fontWeight: 700, color: "var(--pf-ink)" }}>{formatPrice(subtotal, currencyCode)}</span>
-            </div>
-            {discount > 0 && (
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, marginBottom: 4, color: "#16a34a" }}>
-                <span>Discount</span>
-                <span style={{ fontWeight: 600 }}>-{formatPrice(discount, currencyCode)}</span>
-              </div>
-            )}
-
-            {/* Coupon */}
-            {cart?.id && (
-              <CouponInput cartId={cart.id} onApplied={() => { if (cart?.id) refreshCart(cart.id) }} initialCode={appliedPromoCode} />
-            )}
-
-            {/* Free shipping bar - at the bottom near checkout */}
-            <div style={{ margin: "12px 0" }}>
-              <FreeShippingBar subtotal={subtotal} />
-            </div>
-
-            <div style={{ fontSize: 11, color: "var(--pf-text-3)", marginBottom: 12 }}>
-              Tax and shipping calculated at checkout.
-            </div>
-
-            {/* Checkout button */}
-            {onlyBacWater ? (
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-                <div className="pf-btn pf-btn--primary pf-btn--lg" style={{ width: "100%", opacity: 0.4, cursor: "not-allowed" }}>
-                  Checkout &middot; {formatPrice(total, currencyCode)}
-                </div>
-                <p style={{ fontSize: 12, color: "var(--pf-warn)", fontWeight: 500, textAlign: "center", margin: 0 }}>Add a peptide to checkout</p>
-              </div>
-            ) : (
-              <Link href="/checkout" onClick={closeDrawer} className="pf-btn pf-btn--primary pf-btn--lg" style={{ width: "100%" }}>
-                Checkout &middot; {formatPrice(total, currencyCode)}
-              </Link>
-            )}
-
-            <Link href="/cart" onClick={closeDrawer} style={{
-              display: "flex", alignItems: "center", justifyContent: "center",
-              width: "100%", height: 40, marginTop: 8,
-              fontSize: 13, fontWeight: 500, color: "var(--pf-text-2)",
-              textDecoration: "none", borderRadius: 999,
-              border: "1px solid var(--pf-line)", background: "transparent",
-              transition: "border-color 0.15s ease",
-            }}>
-              View full cart
-            </Link>
-
-            {/* Secure payments */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4, marginTop: 12 }}>
-              <IconLock />
-              <span style={{ fontSize: 11, color: "var(--pf-text-3)" }}>100% secure &amp; encrypted payments</span>
-            </div>
-
-            {/* Research disclaimer */}
-            <div style={{ marginTop: 12, padding: 10, background: "var(--pf-paper)", borderRadius: 10, fontSize: 11, color: "var(--pf-text-3)", lineHeight: 1.5, textAlign: "center" }}>
-              For research purposes only. Not for human consumption.
+            <div style={{ flex: 1, overflowY: "auto", padding: "12px 16px", display: "flex", flexDirection: "column", gap: 16 }} className="pf-hide-scrollbar">
+              {upsellProducts.map((p) => (
+                <UpsellCard
+                  key={p.id}
+                  product={p}
+                  onAdd={() => handleUpsellAdd(p.variantId)}
+                  adding={addingId === p.variantId}
+                  layout="sidebar"
+                />
+              ))}
             </div>
           </div>
         )}
+
+        {/* ─── Main cart panel ─── */}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "#fff", minWidth: 0 }}>
+          {/* Header */}
+          <div style={{
+            padding: "18px 24px",
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            borderBottom: "1px solid var(--pf-line)",
+          }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--pf-text-3)" }}>Cart</div>
+              <div style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.02em", color: "var(--pf-ink)", marginTop: 2 }}>
+                Your order ({items.length})
+              </div>
+            </div>
+            <button onClick={closeDrawer} style={{ background: "none", border: "none", cursor: "pointer", padding: 6, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }} aria-label="Close cart">
+              <IconClose />
+            </button>
+          </div>
+
+          {/* Scrollable body */}
+          <div style={{ flex: 1, overflowY: "auto", padding: "20px 24px", display: "flex", flexDirection: "column", gap: 12 }}>
+            {items.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "60px 20px", color: "var(--pf-text-3)" }}>
+                <div style={{ width: 64, height: 64, margin: "0 auto 16px", borderRadius: 99, background: "var(--pf-paper)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <IconBag />
+                </div>
+                <div style={{ fontWeight: 600, color: "var(--pf-ink)", marginBottom: 4 }}>Cart is empty</div>
+                <div style={{ fontSize: 13 }}>Browse the catalog to start an order.</div>
+                <Link href="/products" onClick={closeDrawer} className="pf-btn pf-btn--ink" style={{ marginTop: 16 }}>Shop catalog</Link>
+              </div>
+            ) : (
+              <>
+                {items.map((item) => <CartItem key={item.id} item={item} variant="drawer" />)}
+                <BacWaterUpsell />
+
+                {/* Mobile upsell - horizontal scroll (hidden on desktop when sidebar is shown) */}
+                {hasUpsell && (
+                  <div className="md:hidden" style={{ padding: "16px 0 0" }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: "var(--pf-ink)", marginBottom: 10, letterSpacing: "-0.01em" }}>
+                      You might also like
+                    </div>
+                    <div style={{ display: "flex", gap: 10, overflowX: "auto", paddingBottom: 4 }} className="pf-hide-scrollbar">
+                      {upsellProducts.map((p) => (
+                        <UpsellCard
+                          key={p.id}
+                          product={p}
+                          onAdd={() => handleUpsellAdd(p.variantId)}
+                          adding={addingId === p.variantId}
+                          layout="inline"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+
+          {/* Footer */}
+          {items.length > 0 && (
+            <div style={{ borderTop: "1px solid var(--pf-line)", padding: "20px 24px", display: "flex", flexDirection: "column" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, marginBottom: 4 }}>
+                <span style={{ color: "var(--pf-text-2)" }}>Subtotal</span>
+                <span style={{ fontWeight: 700, color: "var(--pf-ink)" }}>{formatPrice(subtotal, currencyCode)}</span>
+              </div>
+              {discount > 0 && (
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, marginBottom: 4, color: "#16a34a" }}>
+                  <span>Discount</span>
+                  <span style={{ fontWeight: 600 }}>-{formatPrice(discount, currencyCode)}</span>
+                </div>
+              )}
+
+              {cart?.id && (
+                <CouponInput cartId={cart.id} onApplied={() => { if (cart?.id) refreshCart(cart.id) }} initialCode={appliedPromoCode} />
+              )}
+
+              <div style={{ margin: "12px 0" }}>
+                <FreeShippingBar subtotal={subtotal} />
+              </div>
+
+              <div style={{ fontSize: 11, color: "var(--pf-text-3)", marginBottom: 12 }}>
+                Tax and shipping calculated at checkout.
+              </div>
+
+              {onlyBacWater ? (
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+                  <div className="pf-btn pf-btn--primary pf-btn--lg" style={{ width: "100%", opacity: 0.4, cursor: "not-allowed" }}>
+                    Checkout &middot; {formatPrice(total, currencyCode)}
+                  </div>
+                  <p style={{ fontSize: 12, color: "var(--pf-warn)", fontWeight: 500, textAlign: "center", margin: 0 }}>Add a peptide to checkout</p>
+                </div>
+              ) : (
+                <Link href="/checkout" onClick={closeDrawer} className="pf-btn pf-btn--primary pf-btn--lg" style={{ width: "100%" }}>
+                  Checkout &middot; {formatPrice(total, currencyCode)}
+                </Link>
+              )}
+
+              <Link href="/cart" onClick={closeDrawer} style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                width: "100%", height: 40, marginTop: 8,
+                fontSize: 13, fontWeight: 500, color: "var(--pf-text-2)",
+                textDecoration: "none", borderRadius: 999,
+                border: "1px solid var(--pf-line)", background: "transparent",
+              }}>
+                View full cart
+              </Link>
+
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4, marginTop: 12 }}>
+                <IconLock />
+                <span style={{ fontSize: 11, color: "var(--pf-text-3)" }}>100% secure &amp; encrypted payments</span>
+              </div>
+
+              <div style={{ marginTop: 12, padding: 10, background: "var(--pf-paper)", borderRadius: 10, fontSize: 11, color: "var(--pf-text-3)", lineHeight: 1.5, textAlign: "center" }}>
+                For research purposes only. Not for human consumption.
+              </div>
+            </div>
+          )}
+        </div>
       </aside>
     </>
   )
