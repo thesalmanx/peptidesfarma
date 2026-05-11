@@ -44,6 +44,14 @@ function IconYouTube() {
   )
 }
 
+function IconDiscord() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff">
+      <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+    </svg>
+  )
+}
+
 /* ─── Footer columns ─── */
 const footerColumns = [
   {
@@ -116,12 +124,10 @@ export default function Footer() {
   }
 
   return (
-    <footer style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
-      <div style={{ position: "relative", overflow: "hidden", borderRadius: "40px 40px 20px 20px", background: "#001C86" }}>
+    <footer className="px-4 md:px-6" style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
+      <div style={{ position: "relative", overflow: "hidden", borderRadius: "40px 40px 20px 20px", background: "#001C86", maxWidth: 1392, margin: "0 auto" }}>
         {/* Gradient overlay */}
-        <div style={{
-          position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden",
-        }}>
+        <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
           <div style={{
             position: "absolute", width: "120%", height: "120%",
             left: "-10%", top: "-50%",
@@ -133,22 +139,23 @@ export default function Footer() {
           }} />
         </div>
 
-        {/* Main content */}
-        <div className="relative z-10 flex flex-col md:flex-row items-start gap-10 md:gap-12 px-8 py-16 md:px-12 md:py-24" style={{ maxWidth: 1392, margin: "0 auto" }}>
-          {/* Left column: Brand + Newsletter */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 48, width: "100%" }} className="md:w-[440px] md:shrink-0 items-center md:items-start">
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }} className="items-center md:items-start">
-              <span style={{ fontSize: 20, fontWeight: 500, lineHeight: "30px", color: "#fff", fontFamily: "var(--pf-display)" }}>
-                PeptidesFarma
-              </span>
-              <p className="text-center md:text-left" style={{ fontSize: 14, lineHeight: "20px", color: "rgba(255,255,255,0.72)", margin: 0, maxWidth: 283 }}>
-                Premium research-grade peptides with verified purity and full documentation.
-              </p>
-            </div>
+        {/* Top section */}
+        <div className="relative z-10" style={{ padding: "96px 48px 48px" }}>
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-12">
+            {/* Left: Brand + email */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 48 }} className="w-full lg:w-[440px] lg:shrink-0 items-center lg:items-start">
+              {/* Brand */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }} className="items-center lg:items-start">
+                <span style={{ fontSize: 20, fontWeight: 500, lineHeight: "30px", color: "#fff", fontFamily: "var(--pf-display)" }}>
+                  PeptidesFarma
+                </span>
+                <p className="text-center lg:text-left" style={{ fontSize: 14, lineHeight: "20px", color: "rgba(255,255,255,0.72)", margin: 0, maxWidth: 283 }}>
+                  Premium research-grade peptides with verified purity and full documentation.
+                </p>
+              </div>
 
-            {/* Newsletter inline */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }} className="w-full md:w-auto">
-              <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full md:w-auto">
+              {/* Email form */}
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full lg:w-auto">
                 <input
                   type="email"
                   value={email}
@@ -156,7 +163,7 @@ export default function Footer() {
                   placeholder="Enter email address"
                   required
                   disabled={loading || added}
-                  className="outline-none w-full md:w-[361px] disabled:opacity-60"
+                  className="outline-none w-full lg:w-[361px] disabled:opacity-60"
                   style={{
                     height: 48, padding: "12px 24px",
                     background: "rgba(255,255,255,0.12)",
@@ -169,7 +176,7 @@ export default function Footer() {
                 <button
                   type="submit"
                   disabled={loading || added}
-                  className="disabled:cursor-default w-full md:w-[118px]"
+                  className="disabled:cursor-default"
                   style={{
                     height: 48, padding: "12px 24px",
                     background: "#fff", borderRadius: 99, border: "none",
@@ -177,6 +184,7 @@ export default function Footer() {
                     fontWeight: 400, fontFamily: "inherit",
                     cursor: loading || added ? "default" : "pointer",
                     display: "flex", alignItems: "center", justifyContent: "center",
+                    width: "fit-content",
                   }}
                 >
                   {loading ? (
@@ -188,41 +196,39 @@ export default function Footer() {
                 {error && <p style={{ color: "#f87171", fontSize: 12, margin: 0 }}>{error}</p>}
               </form>
             </div>
-          </div>
 
-          {/* Right columns */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 flex-1 w-full">
-            {footerColumns.map((col, i) => (
-              <div key={i} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                <h4 style={{ fontSize: 20, fontWeight: 500, lineHeight: "30px", color: "#fff", margin: 0 }}>
-                  {col.title}
-                </h4>
-                {col.links.map((link, j) => (
-                  <Link
-                    key={j}
-                    href={link.url}
-                    style={{
-                      fontSize: 14, lineHeight: "20px", color: "rgba(255,255,255,0.72)",
-                      textDecoration: (link as any).underline ? "underline" : "none",
-                    }}
-                    className="hover:opacity-80 transition-opacity"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            ))}
+            {/* Right: 4 link columns */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-8 flex-1">
+              {footerColumns.map((col, i) => (
+                <div key={i} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  <h4 style={{ fontSize: 20, fontWeight: 500, lineHeight: "30px", color: "#fff", margin: 0 }}>
+                    {col.title}
+                  </h4>
+                  {col.links.map((link, j) => (
+                    <Link
+                      key={j}
+                      href={link.url}
+                      style={{
+                        fontSize: 14, lineHeight: "20px", color: "rgba(255,255,255,0.72)",
+                        textDecoration: (link as any).underline ? "underline" : "none",
+                      }}
+                      className="hover:opacity-80 transition-opacity"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Bottom bar */}
         <div className="relative z-10" style={{ borderTop: "1px solid rgba(255,255,255,0.12)" }}>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 px-8 py-8 md:px-12" style={{ maxWidth: 1392, margin: "0 auto" }}>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4" style={{ padding: "48px" }}>
             <p className="text-center md:text-left" style={{ fontSize: 14, lineHeight: "20px", color: "rgba(255,255,255,0.72)", margin: 0 }}>
               &copy; {new Date().getFullYear()} PeptidesFarma. All rights reserved. For research use only.
             </p>
-
-            {/* Social icons */}
             <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:opacity-70 transition-opacity"><IconFacebook /></a>
               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:opacity-70 transition-opacity"><IconInstagram /></a>
