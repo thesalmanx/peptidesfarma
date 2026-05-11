@@ -61,7 +61,7 @@ function SearchProductCard({
   return (
     <div className="flex flex-col items-start" style={{ gap: "6px", borderRadius: "16px" }}>
       <Link
-        href={`/product-page/${product.handle}`}
+        href={`/product/${product.handle}`}
         onClick={onClose}
         className="relative w-full block overflow-hidden"
         style={{ borderRadius: "12px", background: "#F2F7FD", aspectRatio: "1 / 1" }}
@@ -99,7 +99,7 @@ function SearchProductCard({
 
       <div className="w-full flex items-center justify-between" style={{ gap: "6px" }}>
         <Link
-          href={`/product-page/${product.handle}`}
+          href={`/product/${product.handle}`}
           onClick={onClose}
           className="flex-1 min-w-0"
         >
@@ -376,7 +376,7 @@ export default function SearchOverlay({ onClose }: SearchOverlayProps) {
                 {trending.slice(0, 4).map((p) => (
                   <Link
                     key={p.id}
-                    href={`/product-page/${p.handle}`}
+                    href={`/product/${p.handle}`}
                     onClick={onClose}
                     className="flex items-center justify-center hover:opacity-80 transition-opacity py-1 px-2 md:py-2 md:px-3 h-[26px] md:h-[38px]"
                     style={{

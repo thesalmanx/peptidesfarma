@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   async redirects() {
     return [
-      { source: "/products/:handle", destination: "/product-page/:handle", permanent: true },
+      { source: "/products/:handle", destination: "/product/:handle", permanent: true },
     ]
   },
   async headers() {

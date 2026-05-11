@@ -44,7 +44,7 @@ export default async function ProductCollectionPage() {
         "@type": "ListItem",
         position: i + 1,
         name: p.title,
-        url: `${SITE_URL}/product-page/${p.handle}`,
+        url: `${SITE_URL}/product/${p.handle}`,
       })),
     },
   }

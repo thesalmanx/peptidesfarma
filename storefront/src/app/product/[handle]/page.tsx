@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     : `${title} - high-purity research compound from Peptidesfarma. 99%+ purity with certificate of analysis included.`
   const metaDescription = seoDescription.length > 160 ? seoDescription.slice(0, 157) + "..." : seoDescription
   const image = product.images?.[0]?.url || product.thumbnail || null
-  const url = `${SITE_URL}/product-page/${handle}`
+  const url = `${SITE_URL}/product/${handle}`
 
   return {
     title: `${title} Peptide | Research Grade`,
@@ -94,7 +94,7 @@ export default async function ProductPage({ params }: PageProps) {
     name: product.title,
     description: product.description || `${product.title} - high-purity research compound from Peptidesfarma.`,
     image: product.images?.[0]?.url || product.thumbnail || undefined,
-    url: `${SITE_URL}/product-page/${handle}`,
+    url: `${SITE_URL}/product/${handle}`,
     sku: handle,
     brand: { "@type": "Brand", name: "Peptidesfarma" },
     offers: {

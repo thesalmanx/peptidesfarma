@@ -187,7 +187,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         })()}
 
         <Link
-          href={`/product-page/${product.handle}`}
+          href={`/product/${product.handle}`}
           style={{
             display: "block",
             position: "relative",
@@ -260,7 +260,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           {/* View button */}
           <Link
-            href={`/product-page/${product.handle}`}
+            href={`/product/${product.handle}`}
             style={{
               display: "flex", alignItems: "center", justifyContent: "center",
               width: "100%", height: 38, borderRadius: 999,

@@ -19,7 +19,7 @@ export default function LayoutShell({
   const pathname = usePathname()
   const isAuth = pathname.startsWith("/auth")
   const isHome = pathname === "/"
-  const isProduct = pathname.startsWith("/product-page/")
+  const isProduct = pathname.startsWith("/product/")
   const isCheckout = pathname.startsWith("/checkout")
 
   useEffect(() => {

@@ -1,23 +1,18 @@
 {
   "redirects": [
     {
-      "source": "/product/:handle",
-      "destination": "/product-page/:handle",
+      "source": "/product-page/:handle",
+      "destination": "/product/:handle",
       "permanent": true
     },
     {
-      "source": "/product",
-      "destination": "/products",
+      "source": "/shop/:handle",
+      "destination": "/product/:handle",
       "permanent": true
     },
     {
       "source": "/shop",
       "destination": "/products",
-      "permanent": true
-    },
-    {
-      "source": "/shop/:handle",
-      "destination": "/product-page/:handle",
       "permanent": true
     }
   ],

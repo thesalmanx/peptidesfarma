@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
     if (handle) {
       revalidateTag(`product-${handle}`, EXPIRE_NOW)
-      revalidatePath(`/product-page/${handle}`)
+      revalidatePath(`/product/${handle}`)
     }
 
     revalidatePath("/products")

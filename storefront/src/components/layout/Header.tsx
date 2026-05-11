@@ -67,7 +67,7 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname()
-  const isProductPage = pathname.startsWith("/product-page/")
+  const isProductPage = pathname.startsWith("/product/")
   const [catalogOpen, setCatalogOpen] = useState(false)
   const [catalogHover, setCatalogHover] = useState(false)
   const hoverTimer = useState<ReturnType<typeof setTimeout> | null>(null)
@@ -232,11 +232,11 @@ function CatalogPanel({ onClose }: { onClose: () => void }) {
             const currency = p.variants[0]?.calculated_price?.currency_code || "usd"
             return (
               <div key={p.id} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <Link href={`/product-page/${p.handle}`} onClick={onClose} style={{ display: "block", borderRadius: 12, overflow: "hidden", background: "var(--pf-paper)", aspectRatio: "1/1", position: "relative" }}>
+                <Link href={`/product/${p.handle}`} onClick={onClose} style={{ display: "block", borderRadius: 12, overflow: "hidden", background: "var(--pf-paper)", aspectRatio: "1/1", position: "relative" }}>
                   {p.thumbnail && <Image src={p.thumbnail} alt={p.title} fill className="object-cover" sizes="200px" />}
                 </Link>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 6 }}>
-                  <Link href={`/product-page/${p.handle}`} onClick={onClose} style={{ flex: 1, minWidth: 0, textDecoration: "none" }}>
+                  <Link href={`/product/${p.handle}`} onClick={onClose} style={{ flex: 1, minWidth: 0, textDecoration: "none" }}>
                     <span style={{ display: "block", fontWeight: 500, fontSize: 14, letterSpacing: "-0.02em", color: "var(--pf-ink)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.title}</span>
                   </Link>
                   {lowest != null && (
