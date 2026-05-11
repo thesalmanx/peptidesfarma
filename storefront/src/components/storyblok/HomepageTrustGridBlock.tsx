@@ -56,7 +56,18 @@ export default function HomepageTrustGridBlock({ blok }: { blok: HomepageTrustGr
       }}
     >
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, maxWidth: 508 }}>
-        <span style={{ fontSize: 14, fontWeight: 400, lineHeight: "20px", textTransform: "uppercase", color: "#4A557E", letterSpacing: "0.05em" }}>
+        <span style={{
+          display: "inline-flex", alignItems: "center", gap: 6,
+          padding: "6px 14px",
+          background: "rgba(0, 28, 134, 0.08)",
+          borderRadius: 99,
+          fontSize: 14, fontWeight: 500, lineHeight: "20px",
+          textTransform: "uppercase", color: "#001C86",
+          letterSpacing: "0.05em",
+        }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#001C86">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
+          </svg>
           Our Promise
         </span>
         <h2 style={{ fontSize: "clamp(36px, 5vw, 64px)", fontWeight: 400, lineHeight: "72px", letterSpacing: "-0.02em", color: "#05144D", textAlign: "center", margin: 0, fontFamily: "var(--pf-display)" }}>
