@@ -48,9 +48,10 @@ export default function HomepageTrustGridBlock({ blok }: { blok: HomepageTrustGr
   return (
     <section
       {...storyblokEditable(blok)}
+      className="px-5 md:px-14 py-16 md:py-24"
       style={{
         display: "flex", flexDirection: "column", alignItems: "center",
-        padding: "96px 56px", gap: 48,
+        gap: 48,
         background: "#FFFFFF",
         borderRadius: 0,
       }}

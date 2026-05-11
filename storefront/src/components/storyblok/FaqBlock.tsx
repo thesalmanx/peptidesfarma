@@ -89,10 +89,10 @@ export default function FaqBlock({ blok }: { blok: FaqBlok }) {
 
   return (
     <section {...storyblokEditable(blok)}>
-      <div style={{
+      <div className="px-5 md:px-12 py-16 md:py-24" style={{
         position: "relative",
         display: "flex", flexDirection: "column", alignItems: "center",
-        padding: "96px 48px", gap: 48,
+        gap: 48,
         background: "#E0E3F0",
         overflow: "hidden",
         isolation: "isolate",
