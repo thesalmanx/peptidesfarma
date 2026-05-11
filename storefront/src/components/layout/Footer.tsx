@@ -1,101 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
-
-/* ─── Newsletter ─── */
-function NewsletterSection() {
-  const [email, setEmail] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [added, setAdded] = useState(false)
-  const [error, setError] = useState("")
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email) return
-    setLoading(true)
-    setError("")
-    try {
-      const res = await fetch("/api/newsletter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      })
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}))
-        throw new Error(body.error || "Failed to subscribe")
-      }
-      setLoading(false)
-      setAdded(true)
-      setEmail("")
-      setTimeout(() => setAdded(false), 3000)
-    } catch (err: any) {
-      setError(err.message || "Something went wrong. Please try again.")
-      setLoading(false)
-    }
-  }
-
-  return (
-    <section style={{ background: "#fff", padding: "24px 20px 32px" }} className="md:px-20 md:py-8">
-      <div className="relative w-full max-w-[1280px] mx-auto">
-        <div
-          className="relative flex flex-col items-center md:items-start md:flex-row md:justify-between w-full gap-8 md:gap-6 rounded-[20px] md:rounded-[24px] transition-shadow duration-300"
-          style={{
-            padding: "48px 40px",
-            background: "linear-gradient(180deg, var(--pf-blue-tint) 11%, #E8EEFF 100%)",
-            border: "2px solid #fff",
-          }}
-        >
-          <div className="flex flex-col items-center md:items-start gap-6 md:gap-4">
-            <h2
-              className="text-[32px] leading-[40px] md:text-[48px] md:leading-[56px] text-center md:text-left"
-              style={{ fontWeight: 700, letterSpacing: "-0.04em", color: "var(--pf-ink)" }}
-            >
-              Subscribe to our{" "}
-              <span style={{ color: "var(--pf-blue)" }}>Newsletter</span>
-            </h2>
-            <p
-              className="text-[16px] leading-[24px] md:text-[20px] md:leading-[22px] text-center md:text-left"
-              style={{ fontWeight: 400, color: "var(--pf-text-2)" }}
-            >
-              New lots, COA drops, handling guides and research updates.
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="flex flex-col md:flex-row items-start w-full md:w-auto shrink-0 gap-3">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter email address"
-              required
-              disabled={loading || added}
-              className="outline-none w-full md:w-[360px] text-center md:text-left disabled:opacity-60"
-              style={{
-                height: 48, padding: "12px 16px",
-                background: "rgba(255,255,255,0.5)",
-                border: "1px solid var(--pf-ink)",
-                borderRadius: 16, fontSize: 16, color: "var(--pf-ink)",
-                fontFamily: "inherit",
-              }}
-            />
-            <button
-              type="submit"
-              disabled={loading || added}
-              className="pf-btn pf-btn--primary shrink-0 w-full md:w-auto"
-              style={{ height: 48, padding: "12px 28px", borderRadius: 999 }}
-            >
-              {loading ? (
-                <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="50 20" /></svg>
-              ) : added ? "Subscribed!" : "Subscribe"}
-            </button>
-            {error && <p style={{ color: "var(--pf-err)", fontSize: 13, width: "100%", textAlign: "center" }}>{error}</p>}
-          </form>
-        </div>
-      </div>
-    </section>
-  )
-}
+import Newsletter from "@/components/sections/Newsletter"
 
 /* ─── Footer columns (Figma) ─── */
 const columns = [
@@ -146,7 +52,7 @@ const trustBadges = [
 export default function Footer() {
   return (
     <>
-      <NewsletterSection />
+      <Newsletter />
       <footer style={{ background: "linear-gradient(180deg, #c8d5e5 0%, #f7f8fa 100%)", color: "var(--pf-ink)", paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
         <div className="max-w-[1280px] mx-auto px-5 md:px-9 lg:px-12">
           <div className="py-12 lg:py-14 flex flex-col gap-10 lg:gap-20">
