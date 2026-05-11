@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
 
 export default function Newsletter() {
   const [email, setEmail] = useState("")
@@ -37,72 +36,58 @@ export default function Newsletter() {
 
   return (
     <section className="bg-white px-5 py-6 md:px-20 md:py-8">
-      <div className="relative w-full max-w-[1280px] mx-auto">
-        <Image
-          src="/vials/glp-newsletter.png"
-          alt=""
-          width={126}
-          height={180}
-          className="absolute pointer-events-none z-10 w-[70px] md:w-[106px] -left-5 md:-left-[59px] -top-[30px] md:-top-[61px]"
-          style={{
-            height: "auto",
-            transform: "rotate(8deg)",
-            opacity: 0.9,
-          }}
-        />
-        <Image
-          src="/vials/nad-newsletter.png"
-          alt=""
-          width={126}
-          height={180}
-          className="absolute pointer-events-none z-10 w-[70px] md:w-[106px] -right-5 md:-right-[69px] -bottom-[30px] md:-bottom-[55px]"
-          style={{
-            height: "auto",
-            transform: "rotate(12deg)",
-            opacity: 0.9,
-          }}
-        />
-
+      <div className="w-full max-w-[1280px] mx-auto">
         <div
-          className="newsletter-card relative flex flex-col items-center md:items-start md:flex-row md:justify-between w-full gap-8 md:gap-6 rounded-[20px] md:rounded-[24px] transition-shadow duration-300 hover:shadow-[0_0_48px_rgba(43,132,143,0.24)]"
+          className="relative flex flex-col items-center gap-8 rounded-[24px] md:rounded-[32px] overflow-hidden"
           style={{
-            padding: "48px 40px",
-            background: "linear-gradient(180deg, #E2E1F9 11.14%, #FAE5F9 100%)",
-            border: "2px solid #FFFFFF",
+            padding: "56px 32px",
+            background: "linear-gradient(135deg, rgba(0,28,134,0.06) 0%, rgba(79,138,247,0.10) 50%, rgba(0,28,134,0.04) 100%)",
+            border: "1px solid rgba(79,138,247,0.12)",
           }}
         >
-          <div className="flex flex-col items-center md:items-start gap-6 md:gap-4">
-            <h2
-              className="text-[40px] leading-[48px] md:text-[48px] md:leading-[56px] text-center md:text-left"
-              style={{
-                fontWeight: 700,
-                letterSpacing: "-0.04em",
-                color: "#242424",
-              }}
-            >
+          {/* Decorative blurred circles */}
+          <div style={{ position: "absolute", width: 200, height: 200, borderRadius: "50%", background: "rgba(79,138,247,0.08)", filter: "blur(60px)", top: -40, right: -40, pointerEvents: "none" }} />
+          <div style={{ position: "absolute", width: 160, height: 160, borderRadius: "50%", background: "rgba(0,28,134,0.06)", filter: "blur(50px)", bottom: -30, left: -30, pointerEvents: "none" }} />
+
+          {/* Mail icon */}
+          <div style={{
+            width: 56, height: 56, borderRadius: 99,
+            background: "rgba(0,28,134,0.08)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="#001C86">
+              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+            </svg>
+          </div>
+
+          {/* Text */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, maxWidth: 480, position: "relative", zIndex: 1 }}>
+            <h2 style={{
+              fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700,
+              letterSpacing: "-0.03em", color: "#05144D",
+              textAlign: "center", margin: 0, lineHeight: 1.15,
+              fontFamily: "var(--pf-display)",
+            }}>
               Subscribe to our{" "}
-              <span
-                style={{
-                  background: "linear-gradient(90deg, #4F8AF7 0%, #36848E 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
+              <span style={{
+                background: "linear-gradient(90deg, #001C86 0%, #4F8AF7 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}>
                 Newsletter
               </span>
             </h2>
-            <p
-              className="text-[16px] leading-[24px] md:text-[20px] md:leading-[22px] text-center md:text-left"
-              style={{ fontWeight: 400, color: "#242424" }}
-            >
-              Subscribe to our newsletter to get daily insights, news, updates.
+            <p style={{ fontSize: 16, lineHeight: "24px", color: "#4A557E", textAlign: "center", margin: 0 }}>
+              New lots, COA drops, handling guides and research updates.
             </p>
           </div>
 
+          {/* Form */}
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col md:flex-row items-start w-full md:w-auto shrink-0 gap-3"
+            className="flex flex-col sm:flex-row items-center w-full sm:w-auto gap-3"
+            style={{ position: "relative", zIndex: 1 }}
           >
             <label htmlFor="newsletter-email" className="sr-only">Email address</label>
             <input
@@ -110,79 +95,46 @@ export default function Newsletter() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter email address"
+              placeholder="Enter your email"
               required
               disabled={loading || added}
               autoComplete="email"
-              className="outline-none w-full md:w-[360px] text-center md:text-left disabled:opacity-60"
+              className="outline-none w-full sm:w-[320px] disabled:opacity-60"
               style={{
-                height: "48px",
-                padding: "12px 16px",
-                background: "rgba(255, 255, 255, 0.2)",
-                border: "1px solid #242424",
-                borderRadius: "16px",
-                fontSize: "16px",
-                lineHeight: "24px",
-                color: "#383637",
+                height: 48, padding: "12px 20px",
+                background: "#fff",
+                border: "1px solid var(--pf-line)",
+                borderRadius: 999,
+                fontSize: 14, color: "var(--pf-ink)",
+                fontFamily: "inherit",
               }}
             />
             <button
               type="submit"
               disabled={loading || added}
-              className={`group shrink-0 w-full md:w-auto flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 ${
-                added
-                  ? "bg-[#4F8AF7]"
-                  : "btn-primary hover:opacity-90"
-              } disabled:cursor-default`}
+              className="pf-btn pf-btn--primary shrink-0 w-full sm:w-auto disabled:cursor-default"
               style={{
-                height: "48px",
-                padding: "12px 28px 12px 32px",
-                borderRadius: "110px",
-                fontWeight: 500,
-                fontSize: "16px",
-                lineHeight: "25px",
-                letterSpacing: "-0.01em",
-                color: "#FFFFFF",
+                height: 48, padding: "12px 28px",
+                fontSize: 14, fontWeight: 600,
               }}
             >
               {loading ? (
                 <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="#FFFFFF"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeDasharray="50 20"
-                  />
+                  <circle cx="12" cy="12" r="10" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="50 20" />
                 </svg>
               ) : added ? (
-                <>
-                  <svg className="w-5 h-5 animate-check-pop" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M5 13l4 4L19 7"
-                      stroke="#FFFFFF"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
+                <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="#fff" />
                   </svg>
-                  <span>Subscribed!</span>
-                </>
+                  Subscribed!
+                </span>
               ) : (
-                <>
-                  Subscribe
-                  <span className="inline-flex overflow-hidden w-0 group-hover:w-7 group-hover:pl-2 transition-all duration-200 ease-out">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="white" className="w-5 h-5 shrink-0">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                    </svg>
-                  </span>
-                </>
+                "Subscribe"
               )}
             </button>
             {error && (
-              <p className="text-red-600 text-sm w-full text-center md:text-left">{error}</p>
+              <p style={{ color: "var(--pf-err)", fontSize: 13, margin: 0, textAlign: "center", width: "100%" }}>{error}</p>
             )}
           </form>
         </div>
