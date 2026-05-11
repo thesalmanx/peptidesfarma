@@ -3,24 +3,88 @@
 import Link from "next/link"
 import { useState } from "react"
 
-function PFMonogram({ size = 32, bg = "var(--pf-blue)" }: { size?: number; bg?: string }) {
+/* ─── Social Icons ─── */
+function IconFacebook() {
   return (
-    <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: size, height: size, borderRadius: 8, background: bg, color: "#fff", fontFamily: "var(--pf-display)", fontWeight: 600, fontSize: size * 0.42, letterSpacing: "-0.02em" }}>
-      pf
-    </span>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff">
+      <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" />
+    </svg>
   )
 }
 
-function Wordmark({ color = "#fff", size = 16 }: { color?: string; size?: number }) {
+function IconInstagram() {
   return (
-    <span style={{ fontFamily: "var(--pf-display)", fontWeight: 600, fontSize: size, letterSpacing: "-0.02em", color, display: "inline-flex", alignItems: "baseline" }}>
-      peptides<span style={{ color: "var(--pf-blue-soft)" }}>farma</span>
-    </span>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff">
+      <path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z" />
+    </svg>
   )
 }
 
-/* ─── Newsletter ─── */
-function NewsletterSection() {
+function IconX() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  )
+}
+
+function IconLinkedIn() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff">
+      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+    </svg>
+  )
+}
+
+function IconYouTube() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff">
+      <path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z" />
+    </svg>
+  )
+}
+
+/* ─── Footer columns ─── */
+const footerColumns = [
+  {
+    title: "Products",
+    links: [
+      { label: "BPC-157", url: "/product/bpc-157" },
+      { label: "GHK-Cu", url: "/product/ghk-cu" },
+      { label: "NAD+", url: "/product/nad" },
+      { label: "Epithalon", url: "/product/epithalon" },
+      { label: "View all products", url: "/products", underline: true },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About Us", url: "/about" },
+      { label: "Track Your Order", url: "/account/orders" },
+      { label: "Lab Reports", url: "/about" },
+      { label: "Careers", url: "/contact" },
+    ],
+  },
+  {
+    title: "Support",
+    links: [
+      { label: "Contact Us", url: "/contact" },
+      { label: "FAQ", url: "/faq" },
+      { label: "Shipping Info", url: "/shipping-policy" },
+      { label: "Returns", url: "/refund-policy" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { label: "Terms of Service", url: "/terms-of-service" },
+      { label: "Privacy Policy", url: "/privacy-policy" },
+      { label: "Disclaimer", url: "/about" },
+    ],
+  },
+]
+
+export default function Footer() {
   const [email, setEmail] = useState("")
   const [loading, setLoading] = useState(false)
   const [added, setAdded] = useState(false)
@@ -46,188 +110,129 @@ function NewsletterSection() {
       setEmail("")
       setTimeout(() => setAdded(false), 3000)
     } catch (err: any) {
-      setError(err.message || "Something went wrong. Please try again.")
+      setError(err.message || "Something went wrong.")
       setLoading(false)
     }
   }
 
   return (
-    <section style={{ background: "#fff", padding: "24px 20px 32px" }} className="md:px-20 md:py-8">
-      <div className="relative w-full max-w-[1280px] mx-auto">
-        <div
-          className="relative flex flex-col items-center md:items-start md:flex-row md:justify-between w-full gap-8 md:gap-6 rounded-[20px] md:rounded-[24px] transition-shadow duration-300"
-          style={{
-            padding: "48px 40px",
-            background: "linear-gradient(180deg, var(--pf-blue-tint) 11%, #E8EEFF 100%)",
-            border: "2px solid #fff",
-          }}
-        >
-          <div className="flex flex-col items-center md:items-start gap-6 md:gap-4">
-            <h2
-              className="text-[32px] leading-[40px] md:text-[48px] md:leading-[56px] text-center md:text-left"
-              style={{ fontWeight: 700, letterSpacing: "-0.04em", color: "var(--pf-ink)" }}
-            >
-              Subscribe to our{" "}
-              <span style={{ color: "var(--pf-blue)" }}>Newsletter</span>
-            </h2>
-            <p
-              className="text-[16px] leading-[24px] md:text-[20px] md:leading-[22px] text-center md:text-left"
-              style={{ fontWeight: 400, color: "var(--pf-text-2)" }}
-            >
-              New lots, COA drops, handling guides and research updates.
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="flex flex-col md:flex-row items-start w-full md:w-auto shrink-0 gap-3">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter email address"
-              required
-              disabled={loading || added}
-              className="outline-none w-full md:w-[360px] text-center md:text-left disabled:opacity-60"
-              style={{
-                height: 48, padding: "12px 16px",
-                background: "rgba(255,255,255,0.5)",
-                border: "1px solid var(--pf-ink)",
-                borderRadius: 16, fontSize: 16, color: "var(--pf-ink)",
-                fontFamily: "inherit",
-              }}
-            />
-            <button
-              type="submit"
-              disabled={loading || added}
-              className="pf-btn pf-btn--primary shrink-0 w-full md:w-auto"
-              style={{ height: 48, padding: "12px 28px", borderRadius: 999 }}
-            >
-              {loading ? (
-                <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="50 20" /></svg>
-              ) : added ? (
-                "Subscribed!"
-              ) : (
-                "Subscribe"
-              )}
-            </button>
-            {error && <p style={{ color: "var(--pf-err)", fontSize: 13, width: "100%", textAlign: "center" }}>{error}</p>}
-          </form>
+    <footer style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
+      <div style={{ position: "relative", overflow: "hidden", borderRadius: "40px 40px 20px 20px", background: "#001C86" }}>
+        {/* Gradient overlay */}
+        <div style={{
+          position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden",
+        }}>
+          <div style={{
+            position: "absolute", width: "120%", height: "120%",
+            left: "-10%", top: "-50%",
+            background: "linear-gradient(310deg, #001C86 0%, rgba(255,255,255,0.15) 75%)",
+            mixBlendMode: "plus-lighter",
+            opacity: 0.5,
+            filter: "blur(60px)",
+            transform: "rotate(27deg)",
+          }} />
         </div>
-      </div>
-    </section>
-  )
-}
 
-/* ─── Footer ─── */
-const columns = [
-  { title: "Home", links: [{ label: "Shop", url: "/products" }, { label: "About", url: "/about" }, { label: "Contact Us", url: "/contact" }] },
-  { title: "Legal pages", links: [{ label: "FAQs", url: "/faq" }, { label: "Terms & conditions", url: "/terms-of-service" }, { label: "Privacy policy", url: "/privacy-policy" }, { label: "Shipping & Returns", url: "/shipping-and-returns" }] },
-  { title: "Contact", links: [{ label: "support@peptidesfarma.com", url: "mailto:support@peptidesfarma.com" }] },
-]
-
-const trustBadges = [
-  { label: "SSL Secured", icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg> },
-  { label: "99%+ purity", icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M9 3v6L4 19a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3l-5-10V3" /><path d="M9 3h6" /></svg> },
-  { label: "Same day delivery", icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="12" height="10" rx="1" /><path d="M14 10h4l3 3v4h-7" /><circle cx="7" cy="18" r="2" /><circle cx="17" cy="18" r="2" /></svg> },
-]
-
-export default function Footer() {
-  return (
-    <>
-      <NewsletterSection />
-      <footer style={{ background: "linear-gradient(180deg, #c8d5e5 0%, #f7f8fa 100%)", color: "var(--pf-ink)", paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
-        <div className="max-w-[1280px] mx-auto px-9 lg:px-0">
-          <div className="py-12 lg:py-14 flex flex-col gap-10 lg:gap-24">
-            <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-20">
-              <div className="shrink-0">
-                <Link href="/">
-                  <img src="/peptidesfarma-logo-dark.svg" alt="PeptidesFarma" style={{ height: 36 }} />
-                </Link>
-              </div>
-
-              <div className="flex flex-col gap-6 lg:flex-1 w-full">
-                <div className="grid grid-cols-2 gap-20 lg:hidden">
-                  {columns.slice(0, 2).map((col, i) => (
-                    <div key={i} className="flex flex-col gap-[10px]">
-                      <h4 className="text-[16px] font-semibold leading-6 tracking-[-0.01em]" style={{ color: "var(--pf-ink)" }}>{col.title}</h4>
-                      <div className="flex flex-col gap-2">
-                        {col.links.map((link, j) => (
-                          <Link key={j} href={link.url} className="text-[14px] font-normal leading-5 tracking-[-0.03em] hover:opacity-70 transition-colors whitespace-pre-line" style={{ textDecoration: "none", color: "var(--pf-text-2)" }}>
-                            {link.label}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                {columns.length > 2 && (
-                  <div className="flex flex-col gap-3 lg:hidden">
-                    <h4 className="text-[16px] font-semibold leading-6 tracking-[-0.01em]" style={{ color: "var(--pf-ink)" }}>{columns[2].title}</h4>
-                    <div className="flex flex-col gap-2">
-                      {columns[2].links.map((link, j) => (
-                        <Link key={j} href={link.url} className="text-[14px] font-normal leading-5 tracking-[-0.03em] hover:opacity-70 transition-colors whitespace-pre-line" style={{ textDecoration: "none", color: "var(--pf-text-2)" }}>
-                          {link.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <nav aria-label="Footer navigation" className="hidden lg:grid lg:grid-cols-3 gap-20 w-full">
-                  {columns.map((col, i) => (
-                    <div key={i} className="flex flex-col gap-3">
-                      <h4 className="text-[16px] font-semibold leading-6 tracking-[-0.01em]" style={{ color: "var(--pf-ink)" }}>{col.title}</h4>
-                      <div className="flex flex-col gap-3">
-                        {col.links.map((link, j) => (
-                          <Link key={j} href={link.url} className="text-[16px] font-normal leading-6 tracking-[-0.03em] hover:opacity-70 transition-colors whitespace-pre-line" style={{ textDecoration: "none", color: "var(--pf-text-2)" }}>
-                            {link.label}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </nav>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t lg:hidden" style={{ borderColor: "var(--pf-line)" }} />
-
-          <div className="py-4 flex flex-col gap-6 lg:hidden">
-            <div className="flex flex-col items-center gap-6">
-              <span className="text-[16px] font-normal leading-6 tracking-[-0.03em] text-center" style={{ color: "var(--pf-text-3)" }}>
-                &copy; {new Date().getFullYear()} Peptidesfarma
+        {/* Main content */}
+        <div className="relative z-10 flex flex-col md:flex-row items-start gap-10 md:gap-12 px-8 py-16 md:px-12 md:py-24" style={{ maxWidth: 1392, margin: "0 auto" }}>
+          {/* Left column: Brand + Newsletter */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 48, width: "100%" }} className="md:w-[440px] md:shrink-0 items-center md:items-start">
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }} className="items-center md:items-start">
+              <span style={{ fontSize: 20, fontWeight: 500, lineHeight: "30px", color: "#fff", fontFamily: "var(--pf-display)" }}>
+                PeptidesFarma
               </span>
+              <p className="text-center md:text-left" style={{ fontSize: 14, lineHeight: "20px", color: "rgba(255,255,255,0.72)", margin: 0, maxWidth: 283 }}>
+                Premium research-grade peptides with verified purity and full documentation.
+              </p>
             </div>
-            <div className="flex flex-wrap items-center justify-center" style={{ gap: "16px 24px" }}>
-              {trustBadges.map((badge, i) => (
-                <div key={i} className="flex items-center gap-2" style={{ color: "var(--pf-text-2)" }}>
-                  {badge.icon}
-                  <span className="text-[14px] font-normal leading-5 tracking-[-0.03em]">{badge.label}</span>
-                </div>
-              ))}
+
+            {/* Newsletter inline */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }} className="w-full md:w-auto">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full md:w-auto">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter email address"
+                  required
+                  disabled={loading || added}
+                  className="outline-none w-full md:w-[361px] disabled:opacity-60"
+                  style={{
+                    height: 48, padding: "12px 24px",
+                    background: "rgba(255,255,255,0.12)",
+                    border: "1px solid #fff",
+                    borderRadius: 99,
+                    fontSize: 16, lineHeight: "24px", color: "#fff",
+                    fontFamily: "inherit",
+                  }}
+                />
+                <button
+                  type="submit"
+                  disabled={loading || added}
+                  className="disabled:cursor-default w-full md:w-[118px]"
+                  style={{
+                    height: 48, padding: "12px 24px",
+                    background: "#fff", borderRadius: 99, border: "none",
+                    fontSize: 16, lineHeight: "24px", color: "#001C86",
+                    fontWeight: 400, fontFamily: "inherit",
+                    cursor: loading || added ? "default" : "pointer",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}
+                >
+                  {loading ? (
+                    <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="10" stroke="#001C86" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="50 20" />
+                    </svg>
+                  ) : added ? "Subscribed!" : "Subscribe"}
+                </button>
+                {error && <p style={{ color: "#f87171", fontSize: 12, margin: 0 }}>{error}</p>}
+              </form>
             </div>
           </div>
 
-          <div className="hidden lg:flex flex-col">
-            <div className="flex items-center justify-between py-4">
-              <div className="flex items-center" style={{ gap: 24 }}>
-                {trustBadges.map((badge, i) => (
-                  <div key={i} className="flex items-center gap-2" style={{ color: "var(--pf-text-2)" }}>
-                    {badge.icon}
-                    <span className="text-[14px] font-normal leading-5 tracking-[-0.03em]">{badge.label}</span>
-                  </div>
+          {/* Right columns */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 flex-1 w-full">
+            {footerColumns.map((col, i) => (
+              <div key={i} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                <h4 style={{ fontSize: 20, fontWeight: 500, lineHeight: "30px", color: "#fff", margin: 0 }}>
+                  {col.title}
+                </h4>
+                {col.links.map((link, j) => (
+                  <Link
+                    key={j}
+                    href={link.url}
+                    style={{
+                      fontSize: 14, lineHeight: "20px", color: "rgba(255,255,255,0.72)",
+                      textDecoration: (link as any).underline ? "underline" : "none",
+                    }}
+                    className="hover:opacity-80 transition-opacity"
+                  >
+                    {link.label}
+                  </Link>
                 ))}
               </div>
-            </div>
-            <div className="border-t" style={{ borderColor: "var(--pf-line)" }} />
-            <div className="py-4 flex justify-center">
-              <span className="text-[14px] font-normal leading-5 tracking-[-0.03em] text-center" style={{ color: "var(--pf-text-3)" }}>
-                &copy; {new Date().getFullYear()} Peptidesfarma. All rights reserved. For research purposes only.
-              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="relative z-10" style={{ borderTop: "1px solid rgba(255,255,255,0.12)" }}>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 px-8 py-8 md:px-12" style={{ maxWidth: 1392, margin: "0 auto" }}>
+            <p className="text-center md:text-left" style={{ fontSize: 14, lineHeight: "20px", color: "rgba(255,255,255,0.72)", margin: 0 }}>
+              &copy; {new Date().getFullYear()} PeptidesFarma. All rights reserved. For research use only.
+            </p>
+
+            {/* Social icons */}
+            <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:opacity-70 transition-opacity"><IconFacebook /></a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:opacity-70 transition-opacity"><IconInstagram /></a>
+              <a href="https://x.com" target="_blank" rel="noopener noreferrer" aria-label="X" className="hover:opacity-70 transition-opacity"><IconX /></a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:opacity-70 transition-opacity"><IconLinkedIn /></a>
+              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="hover:opacity-70 transition-opacity"><IconYouTube /></a>
             </div>
           </div>
         </div>
-      </footer>
-    </>
+      </div>
+    </footer>
   )
 }
