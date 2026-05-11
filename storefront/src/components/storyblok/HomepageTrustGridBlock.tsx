@@ -78,76 +78,41 @@ export default function HomepageTrustGridBlock({ blok }: { blok: HomepageTrustGr
         </p>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 20, width: "100%", maxWidth: 1280 }}>
-        {/* Row 1 */}
-        <div style={{ display: "flex", gap: 20 }} className="flex-col md:flex-row">
-          {row1.map((card, i) => {
-            const iconName = card.icon || defaultCards[i]?.icon || "shipping"
-            const iconSrc = iconMap[iconName] || "/icons/precision-synthesis.svg"
-            const isFirst = i === 0
+      {/* Cards grid - 2 cols mobile, 3 cols desktop */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5 w-full" style={{ maxWidth: 1280 }}>
+        {cards.map((card, i) => {
+          const iconName = card.icon || defaultCards[i]?.icon || "shipping"
+          const iconSrc = iconMap[iconName] || "/icons/precision-synthesis.svg"
+          const isFirst = i === 0
 
-            return (
-              <div
-                key={i}
-                style={{
-                  display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-start",
-                  padding: 32, gap: 36, flex: 1, minHeight: 250,
-                  background: isFirst
-                    ? "linear-gradient(180deg, rgba(0, 28, 134, 0) 0%, rgba(0, 28, 134, 0.08) 100%)"
-                    : "rgba(0, 36, 173, 0.04)",
-                  borderRadius: 24,
-                  ...(isFirst ? { filter: "drop-shadow(0px 0px 64px rgba(0, 36, 173, 0.16))" } : {}),
-                }}
-              >
-                <div style={{
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  width: 64, height: 64,
-                  background: isFirst ? "#001C86" : "rgba(0, 28, 134, 0.08)",
-                  borderRadius: 99,
-                }}>
-                  <Image src={iconSrc} alt="" width={32} height={32} style={{ filter: isFirst ? "brightness(0) invert(1)" : "none" }} />
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  <h3 style={{ fontSize: 20, fontWeight: 500, lineHeight: "30px", color: "#05144D", margin: 0 }}>{card.title}</h3>
-                  <p style={{ fontSize: 16, fontWeight: 400, lineHeight: "24px", color: "#4A557E", margin: 0 }}>{card.description}</p>
-                </div>
+          return (
+            <div
+              key={i}
+              className="p-5 md:p-8"
+              style={{
+                display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-start",
+                gap: 20, minHeight: 200,
+                background: isFirst
+                  ? "linear-gradient(180deg, rgba(0, 28, 134, 0) 0%, rgba(0, 28, 134, 0.08) 100%)"
+                  : "rgba(0, 36, 173, 0.04)",
+                borderRadius: 24,
+                ...(isFirst ? { filter: "drop-shadow(0px 0px 64px rgba(0, 36, 173, 0.16))" } : {}),
+              }}
+            >
+              <div className="w-12 h-12 md:w-16 md:h-16" style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                background: isFirst ? "#001C86" : "rgba(0, 28, 134, 0.08)",
+                borderRadius: 99,
+              }}>
+                <Image src={iconSrc} alt="" width={32} height={32} className="w-6 h-6 md:w-8 md:h-8" style={{ filter: isFirst ? "brightness(0) invert(1)" : "none" }} />
               </div>
-            )
-          })}
-        </div>
-
-        {/* Row 2 */}
-        <div style={{ display: "flex", gap: 20 }} className="flex-col md:flex-row">
-          {row2.map((card, i) => {
-            const iconName = card.icon || defaultCards[i + 3]?.icon || "testing"
-            const iconSrc = iconMap[iconName] || "/icons/precision-lab.svg"
-
-            return (
-              <div
-                key={i + 3}
-                style={{
-                  display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-start",
-                  padding: 32, gap: 36, flex: 1, minHeight: 250,
-                  background: "rgba(0, 36, 173, 0.04)",
-                  borderRadius: 24,
-                }}
-              >
-                <div style={{
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  width: 64, height: 64,
-                  background: "rgba(0, 28, 134, 0.08)",
-                  borderRadius: 99,
-                }}>
-                  <Image src={iconSrc} alt="" width={32} height={32} />
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  <h3 style={{ fontSize: 20, fontWeight: 500, lineHeight: "30px", color: "#05144D", margin: 0 }}>{card.title}</h3>
-                  <p style={{ fontSize: 16, fontWeight: 400, lineHeight: "24px", color: "#4A557E", margin: 0 }}>{card.description}</p>
-                </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                <h3 className="text-base md:text-xl" style={{ fontWeight: 500, lineHeight: "1.4", color: "#05144D", margin: 0 }}>{card.title}</h3>
+                <p className="text-sm md:text-base" style={{ fontWeight: 400, lineHeight: "1.5", color: "#4A557E", margin: 0 }}>{card.description}</p>
               </div>
-            )
-          })}
-        </div>
+            </div>
+          )
+        })}
       </div>
     </section>
   )
