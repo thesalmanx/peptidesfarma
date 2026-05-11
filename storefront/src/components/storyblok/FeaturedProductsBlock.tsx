@@ -1,7 +1,6 @@
 import { storyblokEditable, type SbBlokData } from "@storyblok/react/rsc"
 import { getProduct, getCollectionProducts as getAllProducts } from "@/lib/data"
 import ProductCard from "@/components/product/ProductCard"
-import ProductSlider from "@/components/product/ProductSlider"
 import Link from "next/link"
 
 interface FeaturedProductsBlok extends SbBlokData {
@@ -71,26 +70,18 @@ export default async function FeaturedProductsBlock({ blok }: { blok: FeaturedPr
     blok.subtitle ||
     "Here is the selection of high-purity compounds designed for laboratory research."
 
-  const isGrid = blok.layout === "grid"
-  const maxMobile = Number(blok.max_products_mobile) || 8
-  const maxDesktop = Number(blok.max_products_desktop) || 8
-  const maxProducts = Math.max(maxMobile, maxDesktop)
-
-  // BAC Water is only available as cart add-on, never shown in product listings
+  const maxProducts = 8
   const HIDDEN_HANDLES = ["bac-water", "test-order-qa"]
   const handles = parseHandles(blok.products).filter(h => !HIDDEN_HANDLES.includes(h))
 
   let products: ProductType[] = []
 
   if (handles.length > 0) {
-    // Fetch all products for fast lookup
     const allProducts = await getAllProducts()
     const byHandle = new Map<string, ProductType>()
     for (const p of allProducts) {
       byHandle.set(p.handle, mapProduct(p))
     }
-
-    // Maintain Storyblok ordering
     const seen = new Set<string>()
     for (const h of handles.slice(0, maxProducts)) {
       if (byHandle.has(h) && !seen.has(h)) {
@@ -98,7 +89,6 @@ export default async function FeaturedProductsBlock({ blok }: { blok: FeaturedPr
         seen.add(h)
         continue
       }
-      // Direct fetch as fallback
       if (!seen.has(h)) {
         const p = await getProduct(h)
         if (p) {
@@ -109,67 +99,59 @@ export default async function FeaturedProductsBlock({ blok }: { blok: FeaturedPr
     }
   }
 
-  // Fallback to all products if none selected
   if (products.length === 0) {
     const all = await getAllProducts()
-    products = all.slice(0, maxProducts).map(mapProduct)
+    products = all.filter(p => !HIDDEN_HANDLES.includes(p.handle)).slice(0, maxProducts).map(mapProduct)
   }
-
-  const mobileProducts = products.slice(0, maxMobile)
-  const desktopProducts = products.slice(0, maxDesktop)
-  const sliderProducts = products.slice(0, maxProducts)
 
   return (
     <section
-      className="relative py-5 lg:py-6 px-5 lg:px-20 bg-white overflow-hidden"
       {...storyblokEditable(blok)}
+      style={{ padding: "80px 0", background: "var(--pf-paper)" }}
     >
-      <div className="relative z-10 max-w-[1280px] mx-auto flex flex-col items-center gap-8">
-        <div className="flex flex-col items-start md:items-center gap-3 md:gap-5 max-w-[350px] md:max-w-[666px]">
-          <h2 className="text-[40px] md:text-[48px] font-bold leading-[48px] md:leading-[56px] tracking-[-0.03em] text-[#14213D] text-left md:text-center">
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
+        {/* Heading */}
+        <div style={{ textAlign: "center", marginBottom: 48 }}>
+          <h2 style={{ fontFamily: "var(--pf-display)", fontWeight: 700, fontSize: "clamp(28px, 3.5vw, 40px)", letterSpacing: "-0.025em", color: "var(--pf-ink)", margin: "0 0 12px" }}>
             {headingBase}{" "}
-            <span style={{ background: "linear-gradient(90deg, #4F8AF7 0%, #7AA2FF 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-              {highlight}
-            </span>
+            <span style={{ color: "var(--pf-blue)" }}>{highlight}</span>
           </h2>
-          <p className="text-[16px] md:text-[18px] font-normal leading-[24px] md:leading-[28px] tracking-[-0.01em] text-[#44516B] text-left md:text-center">
+          <p style={{ fontSize: 16, color: "var(--pf-text-2)", maxWidth: 540, margin: "0 auto", lineHeight: 1.6 }}>
             {subtitle}
           </p>
         </div>
 
-        {sliderProducts.length > 0 ? (
-          isGrid ? (
-            <>
-              <div className="w-full grid grid-cols-2 gap-4 md:hidden">
-                {mobileProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-              <div className="w-full hidden md:grid md:grid-cols-4 gap-4">
-                {desktopProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            </>
-          ) : (
-            <ProductSlider products={sliderProducts} />
-          )
+        {/* 4-column grid, 8 products */}
+        {products.length > 0 ? (
+          <>
+            {/* Mobile: 2 cols */}
+            <div className="grid grid-cols-2 gap-3 md:hidden">
+              {products.slice(0, 8).map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+            {/* Desktop: 4 cols */}
+            <div className="hidden md:grid md:grid-cols-4 gap-5">
+              {products.slice(0, 8).map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </>
         ) : (
-          <p className="text-gray-400 text-center">No products available</p>
+          <p style={{ textAlign: "center", color: "var(--pf-text-3)" }}>No products available</p>
         )}
 
-        <Link
-          href="/products"
-          className="btn-primary group inline-flex items-center justify-center rounded-[110px] h-12 text-base font-bold leading-6 tracking-[-0.01em] text-white hover:opacity-90 transition-opacity"
-          style={{ padding: "12px 28px 12px 24px" }}
-        >
-          See all products
-          <span className="inline-flex overflow-hidden w-0 group-hover:w-7 group-hover:pl-2 transition-all duration-200 ease-out">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-5 h-5 shrink-0">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-            </svg>
-          </span>
-        </Link>
+        {/* View all button */}
+        <div style={{ marginTop: 40, display: "flex", justifyContent: "center" }}>
+          <Link
+            href="/products"
+            className="pf-btn pf-btn--primary pf-btn--lg"
+            style={{ padding: "0 32px" }}
+          >
+            View all products
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+          </Link>
+        </div>
       </div>
     </section>
   )

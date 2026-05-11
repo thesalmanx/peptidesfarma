@@ -25,16 +25,16 @@ export default function HeaderAccountButton() {
 
   return (
     <Link href="/account" aria-label="My Account" className="flex items-center gap-3 rounded-[14px] hover:opacity-80 transition-opacity">
-      <span className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center shrink-0" style={{ background: "rgba(255,255,255,0.15)" }}>
+      <span className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center shrink-0" style={{ background: "var(--pf-blue-tint)" }}>
         {profileImage ? (
           /* eslint-disable-next-line @next/next/no-img-element */
           <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
         ) : (
-          <span className="text-[14px] font-medium text-white">{initials || "U"}</span>
+          <span className="text-[14px] font-medium" style={{ color: "var(--pf-ink)" }}>{initials || "U"}</span>
         )}
       </span>
       {firstName && (
-        <p className="text-[14px] font-medium leading-[20px] hidden lg:block text-white">{firstName}</p>
+        <p className="text-[14px] font-medium leading-[20px] hidden lg:block" style={{ color: "var(--pf-ink)" }}>{firstName}</p>
       )}
     </Link>
   )

@@ -1,9 +1,8 @@
 "use client"
 
-import { storyblokEditable } from "@storyblok/react/rsc"
-import type { SbBlokData } from "@storyblok/react/rsc"
-import Image from "next/image"
-import { useEffect, useRef, useCallback, useState } from "react"
+import { storyblokEditable } from "@storyblok/react"
+import type { SbBlokData } from "@storyblok/react"
+import { useState } from "react"
 
 interface Testimonial {
   _uid?: string
@@ -12,36 +11,30 @@ interface Testimonial {
   author: string
   role?: string
   rating?: string
-  avatar?: { filename: string; alt?: string } | string
+  title?: string
 }
 
 interface TestimonialsSectionBlok extends SbBlokData {
   heading?: string
   heading_highlight?: string
+  subtitle?: string
   testimonials?: Testimonial[]
 }
 
-const AVATAR_COLORS = [
-  "linear-gradient(135deg, #4F8AF7 0%, #7AA2FF 100%)",
-  "linear-gradient(135deg, #1B2A4A 0%, #3D5AAF 100%)",
-  "linear-gradient(135deg, #4F8AF7 0%, #7AA2FF 100%)",
-  "linear-gradient(135deg, #1B2A4A 0%, #7AA2FF 100%)",
-  "linear-gradient(135deg, #7AA2FF 0%, #4F8AF7 100%)",
-  "linear-gradient(135deg, #3D5AAF 0%, #4F8AF7 100%)",
+const defaultTestimonials = [
+  { title: "Great service!", quote: "We have worked with multiple peptide suppliers, but PeptidesFarma stands out for consistency. Documentation is clear, and batch quality has been reliable for our ongoing research needs.", author: "John Doe", role: "CEO Company" },
+  { title: "Great service!", quote: "We have worked with multiple peptide suppliers, but PeptidesFarma stands out for consistency. Documentation is clear, and batch quality has been reliable for our ongoing research needs.", author: "John Doe", role: "CEO Company" },
+  { title: "Great service!", quote: "We have worked with multiple peptide suppliers, but PeptidesFarma stands out for consistency. Documentation is clear, and batch quality has been reliable for our ongoing research needs.", author: "John Doe", role: "CEO Company" },
+  { title: "Great service!", quote: "Exceptional purity and fast shipping. The COAs are thorough and the customer support team is knowledgeable. Highly recommend for any research lab.", author: "Sarah Kim", role: "Research Director" },
+  { title: "Great service!", quote: "Switched from our previous supplier after quality issues. Three orders in with PeptidesFarma and zero complaints. NAD+ and Epithalon have been particularly consistent.", author: "Lisa Wang", role: "Lab Manager" },
+  { title: "Great service!", quote: "The attention to detail in packaging, the comprehensive COAs, and the research-grade quality make PeptidesFarma our go-to supplier for all peptide compounds.", author: "Robert Hayes", role: "Principal Investigator" },
 ]
 
-function getInitials(name: string) {
-  const parts = name.trim().split(/\s+/)
-  const first = parts[0]?.[0] || ""
-  const last = parts.length > 1 ? parts[parts.length - 1][0] : ""
-  return (first + last).toUpperCase()
-}
-
-function FiveStars() {
+function Stars() {
   return (
-    <div className="flex gap-[3px]">
+    <div style={{ display: "flex", gap: 6 }}>
       {[...Array(5)].map((_, i) => (
-        <svg key={i} width="12" height="12" viewBox="0 0 24 24" fill="#F5A623" xmlns="http://www.w3.org/2000/svg">
+        <svg key={i} width="20" height="20" viewBox="0 0 24 24" fill="#001C86">
           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
         </svg>
       ))}
@@ -49,209 +42,157 @@ function FiveStars() {
   )
 }
 
-function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; index: number }) {
-  const hasImage =
-    (typeof testimonial.avatar === "object" && testimonial.avatar?.filename) ||
-    (typeof testimonial.avatar === "string" && testimonial.avatar)
-
-  return (
-    <div
-      className="card-hover-border flex flex-col justify-between p-5 sm:p-6 w-[320px] sm:w-[440px] lg:w-[580px] h-[156px] shrink-0 rounded-[24px] cursor-default"
-      style={{
-        background: "rgba(255, 255, 255, 0.08)",
-        border: "1px solid rgba(255, 255, 255, 0.15)",
-      }}
-    >
-      <p className="text-[14px] sm:text-[16px] font-normal leading-[150%] tracking-[-0.01em] line-clamp-2 text-white/80">
-        {testimonial.quote}
-      </p>
-      <FiveStars />
-      <div className="flex items-center gap-3">
-        {hasImage ? (
-          <div className="w-8 h-8 rounded-full overflow-hidden shrink-0">
-            <Image
-              src={
-                typeof testimonial.avatar === "object" && testimonial.avatar?.filename
-                  ? testimonial.avatar.filename
-                  : (testimonial.avatar as string)
-              }
-              alt={testimonial.author}
-              width={32}
-              height={32}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        ) : (
-          <div
-            className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center"
-            style={{ background: AVATAR_COLORS[index % AVATAR_COLORS.length] }}
-          >
-            <span className="text-[12px] font-bold text-white leading-none">
-              {getInitials(testimonial.author)}
-            </span>
-          </div>
-        )}
-        <p className="m-0 text-[14px] sm:text-[16px] font-semibold leading-6 tracking-[-0.02em] text-[#7AA2FF]">
-          @{testimonial.author}
-        </p>
-      </div>
-    </div>
-  )
+function getInitials(name: string) {
+  const parts = name.trim().split(/\s+/)
+  return ((parts[0]?.[0] || "") + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase()
 }
 
-function MarqueeRow({ items, direction, speed }: { items: Testimonial[]; direction: "left" | "right"; speed: number }) {
-  const trackRef = useRef<HTMLDivElement>(null)
-  const animRef = useRef<number>(0)
-  const posRef = useRef<number>(0)
-  const setWidthRef = useRef<number>(0)
-  const pausedRef = useRef(false)
-  const itemCount = items.length
-
-  const measure = useCallback(() => {
-    const track = trackRef.current
-    if (!track) return
-    const firstSet = track.children[0] as HTMLElement
-    if (firstSet) {
-      setWidthRef.current = firstSet.offsetWidth
-    }
-  }, [])
-
-  useEffect(() => {
-    if (itemCount === 0) return
-
-    measure()
-    window.addEventListener("resize", measure)
-
-    posRef.current = 0
-    let lastTime = 0
-
-    const animate = (time: number) => {
-      if (lastTime === 0) lastTime = time
-      const delta = time - lastTime
-      lastTime = time
-
-      if (!pausedRef.current && setWidthRef.current > 0) {
-        const pxPerMs = speed / 16.667
-        const move = pxPerMs * delta
-
-        if (direction === "left") {
-          posRef.current -= move
-          if (posRef.current <= -setWidthRef.current) {
-            posRef.current += setWidthRef.current
-          }
-        } else {
-          posRef.current += move
-          if (posRef.current >= 0) {
-            posRef.current -= setWidthRef.current
-          }
-        }
-        if (trackRef.current) {
-          trackRef.current.style.transform = `translate3d(${posRef.current}px, 0, 0)`
-        }
-      } else {
-        lastTime = time
-      }
-      animRef.current = requestAnimationFrame(animate)
-    }
-
-    if (direction === "right") {
-      requestAnimationFrame(() => {
-        measure()
-        posRef.current = -setWidthRef.current
-      })
-    }
-
-    animRef.current = requestAnimationFrame(animate)
-
-    return () => {
-      cancelAnimationFrame(animRef.current)
-      window.removeEventListener("resize", measure)
-    }
-  }, [direction, speed, measure, itemCount])
-
-  return (
-    <div
-      className="overflow-hidden"
-      onMouseEnter={() => { pausedRef.current = true }}
-      onMouseLeave={() => { pausedRef.current = false }}
-      style={{
-        maskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
-        WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
-      }}
-    >
-      <div
-        ref={trackRef}
-        className="flex will-change-transform"
-        style={{ backfaceVisibility: "hidden" }}
-      >
-        {[0, 1, 2, 3].map((setIdx) => (
-          <div key={setIdx} className="flex gap-3 md:gap-6 shrink-0 pr-3 md:pr-6">
-            {items.map((t, i) => (
-              <TestimonialCard key={`${setIdx}-${i}`} testimonial={t} index={i} />
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
+const AVATAR_COLORS = [
+  "linear-gradient(135deg, #001C86 0%, #4F8AF7 100%)",
+  "linear-gradient(135deg, #0024AD 0%, #7AA2FF 100%)",
+  "linear-gradient(135deg, #05144D 0%, #4F8AF7 100%)",
+]
 
 export default function TestimonialsSectionBlock({ blok }: { blok: TestimonialsSectionBlok }) {
-  const heading = blok.heading || "What people say about"
-  const headingHighlight = blok.heading_highlight || "our products"
-  const storyblokTestimonials = blok.testimonials || []
-  const [liveReviews, setLiveReviews] = useState<Testimonial[]>([])
+  const heading = blok.heading || "Hear from our customers"
+  const subtitle = blok.subtitle || "Read 100+ reviews left by our customers."
+  const testimonials = blok.testimonials?.length ? blok.testimonials : defaultTestimonials
+  const [showAll, setShowAll] = useState(false)
 
-  useEffect(() => {
-    if (storyblokTestimonials.length > 0) return
-    fetch("/api/reviews")
-      .then((r) => r.json())
-      .then((reviews: { name: string; stars: number; text: string; title: string }[]) => {
-        setLiveReviews(
-          reviews
-            .filter((r) => r.stars === 5 && r.text.length > 20)
-            .map((r) => ({
-              quote: r.text.replace(/\n/g, " ").trim(),
-              author: r.name,
-              rating: "5",
-            }))
-        )
-      })
-      .catch(() => {})
-  }, [storyblokTestimonials.length])
-
-  const testimonials = storyblokTestimonials.length > 0 ? storyblokTestimonials : liveReviews
-
-  const half = Math.ceil(testimonials.length / 2)
-  const row1 = testimonials.slice(0, half)
-  const row2 = testimonials.slice(half)
+  const visible = showAll ? testimonials : testimonials.slice(0, 6)
+  const row1 = visible.slice(0, 3)
+  const row2 = visible.slice(3, 6)
 
   return (
     <section
       {...storyblokEditable(blok)}
-      className="relative py-5 lg:py-6 overflow-hidden"
+      style={{
+        display: "flex", flexDirection: "column", alignItems: "center",
+        padding: "96px 56px", gap: 48,
+        background: "#FFFFFF",
+      }}
     >
-      <div className="flex flex-col items-center px-4 lg:px-20 mb-6 max-w-[1280px] mx-auto">
-        <h2 className="text-3xl md:text-[48px] font-bold md:leading-[56px] tracking-[-0.03em] text-white text-center max-w-[666px]">
-          {heading}{" "}
-            <span
-              style={{
-                background: "linear-gradient(90deg, #4F8AF7 0%, #7AA2FF 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              {headingHighlight}
-            </span>
+      {/* Header */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, maxWidth: 650 }}>
+        <span style={{ fontSize: 14, fontWeight: 400, lineHeight: "20px", textTransform: "uppercase", color: "#4A557E", letterSpacing: "0.05em" }}>
+          Testimonials
+        </span>
+        <h2 style={{ fontSize: "clamp(36px, 5vw, 64px)", fontWeight: 400, lineHeight: "72px", letterSpacing: "-0.02em", color: "#05144D", textAlign: "center", margin: 0, fontFamily: "var(--pf-display)" }}>
+          {heading}
         </h2>
+        <p style={{ fontSize: 18, fontWeight: 400, lineHeight: "28px", textAlign: "center", color: "#4A557E", margin: 0 }}>
+          {subtitle}
+        </p>
       </div>
 
-      {testimonials.length > 0 && (
-        <div className="flex flex-col gap-3 md:gap-6 max-w-[1280px] mx-auto">
-          <MarqueeRow items={row1} direction="left" speed={1.2} />
-          <MarqueeRow items={row2} direction="right" speed={1.2} />
+      {/* Reviews grid */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 20, width: "100%", maxWidth: 1280 }}>
+        {/* Row 1 */}
+        <div style={{ display: "flex", gap: 20 }} className="flex-col md:flex-row">
+          {row1.map((t, i) => {
+            const isFirst = i === 0
+            return (
+              <div
+                key={(t as Testimonial)._uid || i}
+                style={{
+                  display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-start",
+                  padding: 32, gap: 24, flex: 1, minHeight: 308,
+                  background: isFirst
+                    ? "linear-gradient(180deg, rgba(0, 28, 134, 0) 0%, rgba(0, 28, 134, 0.08) 100%)"
+                    : "rgba(0, 36, 173, 0.04)",
+                  borderRadius: 24,
+                  ...(isFirst ? { filter: "drop-shadow(0px 0px 64px rgba(0, 36, 173, 0.16))" } : {}),
+                }}
+              >
+                <Stars />
+                <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  <h3 style={{ fontSize: 20, fontWeight: 500, lineHeight: "30px", color: "#05144D", margin: 0 }}>
+                    {(t as Testimonial).title || "Great service!"}
+                  </h3>
+                  <p style={{ fontSize: 16, fontWeight: 400, lineHeight: "24px", color: "#4A557E", margin: 0 }}>
+                    {t.quote}
+                  </p>
+                </div>
+                <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                  <div style={{ width: 48, height: 48, borderRadius: 70, background: AVATAR_COLORS[i % AVATAR_COLORS.length], display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>{getInitials(t.author)}</span>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 16, fontWeight: 500, lineHeight: "24px", color: "#05144D" }}>{t.author}</div>
+                    {t.role && <div style={{ fontSize: 14, fontWeight: 400, lineHeight: "20px", color: "#4A557E" }}>{t.role}</div>}
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </div>
+
+        {/* Row 2 */}
+        {row2.length > 0 && (
+          <div style={{ display: "flex", gap: 20 }} className="flex-col md:flex-row">
+            {row2.map((t, i) => (
+              <div
+                key={(t as Testimonial)._uid || i + 3}
+                style={{
+                  display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-start",
+                  padding: 32, gap: 24, flex: 1, minHeight: 308,
+                  background: "rgba(0, 36, 173, 0.04)",
+                  borderRadius: 24,
+                }}
+              >
+                <Stars />
+                <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  <h3 style={{ fontSize: 20, fontWeight: 500, lineHeight: "30px", color: "#05144D", margin: 0 }}>
+                    {(t as Testimonial).title || "Great service!"}
+                  </h3>
+                  <p style={{ fontSize: 16, fontWeight: 400, lineHeight: "24px", color: "#4A557E", margin: 0 }}>
+                    {t.quote}
+                  </p>
+                </div>
+                <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                  <div style={{ width: 48, height: 48, borderRadius: 70, background: AVATAR_COLORS[(i + 3) % AVATAR_COLORS.length], display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>{getInitials(t.author)}</span>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 16, fontWeight: 500, lineHeight: "24px", color: "#05144D" }}>{t.author}</div>
+                    {t.role && <div style={{ fontSize: 14, fontWeight: 400, lineHeight: "20px", color: "#4A557E" }}>{t.role}</div>}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* View all button */}
+      {testimonials.length > 6 && !showAll && (
+        <button
+          onClick={() => setShowAll(true)}
+          style={{
+            display: "flex", justifyContent: "center", alignItems: "center",
+            padding: "12px 20px", gap: 10,
+            border: "1px solid #4A557E", borderRadius: 99,
+            background: "transparent", cursor: "pointer",
+            fontSize: 16, fontWeight: 400, lineHeight: "24px",
+            color: "#4A557E", fontFamily: "inherit",
+          }}
+        >
+          View all testimonials
+        </button>
+      )}
+      {testimonials.length <= 6 && (
+        <button
+          style={{
+            display: "flex", justifyContent: "center", alignItems: "center",
+            padding: "12px 20px", gap: 10,
+            border: "1px solid #4A557E", borderRadius: 99,
+            background: "transparent", cursor: "pointer",
+            fontSize: 16, fontWeight: 400, lineHeight: "24px",
+            color: "#4A557E", fontFamily: "inherit",
+          }}
+        >
+          View all testimonials
+        </button>
       )}
     </section>
   )

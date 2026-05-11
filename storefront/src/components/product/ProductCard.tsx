@@ -166,103 +166,115 @@ export default function ProductCard({ product }: ProductCardProps) {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <Link
-        href={`/product-page/${product.handle}`}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-          background: "#fff",
-          borderRadius: 14,
-          overflow: "hidden",
-          border: hover ? "1px solid var(--pf-ink)" : "1px solid var(--pf-line)",
-          transition: "transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease",
-          boxShadow: "none",
-          textDecoration: "none",
-        }}
-      >
-        {/* Image area */}
-        <div className="pf-catalog-card-image" style={{ position: "relative", height: 280, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", background: "#FAFBFE" }}>
-          {/* Wishlist */}
+      <div style={{ display: "flex", flexDirection: "column", height: "100%", position: "relative" }}>
+        {/* Discount bubble */}
+        {(() => {
+          const discountPct = (product as any).metadata?.discount_percentage || 0
+          if (discountPct > 0) return (
+            <div style={{
+              position: "absolute", top: -8, right: -8, zIndex: 10,
+              width: 66, height: 60,
+              borderRadius: "47% 53% 52% 48% / 44% 50% 50% 56%",
+              background: "var(--pf-ink)",
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              pointerEvents: "none",
+            }}>
+              <span style={{ fontSize: 18, fontWeight: 800, color: "#fff", lineHeight: 1 }}>{discountPct}%</span>
+              <span style={{ fontSize: 8, fontWeight: 700, color: "rgba(255,255,255,0.8)", textTransform: "uppercase", letterSpacing: "0.04em" }}>off</span>
+            </div>
+          )
+          return null
+        })()}
+
+        <Link
+          href={`/product-page/${product.handle}`}
+          style={{
+            display: "block",
+            position: "relative",
+            aspectRatio: "3 / 4",
+            borderRadius: 16,
+            overflow: "hidden",
+            textDecoration: "none",
+          }}
+        >
+          {/* Image fills entire card area */}
+          {product.thumbnail ? (
+            <Image
+              src={product.thumbnail}
+              alt={product.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 50vw, 25vw"
+              style={{ objectPosition: "80% center", transition: "transform 300ms ease", transform: hover ? "scale(1.03)" : "scale(1)" }}
+            />
+          ) : (
+            <div style={{ position: "absolute", inset: 0, background: "var(--pf-paper-2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--pf-text-3)" strokeWidth="0.8"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="m21 15-5-5L5 21" /></svg>
+            </div>
+          )}
+
+
+          {/* Wishlist button */}
           <button
             aria-label="Save"
             onClick={handleWishlistToggle}
-            style={{ position: "absolute", right: 10, top: 10, width: 30, height: 30, borderRadius: 999, background: wishlisted ? "var(--pf-ink)" : "rgba(20,33,61,0.05)", border: "1px solid rgba(20,33,61,0.08)", color: wishlisted ? "#fff" : "var(--pf-text-3)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2, transition: "all 180ms ease" }}
+            style={{ position: "absolute", right: 10, top: 10, width: 32, height: 32, borderRadius: 999, background: wishlisted ? "#fff" : "rgba(255,255,255,0.7)", backdropFilter: "blur(8px)", border: "none", color: wishlisted ? "var(--pf-blue)" : "var(--pf-text-3)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2, transition: "all 180ms ease" }}
           >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill={wishlisted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill={wishlisted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10Z" />
             </svg>
           </button>
+        </Link>
 
-          {/* Product image or placeholder */}
-          <div style={{ position: "absolute", inset: 12, zIndex: 1 }}>
-            {product.thumbnail ? (
-              <Image
-                src={product.thumbnail}
-                alt={product.title}
-                fill
-                className="object-contain"
-                sizes="(max-width: 768px) 50vw, 33vw"
-              />
-            ) : (
-              <div style={{ width: 100, height: 180, background: "var(--pf-paper-2)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--pf-text-3)" strokeWidth="1"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="m21 15-5-5L5 21" /></svg>
-              </div>
-            )}
+        {/* Info below image */}
+        <div style={{ padding: "14px 4px 0", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8 }}>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em", color: "var(--pf-ink)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{product.title}</div>
+              {(product as any).subtitle && (
+                <div style={{ fontSize: 12, color: "var(--pf-text-3)", marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {(product as any).subtitle}
+                </div>
+              )}
+            </div>
+            {lowestPrice && (() => {
+              const discountPct = (product as any).metadata?.discount_percentage || 0
+              const originalPrice = discountPct > 0 ? lowestPrice.amount / (1 - discountPct / 100) : 0
+              return (
+                <div style={{ flexShrink: 0, textAlign: "right" }}>
+                  <div style={{ fontSize: 11, color: "var(--pf-text-3)", marginBottom: 1 }}>From</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    {discountPct > 0 && (
+                      <span style={{ fontSize: 12, color: "var(--pf-text-3)", textDecoration: "line-through" }}>
+                        {formatPrice(Math.round(originalPrice), lowestPrice.currency)}
+                      </span>
+                    )}
+                    <span style={{ color: discountPct > 0 ? "var(--pf-err)" : "var(--pf-ink)", fontWeight: 700, fontSize: 15, letterSpacing: "-0.01em" }}>
+                      {formatPrice(lowestPrice.amount, lowestPrice.currency)}
+                    </span>
+                  </div>
+                </div>
+              )
+            })()}
           </div>
+
+          {/* View button */}
+          <Link
+            href={`/product-page/${product.handle}`}
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "center",
+              width: "100%", height: 38, borderRadius: 999,
+              background: "var(--pf-ink)", color: "#fff",
+              fontSize: 13, fontWeight: 600, textDecoration: "none",
+              fontFamily: "inherit", transition: "opacity 180ms",
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.opacity = "0.85")}
+            onMouseOut={(e) => (e.currentTarget.style.opacity = "1")}
+          >
+            View
+          </Link>
         </div>
-
-        {/* Info area */}
-        <div style={{ padding: "16px 18px 18px", display: "flex", flexDirection: "column", gap: 12, flex: 1, justifyContent: "space-between", borderTop: "1px solid var(--pf-line)" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, minWidth: 0 }}>
-            <div style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.02em", color: "var(--pf-ink)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{product.title}</div>
-            {lowestPrice && (
-              <span style={{ fontFamily: "var(--pf-mono)", fontSize: 11, color: "var(--pf-text-3)", letterSpacing: "0.04em", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
-                From
-                <span style={{ color: "var(--pf-ink)", fontWeight: 600, fontFamily: "var(--pf-sans)", fontSize: 16, letterSpacing: "-0.01em" }}>
-                  {formatPrice(lowestPrice.amount, lowestPrice.currency)}
-                </span>
-              </span>
-            )}
-          </div>
-          <div>
-
-            {/* Add to cart button */}
-            {isOutOfStock ? (
-              <button disabled className="pf-btn pf-btn--sm" style={{ width: "100%", opacity: 0.4, cursor: "not-allowed", background: "var(--pf-paper-2)", color: "var(--pf-text-3)", border: "1px solid var(--pf-line)" }}>
-                Out of stock
-              </button>
-            ) : (
-              <button
-                ref={btnRef}
-                onClick={handleAddToCart}
-                disabled={adding}
-                aria-label={`Add ${product.title} to cart`}
-                className={`pf-btn pf-btn--sm ${addError ? "" : added ? "" : "pf-btn--primary"}`}
-                style={{
-                  width: "100%",
-                  ...(addError ? { background: "var(--pf-err)", color: "#fff" } : {}),
-                  ...(added ? { background: "var(--pf-ok)", color: "#fff" } : {}),
-                  cursor: adding ? "wait" : "pointer",
-                }}
-              >
-                {adding ? (
-                  <svg className="animate-spin" width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="50 20" /></svg>
-                ) : addError ? (
-                  "Failed, try again"
-                ) : added ? (
-                  <>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7" /></svg>
-                    Added
-                  </>
-                ) : (
-                  "Add to cart"
-                )}
-              </button>
-            )}
-          </div>
-        </div>
-      </Link>
+      </div>
 
       {/* Variant selector popup */}
       {showVariants && popupPos && typeof document !== "undefined" && createPortal(

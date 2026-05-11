@@ -82,35 +82,37 @@ export default function Header() {
 
   return (
     <>
-      {/* Announcement Bar */}
-      <div
-        className="overflow-hidden flex items-center"
-        style={{ background: "var(--pf-blue)", height: 40 }}
-      >
-        <div className="animate-marquee whitespace-nowrap flex items-center">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <span
-              key={i}
-              style={{ fontSize: 14, fontWeight: 400, lineHeight: "24px", letterSpacing: "0.02em", paddingRight: 96, color: "#fff" }}
-            >
-              Use coupon code &quot;RESEARCH10&quot; and get 10% off.
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Header */}
+      {/* Announcement + Header as one continuous gradient */}
       <header
-        className="relative h-16 md:h-[88px]"
-        style={{ background: "#216283" }}
+        className="relative"
+        style={{ background: "#f7f8fa" }}
       >
+        {/* Announcement Bar */}
+        <div
+          className="overflow-hidden flex items-center"
+          style={{ height: 40 }}
+        >
+          <div className="animate-marquee whitespace-nowrap flex items-center">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <span
+                key={i}
+                style={{ fontSize: 13, fontWeight: 500, lineHeight: "24px", letterSpacing: "0.02em", paddingRight: 96, color: "var(--pf-text-2)" }}
+              >
+                Use coupon code &quot;RESEARCH10&quot; and get 10% off.
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Nav */}
+        <div className="h-16 md:h-[72px]">
         <div
           className="h-full flex items-center justify-between mx-auto px-5 md:px-20"
           style={{ maxWidth: 1440 }}
         >
           {/* Logo */}
           <Link href="/" className="shrink-0">
-            <img src="/peptidesfarma-logo-light.svg" alt="PeptidesFarma" style={{ height: 32 }} className="md:h-10" />
+            <img src="/peptidesfarma-logo-dark.svg" alt="PeptidesFarma" style={{ height: 32 }} className="md:h-10" />
           </Link>
 
           {/* Desktop Nav */}
@@ -123,10 +125,10 @@ export default function Header() {
               <Link
                 href="/products"
                 className="hover:opacity-80 transition-opacity"
-                style={{ fontSize: 16, fontWeight: 500, lineHeight: "24px", letterSpacing: "0.02em", color: "#fff", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4 }}
+                style={{ fontSize: 16, fontWeight: 500, lineHeight: "24px", letterSpacing: "0.02em", color: "var(--pf-ink)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4 }}
               >
                 Catalog
-                <IoChevronDown size={12} color="#fff" style={{ opacity: 0.5, transform: catalogHover ? "rotate(180deg)" : "none", transition: "transform 180ms" }} />
+                <IoChevronDown size={12} color="var(--pf-ink)" style={{ opacity: 0.5, transform: catalogHover ? "rotate(180deg)" : "none", transition: "transform 180ms" }} />
               </Link>
             </div>
             {navLinks.map((link, i) => (
@@ -134,7 +136,7 @@ export default function Header() {
                 key={i}
                 href={link.url}
                 className="hover:opacity-80 transition-opacity"
-                style={{ fontSize: 16, fontWeight: 500, lineHeight: "24px", letterSpacing: "0.02em", color: "#fff", textDecoration: "none" }}
+                style={{ fontSize: 16, fontWeight: 500, lineHeight: "24px", letterSpacing: "0.02em", color: "var(--pf-ink)", textDecoration: "none" }}
               >
                 {link.label}
               </Link>
@@ -158,6 +160,7 @@ export default function Header() {
             <MobileMenu navLinks={[{ label: "Catalog", url: "/products" }, ...navLinks]} />
           </div>
         </div>
+        </div>
         {/* Catalog hover dropdown */}
         {catalogHover && (
           <div
@@ -176,9 +179,6 @@ export default function Header() {
           </div>
         )}
       </header>
-      {!isProductPage && (
-        <div style={{ height: 1, background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0.2) 80%, transparent 100%)" }} />
-      )}
     </>
   )
 }

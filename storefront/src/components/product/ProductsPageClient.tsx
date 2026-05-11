@@ -24,6 +24,14 @@ export default function ProductsPageClient({ products }: { products: Product[] }
   const [sort, setSort] = useState<SortOption>("best")
   const [searchQuery, setSearchQuery] = useState("")
 
+  const researchCategories = [
+    { id: "tissue", label: "Tissue Repair Research", handles: ["bpc-157", "tb-500", "wolverine", "ghk-cu"] },
+    { id: "dermal", label: "Dermal Research", handles: ["ghk-cu", "mt-2", "pt-141", "glow"] },
+    { id: "cellular", label: "Cellular Research", handles: ["nad", "mots-c", "ss-31", "epithalon", "glutathione"] },
+    { id: "neuro", label: "Neuro Research", handles: ["selank", "semax", "dsip-1", "dihexa", "5-amino-1mq"] },
+    { id: "circadian", label: "Circadian Research", handles: ["dsip-1", "epithalon", "selank"] },
+  ]
+
   // Derive categories from products
   const categories = useMemo(() => {
     const map = new Map<string, { id: string; label: string; count: number }>()
@@ -49,7 +57,10 @@ export default function ProductsPageClient({ products }: { products: Product[] }
       list = list.filter((p) => p.title.toLowerCase().includes(q))
     }
     if (category !== "all") {
-      list = list.filter((p) => (p.categories || []).some((c) => c.id === category))
+      const cat = researchCategories.find((c) => c.id === category)
+      if (cat) {
+        list = list.filter((p) => cat.handles.includes(p.handle))
+      }
     }
     const sorted = [...list]
     switch (sort) {
@@ -74,8 +85,8 @@ export default function ProductsPageClient({ products }: { products: Product[] }
 
           {/* Search + Sort row */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 20 }}>
-            <div style={{ position: "relative", width: 280 }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--pf-text-3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }}>
+            <div style={{ position: "relative", width: 360 }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--pf-text-3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)" }}>
                 <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
               </svg>
               <input
@@ -83,7 +94,7 @@ export default function ProductsPageClient({ products }: { products: Product[] }
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ width: "100%", height: 42, paddingLeft: 42, paddingRight: 14, border: "1px solid var(--pf-line)", borderRadius: 10, fontSize: 14, fontFamily: "inherit", color: "var(--pf-ink)", background: "var(--pf-paper)", outline: "none" }}
+                style={{ width: "100%", height: 44, paddingLeft: 44, paddingRight: 16, border: "1px solid var(--pf-line)", borderRadius: 999, fontSize: 14, fontFamily: "inherit", color: "var(--pf-ink)", background: "#fff", outline: "none" }}
               />
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -91,7 +102,7 @@ export default function ProductsPageClient({ products }: { products: Product[] }
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortOption)}
-                style={{ padding: "9px 14px", border: "1px solid var(--pf-line)", borderRadius: 10, background: "#fff", fontFamily: "inherit", fontSize: 13, color: "var(--pf-ink)", cursor: "pointer" }}
+                style={{ padding: "10px 16px", border: "1px solid var(--pf-line)", borderRadius: 999, background: "#fff", fontFamily: "inherit", fontSize: 13, color: "var(--pf-ink)", cursor: "pointer" }}
               >
                 <option value="best">Most Popular</option>
                 <option value="asc">Price: low to high</option>
@@ -103,8 +114,8 @@ export default function ProductsPageClient({ products }: { products: Product[] }
 
           {/* Category pills */}
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", paddingBottom: 28, borderBottom: "1px solid var(--pf-line)" }}>
-            {categories.map((c) => (
-              <CatPill key={c.id} label={c.label} count={c.count} active={category === c.id} onClick={() => setCategory(c.id)} />
+            {researchCategories.map((c) => (
+              <CatPill key={c.id} label={c.label} active={category === c.id} onClick={() => setCategory(category === c.id ? "all" : c.id)} />
             ))}
           </div>
         </div>

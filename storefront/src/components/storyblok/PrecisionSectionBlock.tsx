@@ -1,7 +1,6 @@
 import { storyblokEditable } from "@storyblok/react/rsc"
 import type { SbBlokData } from "@storyblok/react/rsc"
 import Image from "next/image"
-import Link from "next/link"
 
 interface PrecisionFeature {
   _uid?: string
@@ -14,128 +13,164 @@ interface PrecisionFeature {
 interface PrecisionSectionBlok extends SbBlokData {
   heading?: string
   heading_highlight?: string
+  subtitle?: string
   features?: PrecisionFeature[]
   cta_text?: string
   cta_link?: string
 }
 
-const defaultFeatures: PrecisionFeature[] = [
-  {
-    icon: "ai-dna",
-    title: "High-purity peptide synthesis",
-    description: "Each compound is synthesized for molecular accuracy and consistent research results.",
-  },
-  {
-    icon: "license-third-party",
-    title: "Independent third-party lab testing",
-    description: "Products undergo external laboratory testing to verify purity, composition, and batch-level consistency.",
-  },
-  {
-    icon: "laurel-wreath-01",
-    title: "Transparent COA access",
-    description: "Certificates of Analysis are available to provide clear insight into testing results and product specifications.",
-  },
-  {
-    icon: "star-award-01",
-    title: "Controlled storage & handling",
-    description: "Compounds are stored and handled under controlled conditions to preserve stability and integrity.",
-  },
-  {
-    icon: "chat-secure-01",
-    title: "Research-only compliance focus",
-    description: "All products are clearly labeled and supplied exclusively for research and laboratory use.",
-  },
+const defaultFeatures = [
+  { icon: "synthesis", title: "High-Purity Synthesis", description: "Each compound is synthesized for molecular accuracy and consistent research results." },
+  { icon: "lab", title: "Third-Party Lab Tested", description: "Products undergo external laboratory testing to verify purity and batch consistency." },
+  { icon: "coa", title: "Transparent COA Access", description: "Certificates of Analysis provide clear insight into testing results and specifications." },
+  { icon: "storage", title: "Controlled Storage", description: "Compounds are stored under controlled conditions to preserve stability and integrity." },
+  { icon: "compliance", title: "Research Compliance", description: "All products are clearly labeled and supplied exclusively for research use." },
+  { icon: "support", title: "Dedicated Support", description: "Our research specialists are available to assist with any questions you may have." },
 ]
 
 const iconMap: Record<string, string> = {
-  "ai-dna": "/icons/ai-dna.svg",
-  "license-third-party": "/icons/license-third-party.svg",
-  "laurel-wreath-01": "/icons/laurel-wreath-01.svg",
-  "star-award-01": "/icons/star-award-01.svg",
-  "chat-secure-01": "/icons/chat-secure-01.svg",
-  "synthesis": "/icons/ai-dna.svg",
-  "testing": "/icons/license-third-party.svg",
-  "coa": "/icons/laurel-wreath-01.svg",
-  "storage": "/icons/star-award-01.svg",
-  "compliance": "/icons/chat-secure-01.svg",
+  synthesis: "/icons/precision-synthesis.svg",
+  lab: "/icons/precision-lab.svg",
+  coa: "/icons/precision-coa.svg",
+  storage: "/icons/precision-storage.svg",
+  compliance: "/icons/precision-compliance.svg",
+  support: "/icons/precision-support.svg",
 }
 
 export default function PrecisionSectionBlock({ blok }: { blok: PrecisionSectionBlok }) {
-  const heading = blok.heading || "Built for Precision."
-  const headingHighlight = blok.heading_highlight || "Backed by Verification."
+  const heading = blok.heading || "Built for Precision"
+  const subtitle = blok.subtitle || "Every product we deliver meets the highest standards of pharmaceutical-grade quality and transparency."
   const features = blok.features?.length ? blok.features : defaultFeatures
-  const ctaText = blok.cta_text || "Learn About Our Standards"
-  const ctaLink = blok.cta_link || "#"
+
+  const row1 = features.slice(0, 3)
+  const row2 = features.slice(3, 6)
 
   return (
-    <section {...storyblokEditable(blok)} className="py-5 lg:py-8 px-5 lg:px-20">
-      <div className="max-w-[1280px] mx-auto">
-        <div className="text-center mb-10">
-          <h2
-            className="font-bold text-[#14213D] max-w-[666px] mx-auto text-left md:text-center text-[40px] md:text-[48px] leading-[48px] md:leading-[56px] tracking-[-0.03em]"
-          >
-            {heading}{" "}
-            <span
-              style={{
-                background: "linear-gradient(90deg, #4F8AF7 0%, #7AA2FF 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              {headingHighlight}
-            </span>
-          </h2>
-        </div>
+    <section
+      {...storyblokEditable(blok)}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "96px 56px",
+        gap: 48,
+        background: "#FFFFFF",
+        borderRadius: 0,
+      }}
+    >
+      {/* Header */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, maxWidth: 508 }}>
+        <span style={{
+          fontSize: 14, fontWeight: 400, lineHeight: "20px",
+          textTransform: "uppercase", color: "#4A557E",
+          letterSpacing: "0.05em",
+        }}>
+          Our Standards
+        </span>
+        <h2 style={{
+          fontSize: "clamp(36px, 5vw, 64px)", fontWeight: 400, lineHeight: "72px",
+          letterSpacing: "-0.02em", color: "#05144D",
+          textAlign: "center", margin: 0,
+          fontFamily: "var(--pf-display)",
+        }}>
+          {heading}
+        </h2>
+        <p style={{
+          fontSize: 18, fontWeight: 400, lineHeight: "28px",
+          textAlign: "center", color: "#4A557E", margin: 0,
+        }}>
+          {subtitle}
+        </p>
+      </div>
 
-        <div className="grid grid-cols-2 lg:flex lg:flex-wrap lg:justify-center gap-3 lg:gap-6 mb-10">
-          {features.map((feat, i) => (
-            <div
-              key={i}
-              className={`card-hover-border flex flex-col items-start p-4 lg:p-6 gap-4 rounded-[24px] border-2 border-[rgba(79,138,247,0.08)] lg:w-[400px] lg:h-[192px] ${i === features.length - 1 ? "col-span-2 lg:col-span-1" : ""}`}
-              style={{
-                background: "linear-gradient(95.01deg, rgba(79, 138, 247, 0.08) 16.35%, rgba(122, 162, 255, 0.08) 68.78%), #FFFFFF",
-              }}
-            >
+      {/* Cards grid */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 20, width: "100%", maxWidth: 1280 }}>
+        {/* Row 1 */}
+        <div style={{ display: "flex", gap: 20 }} className="flex-col md:flex-row">
+          {row1.map((feature, i) => {
+            const iconName = (feature as PrecisionFeature).icon || defaultFeatures[i]?.icon || "synthesis"
+            const iconSrc = iconMap[iconName] || iconMap.synthesis
+            const isFirst = i === 0
+
+            return (
               <div
-                className="flex items-center justify-center w-9 h-9 lg:w-12 lg:h-12 rounded-[9px] lg:rounded-[12px] shrink-0 p-[6px] lg:p-2"
+                key={(feature as PrecisionFeature)._uid || i}
                 style={{
-                  background: "linear-gradient(95.01deg, rgba(79, 138, 247, 0.16) 16.35%, rgba(122, 162, 255, 0.16) 68.78%)",
+                  display: "flex", flexDirection: "column",
+                  justifyContent: "center", alignItems: "flex-start",
+                  padding: 32, gap: 36,
+                  flex: 1, minHeight: 250,
+                  background: isFirst
+                    ? "linear-gradient(180deg, rgba(0, 28, 134, 0) 0%, rgba(0, 28, 134, 0.08) 100%)"
+                    : "rgba(0, 36, 173, 0.04)",
+                  borderRadius: 24,
+                  ...(isFirst ? { filter: "drop-shadow(0px 0px 64px rgba(0, 36, 173, 0.16))" } : {}),
                 }}
               >
-                <Image
-                  src={iconMap[feat.icon] || iconMap["ai-dna"]}
-                  alt=""
-                  width={32}
-                  height={32}
-                  className="w-6 h-6 lg:w-8 lg:h-8"
-                />
+                <div style={{
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  width: 64, height: 64,
+                  background: isFirst ? "#001C86" : "rgba(0, 28, 134, 0.08)",
+                  borderRadius: 99,
+                }}>
+                  <Image
+                    src={iconSrc}
+                    alt=""
+                    width={32}
+                    height={32}
+                    style={{ filter: isFirst ? "brightness(0) invert(1)" : "none" }}
+                  />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <h3 style={{ fontSize: 20, fontWeight: 500, lineHeight: "30px", color: "#05144D", margin: 0 }}>
+                    {feature.title}
+                  </h3>
+                  <p style={{ fontSize: 16, fontWeight: 400, lineHeight: "24px", color: "#4A557E", margin: 0 }}>
+                    {feature.description}
+                  </p>
+                </div>
               </div>
-
-              <h3 className="text-[14px] lg:text-[18px] font-semibold leading-5 lg:leading-6 tracking-[-0.02em] text-[#14213D]">
-                {feat.title}
-              </h3>
-
-              <p className="text-[12px] lg:text-[14px] font-normal leading-4 lg:leading-5 tracking-[-0.01em] text-[#14213D]">
-                {feat.description}
-              </p>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
-        <div className="text-center">
-          <Link
-            href={ctaLink}
-            className="btn-primary group inline-flex items-center rounded-[110px] py-3 h-12 text-base font-bold leading-6 tracking-[-0.01em] text-white hover:opacity-90 transition-opacity"
-            style={{ padding: "12px 28px 12px 24px" }}
-          >
-            {ctaText}
-            <span className="inline-flex overflow-hidden w-0 group-hover:w-7 group-hover:pl-2 transition-all duration-200 ease-out">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-5 h-5 shrink-0">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-              </svg>
-            </span>
-          </Link>
+        {/* Row 2 */}
+        <div style={{ display: "flex", gap: 20 }} className="flex-col md:flex-row">
+          {row2.map((feature, i) => {
+            const iconName = (feature as PrecisionFeature).icon || defaultFeatures[i + 3]?.icon || "storage"
+            const iconSrc = iconMap[iconName] || iconMap.storage
+
+            return (
+              <div
+                key={(feature as PrecisionFeature)._uid || i + 3}
+                style={{
+                  display: "flex", flexDirection: "column",
+                  justifyContent: "center", alignItems: "flex-start",
+                  padding: 32, gap: 36,
+                  flex: 1, minHeight: 250,
+                  background: "rgba(0, 36, 173, 0.04)",
+                  borderRadius: 24,
+                }}
+              >
+                <div style={{
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  width: 64, height: 64,
+                  background: "rgba(0, 28, 134, 0.08)",
+                  borderRadius: 99,
+                }}>
+                  <Image src={iconSrc} alt="" width={32} height={32} />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <h3 style={{ fontSize: 20, fontWeight: 500, lineHeight: "30px", color: "#05144D", margin: 0 }}>
+                    {feature.title}
+                  </h3>
+                  <p style={{ fontSize: 16, fontWeight: 400, lineHeight: "24px", color: "#4A557E", margin: 0 }}>
+                    {feature.description}
+                  </p>
+                </div>
+              </div>
+            )
+          })}
         </div>
       </div>
     </section>

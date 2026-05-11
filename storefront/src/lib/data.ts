@@ -65,7 +65,7 @@ export const getCollectionProducts = unstable_cache(
 
       const { products } = await sdk.store.product.list({
         region_id: regionId,
-        fields: "+variants.calculated_price,+categories,+variants.options,+variants.inventory_quantity,+variants.manage_inventory,+variants.allow_backorder",
+        fields: "+variants.calculated_price,+categories,+variants.options,+variants.inventory_quantity,+variants.manage_inventory,+variants.allow_backorder,+metadata",
         limit: 50,
       })
 
@@ -75,6 +75,7 @@ export const getCollectionProducts = unstable_cache(
         title: p.title || "",
         thumbnail: p.thumbnail || null,
         collection_id: p.collection_id || null,
+        metadata: (p as any).metadata || null,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         categories: (
           ((p as any).categories || []) as Array<{ id: string; name: string }>

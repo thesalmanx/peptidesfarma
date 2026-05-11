@@ -17,7 +17,7 @@ export default function ContactFormBlock({ blok }: { blok: ContactFormBlok }) {
   const subtitle = blok.subtitle || "Choose the best way to reach our team"
   const submitText = blok.submit_text || "Submit message"
   const pathname = usePathname()
-  const dark = pathname === "/"
+  const dark = false
 
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)

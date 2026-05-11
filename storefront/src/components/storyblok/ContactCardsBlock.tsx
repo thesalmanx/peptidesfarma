@@ -38,7 +38,7 @@ export default function ContactCardsBlock({ blok }: { blok: ContactCardsBlok }) 
   }))
 
   return (
-    <section className="py-10 px-4 lg:px-20 bg-white" {...storyblokEditable(blok)}>
+    <section className="py-10 px-4 lg:px-20" style={{ background: "#f6f7fb" }} {...storyblokEditable(blok)}>
       <div className="max-w-[1280px] mx-auto flex flex-col md:flex-row" style={{ gap: "16px" }}>
         {cards.map((card, i) => (
           <div
