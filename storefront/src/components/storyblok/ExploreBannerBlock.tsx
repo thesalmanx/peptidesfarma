@@ -20,9 +20,9 @@ export default function ExploreBannerBlock({ blok }: { blok: ExploreBannerBlok }
     "A curated selection of high-purity compounds designed for consistency, accuracy, and laboratory research."
   const ctaText = blok.cta_text || "See all products"
   const ctaLink = blok.cta_link || "/products"
-  const vialLeft = "/vials/nad.png"
-  const vialTopRight = "/vials/glp.png"
-  const vialBottomRight = "/vials/ghk.png"
+  const vialLeft = blok.vial_left?.filename || "/vials/nad.png"
+  const vialTopRight = blok.vial_top_right?.filename || "/vials/glp.png"
+  const vialBottomRight = blok.vial_bottom_right?.filename || "/vials/ghk.png"
 
   return (
     <section {...storyblokEditable(blok)} className="py-5 lg:py-8 px-5 lg:px-20 bg-white">

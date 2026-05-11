@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react"
 import ProductCard from "./ProductCard"
+import PfDropdown from "@/components/ui/PfDropdown"
 
 interface Product {
   id: string
@@ -99,16 +100,16 @@ export default function ProductsPageClient({ products }: { products: Product[] }
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span style={{ fontSize: 13, color: "var(--pf-text-3)" }}>Sort by:</span>
-              <select
+              <PfDropdown
                 value={sort}
-                onChange={(e) => setSort(e.target.value as SortOption)}
-                style={{ padding: "10px 16px", border: "1px solid var(--pf-line)", borderRadius: 999, background: "#fff", fontFamily: "inherit", fontSize: 13, color: "var(--pf-ink)", cursor: "pointer" }}
-              >
-                <option value="best">Most Popular</option>
-                <option value="asc">Price: low to high</option>
-                <option value="desc">Price: high to low</option>
-                <option value="az">A to Z</option>
-              </select>
+                onChange={(v) => setSort(v as SortOption)}
+                options={[
+                  { value: "best", label: "Most Popular" },
+                  { value: "asc", label: "Price: low to high" },
+                  { value: "desc", label: "Price: high to low" },
+                  { value: "az", label: "A to Z" },
+                ]}
+              />
             </div>
           </div>
 
