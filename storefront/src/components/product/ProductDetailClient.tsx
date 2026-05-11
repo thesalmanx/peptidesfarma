@@ -6,6 +6,7 @@ import Link from "next/link"
 import { useCart } from "@/lib/cart-context"
 import { formatPrice } from "@/lib/format-price"
 import ProductCard from "./ProductCard"
+import FaqBlock from "@/components/storyblok/FaqBlock"
 
 interface ProductImage { id: string; url: string }
 interface ProductOption { id: string; title: string; values: { id: string; value: string }[] }
@@ -235,6 +236,9 @@ export default function ProductDetailClient({ product, images, options, variants
             )}
           </div>
         </section>
+
+        {/* FAQ - mobile */}
+        <FaqBlock blok={{ component: "faq_section", _uid: "pdp-faq-mobile" } as any} />
 
         {relatedProducts.length > 0 && (
           <section style={{ padding: "48px 0 60px", background: "#fff" }}>
@@ -516,6 +520,9 @@ export default function ProductDetailClient({ product, images, options, variants
           </div>
         </div>
       </section>
+
+      {/* FAQ Section */}
+      <FaqBlock blok={{ component: "faq_section", _uid: "pdp-faq" } as any} />
 
       {/* Related Products */}
       {relatedProducts.length > 0 && (

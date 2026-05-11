@@ -119,8 +119,7 @@ export default function TestimonialsSectionBlock({ blok }: { blok: TestimonialsS
                   </div>
                   <div>
                     <div style={{ fontSize: 16, fontWeight: 500, lineHeight: "24px", color: "#05144D" }}>{t.author}</div>
-                    {t.role && <div style={{ fontSize: 14, fontWeight: 400, lineHeight: "20px", color: "#4A557E" }}>{t.role}</div>}
-                  </div>
+                      </div>
                 </div>
               </div>
             )
@@ -155,8 +154,7 @@ export default function TestimonialsSectionBlock({ blok }: { blok: TestimonialsS
                   </div>
                   <div>
                     <div style={{ fontSize: 16, fontWeight: 500, lineHeight: "24px", color: "#05144D" }}>{t.author}</div>
-                    {t.role && <div style={{ fontSize: 14, fontWeight: 400, lineHeight: "20px", color: "#4A557E" }}>{t.role}</div>}
-                  </div>
+                      </div>
                 </div>
               </div>
             ))}

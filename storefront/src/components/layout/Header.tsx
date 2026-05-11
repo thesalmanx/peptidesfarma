@@ -90,13 +90,13 @@ export default function Header() {
         {/* Announcement Bar */}
         <div
           className="overflow-hidden flex items-center"
-          style={{ height: 40 }}
+          style={{ height: 40, background: "var(--pf-ink)" }}
         >
           <div className="animate-marquee whitespace-nowrap flex items-center">
             {Array.from({ length: 8 }).map((_, i) => (
               <span
                 key={i}
-                style={{ fontSize: 13, fontWeight: 500, lineHeight: "24px", letterSpacing: "0.02em", paddingRight: 96, color: "var(--pf-text-2)" }}
+                style={{ fontSize: 13, fontWeight: 500, lineHeight: "24px", letterSpacing: "0.02em", paddingRight: 96, color: "#fff" }}
               >
                 Use coupon code &quot;RESEARCH10&quot; and get 10% off.
               </span>

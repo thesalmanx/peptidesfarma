@@ -1,7 +1,7 @@
 "use client"
 
 import { storyblokEditable, type SbBlokData } from "@storyblok/react/rsc"
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 
 interface FaqItem {
   _uid?: string
@@ -25,23 +25,75 @@ const defaultItems: FaqItem[] = [
   { question: "Can I return or exchange a product?", answer: "Due to the nature of research compounds, we cannot accept returns on opened products. However, if your order arrives damaged or incorrect, contact us within 48 hours and we will reship at no charge." },
 ]
 
+function AccordionItem({ item, isOpen, onClick }: { item: FaqItem; isOpen: boolean; onClick: () => void }) {
+  const contentRef = useRef<HTMLDivElement>(null)
+  const [height, setHeight] = useState(0)
+
+  useEffect(() => {
+    if (contentRef.current) {
+      setHeight(isOpen ? contentRef.current.scrollHeight : 0)
+    }
+  }, [isOpen])
+
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        display: "flex", flexDirection: "column",
+        padding: 24, cursor: "pointer",
+        background: isOpen ? "#FFFFFF" : "rgba(255, 255, 255, 0.2)",
+        border: isOpen ? "none" : "1px solid rgba(255, 255, 255, 0.32)",
+        borderRadius: 24,
+        transition: "background 300ms ease, border 300ms ease",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", gap: 20 }}>
+        <span style={{ fontSize: 20, fontWeight: isOpen ? 500 : 400, lineHeight: "30px", color: "#05144D", flex: 1 }}>
+          {item.question}
+        </span>
+        <div style={{
+          width: 40, height: 40, borderRadius: 99, flexShrink: 0,
+          background: isOpen ? "#05144D" : "transparent",
+          border: isOpen ? "none" : "1px solid #05144D",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          transition: "background 300ms ease, border 300ms ease",
+        }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ transition: "transform 300ms ease", transform: isOpen ? "rotate(0)" : "rotate(0)" }}>
+            <line x1="4" y1="12" x2="20" y2="12" stroke={isOpen ? "#fff" : "#05144D"} strokeWidth="2" style={{ transition: "stroke 300ms ease" }} />
+            <line x1="12" y1="4" x2="12" y2="20" stroke={isOpen ? "#fff" : "#05144D"} strokeWidth="2" style={{ transition: "stroke 300ms ease, opacity 300ms ease, transform 300ms ease", opacity: isOpen ? 0 : 1, transform: isOpen ? "scaleY(0)" : "scaleY(1)", transformOrigin: "center" }} />
+          </svg>
+        </div>
+      </div>
+      <div
+        ref={contentRef}
+        style={{
+          maxHeight: height,
+          overflow: "hidden",
+          transition: "max-height 350ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms ease, margin-top 300ms ease",
+          opacity: isOpen ? 1 : 0,
+          marginTop: isOpen ? 12 : 0,
+        }}
+      >
+        <p style={{ fontSize: 16, fontWeight: 500, lineHeight: "24px", color: "#4A557E", margin: 0 }}>
+          {item.answer}
+        </p>
+      </div>
+    </div>
+  )
+}
+
 export default function FaqBlock({ blok }: { blok: FaqBlok }) {
   const heading = blok.heading || "Frequently Asked Questions"
   const items = blok.items?.length ? blok.items : defaultItems
   const [openIndex, setOpenIndex] = useState(0)
 
-  const half = Math.ceil(items.length / 2)
-  const col1 = items.slice(0, half)
-  const col2 = items.slice(half)
-
   return (
-    <section {...storyblokEditable(blok)} style={{ padding: "0 8px" }}>
+    <section {...storyblokEditable(blok)}>
       <div style={{
         position: "relative",
-        display: "flex", flexDirection: "column", alignItems: "flex-start",
+        display: "flex", flexDirection: "column", alignItems: "center",
         padding: "96px 48px", gap: 48,
         background: "#E0E3F0",
-        borderRadius: 48,
         overflow: "hidden",
         isolation: "isolate",
       }}>
@@ -60,8 +112,8 @@ export default function FaqBlock({ blok }: { blok: FaqBlok }) {
           pointerEvents: "none",
         }} />
 
-        {/* Header */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 8, zIndex: 1 }}>
+        {/* Header - centered */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, zIndex: 1, textAlign: "center" }}>
           <span style={{ fontSize: 16, fontWeight: 500, lineHeight: "24px", letterSpacing: "0.04em", textTransform: "uppercase", color: "#8B6B56" }}>
             FAQs
           </span>
@@ -70,93 +122,16 @@ export default function FaqBlock({ blok }: { blok: FaqBlok }) {
           </h2>
         </div>
 
-        {/* Two-column FAQ grid */}
-        <div style={{ display: "flex", gap: 24, width: "100%", zIndex: 2 }} className="flex-col md:flex-row">
-          <div style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
-            {col1.map((item, i) => {
-              const idx = i
-              const isOpen = openIndex === idx
-              return (
-                <div
-                  key={(item as FaqItem)._uid || idx}
-                  onClick={() => setOpenIndex(isOpen ? -1 : idx)}
-                  style={{
-                    display: "flex", flexDirection: "column", alignItems: "flex-start",
-                    padding: 24, gap: 12, cursor: "pointer",
-                    background: isOpen ? "#FFFFFF" : "rgba(255, 255, 255, 0.2)",
-                    border: isOpen ? "none" : "1px solid rgba(255, 255, 255, 0.32)",
-                    borderRadius: 24,
-                    transition: "all 200ms ease",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", gap: 20 }}>
-                    <span style={{ fontSize: 20, fontWeight: isOpen ? 500 : 400, lineHeight: "30px", color: "#05144D", flex: 1 }}>
-                      {item.question}
-                    </span>
-                    <div style={{
-                      width: 40, height: 40, borderRadius: 99, flexShrink: 0,
-                      background: isOpen ? "#05144D" : "transparent",
-                      border: isOpen ? "none" : "1px solid #05144D",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                    }}>
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <line x1="4" y1="12" x2="20" y2="12" stroke={isOpen ? "#fff" : "#05144D"} strokeWidth="2" />
-                        {!isOpen && <line x1="12" y1="4" x2="12" y2="20" stroke="#05144D" strokeWidth="2" />}
-                      </svg>
-                    </div>
-                  </div>
-                  {isOpen && (
-                    <p style={{ fontSize: 16, fontWeight: 500, lineHeight: "24px", color: "#4A557E", margin: 0 }}>
-                      {item.answer}
-                    </p>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
-            {col2.map((item, i) => {
-              const idx = i + half
-              const isOpen = openIndex === idx
-              return (
-                <div
-                  key={(item as FaqItem)._uid || idx}
-                  onClick={() => setOpenIndex(isOpen ? -1 : idx)}
-                  style={{
-                    display: "flex", flexDirection: "column", alignItems: "flex-start",
-                    padding: 24, gap: 12, cursor: "pointer",
-                    background: isOpen ? "#FFFFFF" : "rgba(255, 255, 255, 0.2)",
-                    border: isOpen ? "none" : "1px solid rgba(255, 255, 255, 0.32)",
-                    borderRadius: 24,
-                    transition: "all 200ms ease",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", gap: 20 }}>
-                    <span style={{ fontSize: 20, fontWeight: isOpen ? 500 : 400, lineHeight: "30px", color: "#05144D", flex: 1 }}>
-                      {item.question}
-                    </span>
-                    <div style={{
-                      width: 40, height: 40, borderRadius: 99, flexShrink: 0,
-                      background: isOpen ? "#05144D" : "transparent",
-                      border: isOpen ? "none" : "1px solid #05144D",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                    }}>
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <line x1="4" y1="12" x2="20" y2="12" stroke={isOpen ? "#fff" : "#05144D"} strokeWidth="2" />
-                        {!isOpen && <line x1="12" y1="4" x2="12" y2="20" stroke="#05144D" strokeWidth="2" />}
-                      </svg>
-                    </div>
-                  </div>
-                  {isOpen && (
-                    <p style={{ fontSize: 16, fontWeight: 500, lineHeight: "24px", color: "#4A557E", margin: 0 }}>
-                      {item.answer}
-                    </p>
-                  )}
-                </div>
-              )
-            })}
-          </div>
+        {/* Single column centered FAQs */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%", maxWidth: 800, zIndex: 2 }}>
+          {items.map((item, i) => (
+            <AccordionItem
+              key={(item as FaqItem)._uid || i}
+              item={item as FaqItem}
+              isOpen={openIndex === i}
+              onClick={() => setOpenIndex(openIndex === i ? -1 : i)}
+            />
+          ))}
         </div>
       </div>
     </section>
