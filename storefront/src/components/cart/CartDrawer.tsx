@@ -379,7 +379,7 @@ export default function CartDrawer() {
       <div
         onClick={closeDrawer}
         style={{
-          position: "fixed", inset: 0, zIndex: 90,
+          position: "fixed", inset: 0, zIndex: 300,
           background: "rgba(5,20,77,0.45)",
           backdropFilter: "blur(4px)",
           WebkitBackdropFilter: "blur(4px)",
@@ -397,7 +397,7 @@ export default function CartDrawer() {
         style={{
           position: "fixed", top: 0, right: 0, bottom: 0,
           width: drawerWidth,
-          zIndex: 91,
+          zIndex: 301,
           transform: isDrawerOpen ? "translateX(0)" : "translateX(100%)",
           transition: "transform 420ms cubic-bezier(.22,1,.36,1), width 300ms ease",
           display: "flex",
