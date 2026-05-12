@@ -282,11 +282,17 @@ export default function ProductDetailClient({ product, images, options, variants
 
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 24, marginTop: 20 }}>
                 <span className="pf-chip">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--pf-blue-soft)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5L20 7" /></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
                   99%+ purity
                 </span>
-                <span className="pf-chip">HPLC verified</span>
-                <span className="pf-chip">Lot-traced</span>
+                <span className="pf-chip">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" /></svg>
+                  HPLC verified
+                </span>
+                <span className="pf-chip">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5zM19 19.09H5V4.91h14v14.18zM6 15h12v2H6zm0-4h12v2H6zm0-4h12v2H6z" /></svg>
+                  Lot-traced
+                </span>
               </div>
 
               <dl className="pf-spec" style={{ color: "var(--pf-dark-text)", marginBottom: 24, fontSize: 16 }}>
@@ -296,26 +302,20 @@ export default function ProductDetailClient({ product, images, options, variants
               </dl>
             </div>
 
-            <div className="pf-pdp-vial" style={{ display: "flex", alignItems: "center", justifyContent: "center", overflow: "visible" }}>
+            <div className="pf-pdp-vial" style={{ display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
               {mainImage ? (
                 <Image
                   src={mainImage}
                   alt={product.title}
-                  width={800}
-                  height={1100}
+                  width={500}
+                  height={700}
                   className="object-contain animate-variant-swap"
-                  style={{ width: "158%", height: "auto", maxWidth: "none", marginRight: -60, zIndex: 2, pointerEvents: "none" }}
+                  style={{ width: "100%", maxWidth: 380, height: "auto", zIndex: 2, pointerEvents: "none" }}
                   priority
                 />
               ) : (
-                <div style={{ position: "relative", width: 200, height: 370 }}>
-                  <svg viewBox="0 0 200 370" width="200" height="370" style={{ opacity: 0.8 }}>
-                    <rect x="68" y="6" width="64" height="22" rx="3" fill="#2D4174" />
-                    <rect x="62" y="26" width="76" height="18" rx="2" fill="#A4B0C5" />
-                    <path d="M62 44 L62 320 Q62 340 82 340 L118 340 Q138 340 138 320 L138 44 Z" fill="rgba(159,190,232,0.4)" />
-                    <rect x="68" y="118" width="64" height="190" rx="4" fill="#13234A" />
-                    <text x="100" y="150" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="700">{product.title.slice(0, 9)}</text>
-                  </svg>
+                <div style={{ width: 180, height: 280, background: "var(--pf-paper)", borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontSize: 14, color: "var(--pf-text-3)" }}>No image</span>
                 </div>
               )}
             </div>
@@ -411,14 +411,7 @@ export default function ProductDetailClient({ product, images, options, variants
                 </svg>
               ) : (
                 <>
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path d="M6.6665 13.3333L13.9333 12.7277C16.207 12.5383 16.7174 12.0417 16.9694 9.77408L17.4998 5" stroke="var(--pf-ink)" strokeWidth="1.5" strokeLinecap="round"/>
-                    <path d="M5 5H18.3333" stroke="var(--pf-ink)" strokeWidth="1.5" strokeLinecap="round"/>
-                    <path d="M5.00016 18.3333C5.92064 18.3333 6.66683 17.5871 6.66683 16.6667C6.66683 15.7462 5.92064 15 5.00016 15C4.07969 15 3.3335 15.7462 3.3335 16.6667C3.3335 17.5871 4.07969 18.3333 5.00016 18.3333Z" stroke="var(--pf-ink)" strokeWidth="1.5"/>
-                    <path d="M14.1667 18.3333C15.0871 18.3333 15.8333 17.5871 15.8333 16.6667C15.8333 15.7462 15.0871 15 14.1667 15C13.2462 15 12.5 15.7462 12.5 16.6667C12.5 17.5871 13.2462 18.3333 14.1667 18.3333Z" stroke="var(--pf-ink)" strokeWidth="1.5"/>
-                    <path d="M6.6665 16.6667H12.4998" stroke="var(--pf-ink)" strokeWidth="1.5" strokeLinecap="round"/>
-                    <path d="M1.6665 1.66666H2.4715C3.25874 1.66666 3.94495 2.18715 4.13589 2.9291L6.61527 12.5637C6.74056 13.0507 6.63334 13.5664 6.32337 13.968L5.52661 15" stroke="var(--pf-ink)" strokeWidth="1.5" strokeLinecap="round"/>
-                  </svg>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25z" /></svg>
                   <span style={{ fontWeight: 700, fontSize: 14, letterSpacing: "-0.01em", color: "var(--pf-ink)" }}>Add to cart</span>
                 </>
               )}
@@ -590,12 +583,12 @@ function RelatedSlider({ products }: { products: RelatedProduct[] }) {
       </div>
       {canLeft && (
         <button onClick={() => scroll("left")} aria-label="Scroll left" style={{ position: "absolute", left: 0, top: "35%", transform: "translateY(-50%)", width: 36, height: 36, borderRadius: 999, background: "#fff", boxShadow: "0 2px 12px rgba(0,0,0,0.12)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 10 }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--pf-ink)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" /></svg>
         </button>
       )}
       {canRight && (
         <button onClick={() => scroll("right")} aria-label="Scroll right" style={{ position: "absolute", right: 0, top: "35%", transform: "translateY(-50%)", width: 36, height: 36, borderRadius: 999, background: "#fff", boxShadow: "0 2px 12px rgba(0,0,0,0.12)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 10 }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--pf-ink)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l6 6-6 6" /></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" /></svg>
         </button>
       )}
     </div>
@@ -605,9 +598,9 @@ function RelatedSlider({ products }: { products: RelatedProduct[] }) {
 function TrustRow({ icon, h, s }: { icon: string; h: string; s: string }) {
   const c = "var(--pf-blue)"
   let svg
-  if (icon === "truck") svg = <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="12" height="10" rx="1" /><path d="M14 10h4l3 3v4h-7" /><circle cx="7" cy="18" r="2" /><circle cx="17" cy="18" r="2" /></svg>
-  else if (icon === "shield") svg = <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3 4 6v6c0 5 4 8 8 9 4-1 8-4 8-9V6l-8-3Z" /><path d="m9 12 2 2 4-4" /></svg>
-  else svg = <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M9 3v6L4 19a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3l-5-10V3" /><path d="M9 3h6" /><path d="M7 14h10" /></svg>
+  if (icon === "truck") svg = <svg width="18" height="18" viewBox="0 0 24 24" fill={c}><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" /></svg>
+  else if (icon === "shield") svg = <svg width="18" height="18" viewBox="0 0 24 24" fill={c}><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" /></svg>
+  else svg = <svg width="18" height="18" viewBox="0 0 24 24" fill={c}><path d="M7 2v11h3v9l7-12h-4l4-8z" /></svg>
 
   return (
     <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
