@@ -203,35 +203,48 @@ export default function ProductDetailClient({ product, images, options, variants
                   <span style={{ fontSize: 14, color: "var(--pf-text-3)" }}>No image</span>
                 )}
                 {/* Prev/Next arrows */}
+                {/* Dot indicators on mobile */}
                 {images.length > 1 && (
-                  <>
-                    <button
-                      onClick={() => setActiveImgIdx(Math.max(0, activeImgIdx - 1))}
-                      aria-label="Previous image"
-                      className="hover:opacity-100 transition-opacity"
-                      style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", width: 40, height: 40, borderRadius: 99, background: "#fff", boxShadow: "0 2px 10px rgba(0,0,0,0.12)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: activeImgIdx === 0 ? "default" : "pointer", zIndex: 4, opacity: activeImgIdx === 0 ? 0.3 : 0.85 }}
-                    >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" /></svg>
-                    </button>
-                    <button
-                      onClick={() => setActiveImgIdx(Math.min(images.length - 1, activeImgIdx + 1))}
-                      aria-label="Next image"
-                      className="hover:opacity-100 transition-opacity"
-                      style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", width: 40, height: 40, borderRadius: 99, background: "#fff", boxShadow: "0 2px 10px rgba(0,0,0,0.12)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: activeImgIdx === images.length - 1 ? "default" : "pointer", zIndex: 4, opacity: activeImgIdx === images.length - 1 ? 0.3 : 0.85 }}
-                    >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" /></svg>
-                    </button>
-                  </>
+                  <div className="flex md:hidden" style={{ position: "absolute", bottom: 12, left: "50%", transform: "translateX(-50%)", gap: 6, zIndex: 4 }}>
+                    {images.map((_, i) => (
+                      <button key={i} onClick={() => setActiveImgIdx(i)} style={{ width: activeImgIdx === i ? 10 : 8, height: activeImgIdx === i ? 10 : 8, borderRadius: 99, background: activeImgIdx === i ? "#fff" : "rgba(255,255,255,0.5)", border: "none", cursor: "pointer", padding: 0, transition: "all 200ms ease" }} />
+                    ))}
+                  </div>
                 )}
               </div>
-              {/* Thumbnail row */}
+              {/* Thumbnail gallery with arrows — NH GallerySlider style */}
               {images.length > 1 && (
-                <div style={{ display: "flex", gap: 8, marginTop: 14, overflowX: "auto" }} className="pf-hide-scrollbar">
-                  {images.map((img, i) => (
-                    <button key={img.id} onClick={() => setActiveImgIdx(i)} className="hover:opacity-80 transition-opacity" style={{ flexShrink: 0, width: 68, height: 68, borderRadius: 10, overflow: "hidden", border: activeImgIdx === i ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", cursor: "pointer", position: "relative", background: "#f7f8fa", padding: 0, transition: "border-color 200ms ease" }}>
-                      <Image src={img.url} alt="" fill className="object-contain" sizes="68px" style={{ padding: 4 }} />
+                <div className="hidden md:block" style={{ position: "relative", marginTop: 16 }}>
+                  {/* Left arrow */}
+                  {activeImgIdx > 0 && (
+                    <button
+                      onClick={() => setActiveImgIdx(activeImgIdx - 1)}
+                      aria-label="Previous"
+                      className="hover:opacity-100 transition-opacity"
+                      style={{ position: "absolute", left: -16, top: "50%", transform: "translateY(-50%)", width: 32, height: 32, borderRadius: 99, background: "#fff", boxShadow: "0 1px 6px rgba(0,0,0,0.15)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 4, opacity: 0.9 }}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" /></svg>
                     </button>
-                  ))}
+                  )}
+                  {/* Right arrow */}
+                  {activeImgIdx < images.length - 1 && (
+                    <button
+                      onClick={() => setActiveImgIdx(activeImgIdx + 1)}
+                      aria-label="Next"
+                      className="hover:opacity-100 transition-opacity"
+                      style={{ position: "absolute", right: -16, top: "50%", transform: "translateY(-50%)", width: 32, height: 32, borderRadius: 99, background: "#fff", boxShadow: "0 1px 6px rgba(0,0,0,0.15)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 4, opacity: 0.9 }}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" /></svg>
+                    </button>
+                  )}
+                  {/* Thumbnails */}
+                  <div style={{ display: "flex", gap: 8, overflowX: "auto", padding: "0 4px" }} className="pf-hide-scrollbar">
+                    {images.map((img, i) => (
+                      <button key={img.id} onClick={() => setActiveImgIdx(i)} className="hover:opacity-80 transition-opacity" style={{ flexShrink: 0, width: 68, height: 68, borderRadius: 10, overflow: "hidden", border: activeImgIdx === i ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", cursor: "pointer", position: "relative", background: "#f7f8fa", padding: 0, transition: "border-color 200ms ease" }}>
+                        <Image src={img.url} alt="" fill className="object-contain" sizes="68px" style={{ padding: 4 }} />
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
