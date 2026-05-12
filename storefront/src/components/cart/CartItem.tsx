@@ -106,66 +106,62 @@ export default function CartItem({ item, variant = "drawer" }: CartItemProps) {
   // Drawer variant
   return (
     <div
-      className="relative flex items-start"
+      className="relative flex items-center"
       style={{
-        padding: 12, gap: 12, minHeight: 96,
-        background: "#fff",
-        border: "1px solid var(--pf-line)",
-        borderRadius: 16,
+        padding: "14px 16px", gap: 14,
+        background: "var(--pf-paper)",
+        borderRadius: 18,
+        transition: "background 0.15s ease",
       }}
     >
       {/* Thumbnail */}
-      <div className="shrink-0 relative overflow-hidden" style={{ width: 76, height: 76, background: "var(--pf-paper)", borderRadius: 12 }}>
+      <div className="shrink-0 relative overflow-hidden" style={{ width: 68, height: 68, background: "#fff", borderRadius: 14, boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
         {thumbnail ? (
-          <Image src={thumbnail} alt={title} fill className="object-cover" sizes="76px" style={{ objectPosition: "80% center" }} />
+          <Image src={thumbnail} alt={title} fill className="object-cover" sizes="68px" style={{ objectPosition: "80% center" }} />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs">No img</div>
         )}
       </div>
 
-      {/* Content */}
-      <div className="flex flex-col justify-between items-start min-w-0" style={{ flex: "1 1 0%", minHeight: 76 }}>
-        <div className="flex items-start justify-between w-full" style={{ gap: 8 }}>
-          <div className="min-w-0 flex-1">
-            <h4 className="truncate" style={{ fontWeight: 600, fontSize: 15, lineHeight: "22px", letterSpacing: "-0.01em", color: "var(--pf-ink)", margin: 0 }}>
-              {title}
-            </h4>
-            <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-              {variantLabel && (
-                <span className="inline-flex items-center px-1.5 py-px rounded-md text-[10px] font-medium" style={{ background: "rgba(0,28,134,0.08)", color: "var(--pf-blue)" }}>
-                  {variantLabel}
-                </span>
-              )}
-              {isSubscription && (
-                <span className="inline-flex items-center gap-1 px-2 py-px rounded-full text-[10px] font-semibold tracking-wide uppercase" style={{ background: "var(--pf-blue)", color: "#fff" }}>
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" /></svg>
-                  Monthly
-                </span>
-              )}
-            </div>
-          </div>
-          <button onClick={handleRemove} className="shrink-0 hover:opacity-70 transition-opacity" style={{ width: 20, height: 20 }} aria-label="Remove item">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--pf-text-3)"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" /></svg>
+      {/* Middle: title + variant + qty stepper */}
+      <div className="flex flex-col min-w-0" style={{ flex: "1 1 0%", gap: 6 }}>
+        <div>
+          <h4 className="truncate" style={{ fontWeight: 600, fontSize: 14, lineHeight: "20px", letterSpacing: "-0.01em", color: "var(--pf-ink)", margin: 0 }}>
+            {title}
+          </h4>
+          {variantLabel && (
+            <span style={{ fontSize: 11, color: "var(--pf-blue)", fontWeight: 500 }}>
+              {variantLabel}
+            </span>
+          )}
+          {isSubscription && (
+            <span className="inline-flex items-center gap-1 mt-0.5 px-2 py-px rounded-full text-[10px] font-semibold uppercase" style={{ background: "var(--pf-blue)", color: "#fff" }}>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" /></svg>
+              Monthly
+            </span>
+          )}
+        </div>
+
+        {/* Pill qty stepper */}
+        <div className="flex items-center" style={{ background: "#fff", borderRadius: 99, border: "1px solid var(--pf-line)", width: "fit-content", height: 30, padding: "0 2px" }}>
+          <button onClick={() => handleQuantity(item.quantity - 1)} aria-label="Decrease" className="flex items-center justify-center shrink-0 cursor-pointer hover:opacity-60 active:scale-90 transition-all" style={{ width: 26, height: 26, background: "transparent", border: "none", borderRadius: 99 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-text-3)"><path d="M19 13H5v-2h14v2z" /></svg>
+          </button>
+          <span style={{ width: 28, fontWeight: 600, fontSize: 13, textAlign: "center", color: "var(--pf-ink)" }}>{item.quantity}</span>
+          <button onClick={() => handleQuantity(item.quantity + 1)} aria-label="Increase" className="flex items-center justify-center shrink-0 cursor-pointer hover:opacity-60 active:scale-90 transition-all" style={{ width: 26, height: 26, background: "transparent", border: "none", borderRadius: 99 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-text-3)"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" /></svg>
           </button>
         </div>
+      </div>
 
-        <div className="flex items-end justify-between w-full mt-1">
-          {/* Qty */}
-          <div className="flex items-center">
-            <button onClick={() => handleQuantity(item.quantity - 1)} aria-label="Decrease" className="flex items-center justify-center shrink-0 cursor-pointer hover:opacity-70 active:scale-90 transition-transform" style={{ width: 28, height: 28, background: "#fff", border: "1px solid var(--pf-line)", borderRadius: 8 }}>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M19 13H5v-2h14v2z" /></svg>
-            </button>
-            <span style={{ width: 30, fontWeight: 600, fontSize: 15, textAlign: "center", color: "var(--pf-ink)" }}>{item.quantity}</span>
-            <button onClick={() => handleQuantity(item.quantity + 1)} aria-label="Increase" className="flex items-center justify-center shrink-0 cursor-pointer hover:opacity-70 active:scale-90 transition-transform" style={{ width: 28, height: 28, background: "#fff", border: "1px solid var(--pf-line)", borderRadius: 8 }}>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" /></svg>
-            </button>
-          </div>
-
-          {/* Price */}
-          <span style={{ fontWeight: 700, fontSize: 16, letterSpacing: "-0.02em", color: "var(--pf-ink)" }}>
-            {formatPrice(total, currencyCode)}
-          </span>
-        </div>
+      {/* Right: price + remove */}
+      <div className="flex flex-col items-end justify-between shrink-0" style={{ gap: 8, alignSelf: "stretch" }}>
+        <button onClick={handleRemove} className="shrink-0 hover:opacity-60 transition-opacity" aria-label="Remove item" style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--pf-text-3)"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" /></svg>
+        </button>
+        <span style={{ fontWeight: 700, fontSize: 15, letterSpacing: "-0.02em", color: "var(--pf-ink)" }}>
+          {formatPrice(total, currencyCode)}
+        </span>
       </div>
     </div>
   )
