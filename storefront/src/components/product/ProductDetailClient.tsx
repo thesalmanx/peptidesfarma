@@ -290,304 +290,171 @@ export default function ProductDetailClient({ product, images, options, variants
   }
 
   return (
-    <div>
-      {/* Hero + Buy bar in one 100vh dark section */}
-      <section className="pf-pdp-hero" style={{ display: "flex", flexDirection: "column", paddingTop: 40, paddingBottom: 0, background: "linear-gradient(180deg, #f7f8fa 0%, #c8d5e5 100%)" }}>
-        <div style={{ maxWidth: 1180, margin: "0 auto", width: "100%", padding: "0 48px" }}>
-          {/* Top: product info + vial */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "start" }}>
-            <div>
-              <div style={{ fontSize: 12, color: "var(--pf-text-3)", marginBottom: 16, marginTop: 48, fontFamily: "var(--pf-mono)", letterSpacing: "0.08em" }}>
-                <Link href="/" style={{ cursor: "pointer", opacity: 0.7 }}>HOME</Link>
-                <span style={{ margin: "0 8px", opacity: 0.5 }}>/</span>
-                <Link href="/products" style={{ cursor: "pointer", opacity: 0.7 }}>PRODUCTS</Link>
-                <span style={{ margin: "0 8px", opacity: 0.5 }}>/</span>
-                <span style={{ color: "var(--pf-ink)" }}>{product.title.toUpperCase()}</span>
-              </div>
+    <div style={{ background: "#fff" }}>
+      {/* Breadcrumbs */}
+      <div className="max-w-[1332px] mx-auto px-4 md:px-0 w-full pt-4">
+        <div style={{ fontSize: 12, color: "var(--pf-text-3)", fontFamily: "var(--pf-mono)", letterSpacing: "0.06em" }}>
+          <Link href="/" style={{ opacity: 0.7 }}>HOME</Link>
+          <span style={{ margin: "0 8px", opacity: 0.5 }}>/</span>
+          <Link href="/products" style={{ opacity: 0.7 }}>PRODUCTS</Link>
+          <span style={{ margin: "0 8px", opacity: 0.5 }}>/</span>
+          <span style={{ color: "var(--pf-ink)" }}>{product.title.toUpperCase()}</span>
+        </div>
+      </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: 16, margin: "0 0 12px" }}>
-                <h1 style={{ fontSize: 64, fontWeight: 600, letterSpacing: "-0.03em", color: "var(--pf-ink)", margin: 0, lineHeight: 1 }}>
-                  {product.title}
-                </h1>
-                {discountPct > 0 && (
-                  <span style={{
-                    display: "inline-flex", alignItems: "center", justifyContent: "center",
-                    padding: "6px 12px", borderRadius: 99,
-                    background: "var(--pf-ink)", color: "#fff",
-                    fontSize: 13, fontWeight: 700,
-                  }}>
-                    {discountPct}% OFF
-                  </span>
+      {/* NH-style two-column card */}
+      <section className="max-w-[1332px] mx-auto px-4 md:px-4 py-4 md:py-6">
+        <div style={{ border: "1px solid var(--pf-line)", borderRadius: 12, padding: 16, overflow: "hidden" }} className="md:p-[30px] flex flex-col md:flex-row gap-0 md:gap-6 lg:gap-10">
+
+          {/* LEFT: Sticky Image Gallery */}
+          <div className="flex-1 w-full md:w-1/2 relative">
+            <div className="sticky top-[28px]">
+              {/* Discount badge */}
+              {discountPct > 0 && (
+                <span style={{ position: "absolute", top: 12, right: 12, zIndex: 3, padding: "4px 10px", borderRadius: 99, background: "var(--pf-ink)", color: "#fff", fontSize: 12, fontWeight: 700 }}>
+                  {discountPct}% OFF
+                </span>
+              )}
+              {/* Main image */}
+              <div style={{ width: "100%", aspectRatio: "1/1", borderRadius: 10, overflow: "hidden", background: "var(--pf-paper)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+                {mainImage ? (
+                  <Image key={mainImage} src={mainImage} alt={product.title} fill className="object-cover animate-variant-swap" style={{ objectPosition: "80% center" }} sizes="(max-width: 768px) 100vw, 618px" priority />
+                ) : (
+                  <span style={{ fontSize: 14, color: "var(--pf-text-3)" }}>No image</span>
                 )}
               </div>
-
-              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 28, marginTop: 16 }}>
-                <span className="pf-chip">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
-                  99%+ purity
-                </span>
-                <span className="pf-chip">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" /></svg>
-                  HPLC verified
-                </span>
-                <span className="pf-chip">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5zM19 19.09H5V4.91h14v14.18zM6 15h12v2H6zm0-4h12v2H6zm0-4h12v2H6z" /></svg>
-                  Lot-traced
-                </span>
-              </div>
-
-              <dl className="pf-spec" style={{ color: "var(--pf-dark-text)", marginBottom: 32, fontSize: 16 }}>
-                <dt style={{ color: "var(--pf-text-3)", fontSize: 15 }}>Form</dt><dd style={{ color: "var(--pf-ink)", fontSize: 16 }}>Lyophilized powder</dd>
-                <dt style={{ color: "var(--pf-text-3)", fontSize: 15 }}>Storage</dt><dd style={{ color: "var(--pf-ink)", fontSize: 16 }}>-20 C, dark</dd>
-                <dt style={{ color: "var(--pf-text-3)", fontSize: 15 }}>Tested</dt><dd style={{ color: "var(--pf-ink)", fontSize: 16 }}>Freedom Diagnostics, 3rd party</dd>
-              </dl>
-            </div>
-
-            <div className="pf-pdp-vial" style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", overflow: "hidden", paddingTop: 40 }}>
-              {mainImage ? (
-                <Image
-                  key={mainImage}
-                  src={mainImage}
-                  alt={product.title}
-                  width={280}
-                  height={380}
-                  className="object-contain animate-variant-swap"
-                  style={{ width: "auto", maxHeight: 320, zIndex: 2, pointerEvents: "none" }}
-                  priority
-                />
-              ) : (
-                <div style={{ width: 180, height: 280, background: "var(--pf-paper)", borderRadius: 16, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ fontSize: 14, color: "var(--pf-text-3)" }}>No image</span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Bottom: buy bar */}
-          <div style={{ borderTop: "1px solid var(--pf-line)", marginTop: 32 }}>
-          <div style={{ padding: "28px 0" }}>
-          {/* Variant selector */}
-          {hasMultipleVariants && (
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center", marginBottom: 20 }}>
-              <span style={{ fontSize: 14, fontWeight: 600, color: "var(--pf-ink)", marginRight: 4 }}>Dosage</span>
-              {options.map((opt) =>
-                opt.values.map((val) => {
-                  const active = selectedOptions[opt.title] === val.value
-                  const variant = variants.find((v) => v.options[opt.title] === val.value)
-                  const oos = variant ? isOOS(variant) : false
-                  return (
-                    <button
-                      key={val.id}
-                      disabled={oos}
-                      onClick={() => setSelectedOptions((prev) => ({ ...prev, [opt.title]: val.value }))}
-                      style={{
-                        height: 40, padding: "0 20px",
-                        borderRadius: 10,
-                        border: active ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)",
-                        background: active ? "var(--pf-ink)" : "#fff",
-                        color: active ? "#fff" : "var(--pf-ink)",
-                        cursor: oos ? "not-allowed" : "pointer",
-                        fontFamily: "inherit",
-                        textDecoration: oos ? "line-through" : "none",
-                        fontSize: 14, fontWeight: 600,
-                        transition: "all 180ms ease",
-                        opacity: oos ? 0.35 : 1,
-                      }}
-                    >
-                      {val.value}
+              {/* Thumbnail row */}
+              {images.length > 1 && (
+                <div style={{ display: "flex", gap: 10, marginTop: 16, overflowX: "auto" }} className="pf-hide-scrollbar">
+                  {images.map((img, i) => (
+                    <button key={img.id} onClick={() => {}} style={{ flexShrink: 0, width: 72, height: 72, borderRadius: 8, overflow: "hidden", border: mainImage === img.url ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", cursor: "pointer", position: "relative", background: "var(--pf-paper)", padding: 0 }}>
+                      <Image src={img.url} alt="" fill className="object-cover" sizes="72px" style={{ objectPosition: "80% center" }} />
                     </button>
-                  )
-                })
+                  ))}
+                </div>
               )}
             </div>
-          )}
+          </div>
 
-          {/* Bundle & Save + Price + Qty + Add to cart — all one line */}
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            {/* Bundle tiers */}
-            {bundleTiers.map((tier) => {
-              const actualActive = tier === activeTier
-              return (
-                <button
-                  key={tier.qty}
-                  onClick={() => setQty(tier.qty)}
-                  style={{
-                    display: "flex", alignItems: "center", gap: 6,
-                    padding: "10px 14px", borderRadius: 12,
-                    border: actualActive ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)",
-                    background: "#fff", cursor: "pointer",
-                    transition: "all 180ms ease",
-                    position: "relative", fontFamily: "inherit",
-                    flexShrink: 0,
-                  }}
-                >
-                  {tier.tag && (
-                    <span style={{
-                      position: "absolute", top: -7, right: 6,
-                      padding: "1px 6px", borderRadius: 99,
-                      background: tier.tag === "BEST VALUE" ? "#16a34a" : "var(--pf-blue)",
-                      color: "#fff", fontSize: 8, fontWeight: 700,
-                      letterSpacing: "0.03em", textTransform: "uppercase",
-                    }}>
-                      {tier.tag}
-                    </span>
-                  )}
-                  <div style={{ textAlign: "left" }}>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: "var(--pf-ink)", whiteSpace: "nowrap" }}>{tier.label}</div>
-                    {tier.discount > 0 && (
-                      <div style={{ fontSize: 11, fontWeight: 600, color: "#16a34a" }}>{tier.discount}% OFF</div>
-                    )}
+          {/* RIGHT: Product Info */}
+          <div className="flex-1 flex flex-col w-full md:w-1/2 pt-6 md:pt-0">
+            {/* Title */}
+            <h1 style={{ fontFamily: "var(--pf-display)", fontWeight: 700, fontSize: "clamp(32px, 4vw, 56px)", lineHeight: 1.1, letterSpacing: "-0.03em", color: "var(--pf-ink)", margin: "0 0 12px" }}>
+              {product.title}
+            </h1>
+
+            {/* Description */}
+            {product.description && (
+              <p style={{ fontSize: 16, lineHeight: "26px", color: "var(--pf-text-2)", margin: "0 0 20px" }}>
+                {product.description.split(".").slice(0, 2).join(".")}.
+              </p>
+            )}
+
+            {/* Chips */}
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 20 }}>
+              <span className="pf-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>99%+ purity</span>
+              <span className="pf-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" /></svg>HPLC verified</span>
+              <span className="pf-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" /></svg>Same-day shipping</span>
+            </div>
+
+            {/* Spec table */}
+            <dl className="pf-spec" style={{ marginBottom: 24, fontSize: 15 }}>
+              <dt style={{ color: "var(--pf-text-3)" }}>Form</dt><dd style={{ color: "var(--pf-ink)" }}>Lyophilized powder</dd>
+              <dt style={{ color: "var(--pf-text-3)" }}>Storage</dt><dd style={{ color: "var(--pf-ink)" }}>-20 C, dark</dd>
+              <dt style={{ color: "var(--pf-text-3)" }}>Tested</dt><dd style={{ color: "var(--pf-ink)" }}>Freedom Diagnostics, 3rd party</dd>
+            </dl>
+
+            <div style={{ borderTop: "1px solid var(--pf-line)", paddingTop: 20 }}>
+              {/* Variant selector */}
+              {hasMultipleVariants && (
+                <div style={{ marginBottom: 16 }}>
+                  <p style={{ fontSize: 13, color: "var(--pf-text-3)", marginBottom: 8 }}>Dosage</p>
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    {options.map((opt) => opt.values.map((val) => {
+                      const active = selectedOptions[opt.title] === val.value
+                      const variant = variants.find((v) => v.options[opt.title] === val.value)
+                      const oos = variant ? isOOS(variant) : false
+                      return (
+                        <button key={val.id} disabled={oos} onClick={() => setSelectedOptions((prev) => ({ ...prev, [opt.title]: val.value }))}
+                          style={{ height: 40, padding: "0 20px", borderRadius: 10, border: active ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", background: active ? "var(--pf-ink)" : "#fff", color: active ? "#fff" : "var(--pf-ink)", cursor: oos ? "not-allowed" : "pointer", fontFamily: "inherit", textDecoration: oos ? "line-through" : "none", fontSize: 14, fontWeight: 600, transition: "all 180ms ease", opacity: oos ? 0.35 : 1 }}>
+                          {val.value}
+                        </button>
+                      )
+                    }))}
                   </div>
-                </button>
-              )
-            })}
-
-            {/* Spacer */}
-            <div style={{ flex: 1 }} />
-
-            {/* Price */}
-            <div style={{ display: "flex", alignItems: "baseline", gap: 6, flexShrink: 0 }}>
-              {showStrikethrough && strikethroughPrice > totalPrice && (
-                <span style={{ fontSize: 16, fontWeight: 400, color: "var(--pf-text-3)", textDecoration: "line-through" }}>
-                  {formatPrice(strikethroughPrice, currencyCode)}
-                </span>
+                </div>
               )}
-              <span style={{ fontSize: 28, fontWeight: 700, color: "var(--pf-ink)" }}>
-                {formattedPrice}
-              </span>
-            </div>
 
-            {/* Qty stepper */}
-            <div style={{ display: "inline-flex", alignItems: "center", border: "2px solid var(--pf-ink)", borderRadius: 10, height: 44, flexShrink: 0 }}>
-              <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: 36, height: 42, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-                <svg width="14" height="14" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L16 9.57398C16.5523 9.57398 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574L4 11.574C3.44772 11.574 3 11.1263 3 10.574Z" fill="var(--pf-ink)" /></svg>
-              </button>
-              <span style={{ minWidth: 24, textAlign: "center", fontSize: 14, fontWeight: 700, color: "var(--pf-ink)" }}>{qty}</span>
-              <button onClick={() => setQty(Math.min(99, qty + 1))} style={{ width: 36, height: 42, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-                <svg width="14" height="14" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M10 3.57397C10.5523 3.57397 11 4.02169 11 4.57397V9.57397H16C16.5523 9.57397 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574H11V16.574C11 17.1263 10.5523 17.574 10 17.574C9.44772 17.574 9 17.1263 9 16.574V11.574H4C3.44772 11.574 3 11.1263 3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L9 9.57397V4.57397C9 4.02169 9.44772 3.57397 10 3.57397Z" fill="var(--pf-ink)" /></svg>
-              </button>
-            </div>
-            {/* Add to cart */}
-            <button
-              disabled={outOfStock || adding}
-              onClick={handleAdd}
-              className="pf-btn pf-btn--primary"
-              style={{
-                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                flex: 1, minWidth: 180, height: 48, borderRadius: 12,
-                cursor: adding ? "wait" : "pointer",
-                transition: "all 200ms ease",
-                ...(addError ? { background: "#ef4444" } : added ? { background: "#16a34a" } : {}),
-              }}
-            >
-              {adding ? (
-                <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="10" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="50 20" />
-                </svg>
-              ) : addError ? (
-                <span style={{ fontWeight: 700, fontSize: 14, color: "#fff" }}>Failed, try again</span>
-              ) : added ? (
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="#fff" />
-                </svg>
-              ) : (
-                <>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25z" /></svg>
-                  <span style={{ fontWeight: 700, fontSize: 15, color: "#fff" }}>Add to cart</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-          </div>
-        </div>
-      </section>
-
-      {/* DETAILS TABS */}
-      <section style={{ padding: "60px 0", background: "#fff" }}>
-        <div className="pf-wrap pf-pdp-detail" style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 60 }}>
-          <div>
-            <div className="pf-pdp-tabs" style={{ display: "flex", gap: 0, borderBottom: "1px solid var(--pf-line)", marginBottom: 24 }}>
-              {([["description", "Description"], ["notes", "Important notes"]] as const).map(([k, l]) => (
-                <button key={k} onClick={() => setTab(k)} style={{
-                  padding: "12px 20px", background: "transparent", border: "none", cursor: "pointer", fontFamily: "inherit",
-                  fontSize: 14, fontWeight: 600,
-                  color: tab === k ? "var(--pf-text)" : "var(--pf-text-3)",
-                  borderBottom: tab === k ? "2px solid var(--pf-blue)" : "2px solid transparent",
-                  marginBottom: -1,
-                }}>{l}</button>
-              ))}
-            </div>
-            {tab === "description" && product.description && (
-              <div>
-                <p style={{ fontSize: 16, color: "var(--pf-text-2)", lineHeight: 1.7 }}>{product.description}</p>
-              </div>
-            )}
-            {tab === "notes" && (
-              <ul style={{ padding: 0, margin: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
-                {["For laboratory research use only", "Not for human or veterinary consumption", "Store at -20C away from direct light", "Handle by qualified personnel only", "COA available for download in your account"].map((n, i) => (
-                  <li key={i} style={{ display: "flex", gap: 12, fontSize: 14, color: "var(--pf-text-2)", lineHeight: 1.6 }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--pf-blue)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}><path d="m5 12 5 5L20 7" /></svg>
-                    <span>{n}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          {/* Sidebar */}
-          <aside>
-            <div className="pf-card" style={{ padding: 20, marginBottom: 16 }}>
-              <div className="pf-eyebrow" style={{ marginBottom: 12 }}>Order details</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                <TrustRow icon="truck" h="Same-day shipping" s="Orders before 2pm CT" />
-                <TrustRow icon="shield" h="Lot COA included" s="HPLC, third party tested" />
-                <TrustRow icon="flask" h="99%+ purity" s="Pharmaceutical grade" />
-              </div>
-            </div>
-            <div className="pf-card" style={{ padding: 20, background: "var(--pf-blue-tint)", borderColor: "transparent" }}>
-              <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--pf-ink)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
-                  <path d="M12 4 2 21h20L12 4Z" /><path d="M12 10v5" /><circle cx="12" cy="18" r="0.8" fill="currentColor" />
-                </svg>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: "var(--pf-ink)", marginBottom: 4 }}>For laboratory research only</div>
-                  <div style={{ fontSize: 12, color: "var(--pf-text-2)", lineHeight: 1.6 }}>This product is supplied for research use. Not for human or veterinary consumption.</div>
+              {/* Bundle & Save */}
+              <div style={{ marginBottom: 16 }}>
+                <p style={{ fontSize: 13, color: "var(--pf-text-3)", marginBottom: 8 }}>Bundle &amp; Save</p>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  {bundleTiers.map((tier) => {
+                    const actualActive = tier === activeTier
+                    return (
+                      <button key={tier.qty} onClick={() => setQty(tier.qty)} style={{ display: "flex", alignItems: "center", gap: 6, padding: "10px 16px", borderRadius: 10, border: actualActive ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", background: "#fff", cursor: "pointer", transition: "all 180ms ease", position: "relative", fontFamily: "inherit" }}>
+                        {tier.tag && <span style={{ position: "absolute", top: -7, right: 6, padding: "1px 6px", borderRadius: 99, background: tier.tag === "BEST VALUE" ? "#16a34a" : "var(--pf-blue)", color: "#fff", fontSize: 8, fontWeight: 700, letterSpacing: "0.03em", textTransform: "uppercase" }}>{tier.tag}</span>}
+                        <div style={{ textAlign: "left" }}>
+                          <div style={{ fontSize: 13, fontWeight: 600, color: "var(--pf-ink)", whiteSpace: "nowrap" }}>{tier.label}</div>
+                          {tier.discount > 0 && <div style={{ fontSize: 11, fontWeight: 600, color: "#16a34a" }}>{tier.discount}% OFF</div>}
+                        </div>
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
-            </div>
-          </aside>
-        </div>
-      </section>
 
-      {/* Important Notes */}
-      <section style={{ padding: "0 0 60px", background: "#fff" }}>
-        <div className="pf-wrap">
-          <div style={{
-            padding: 24, gap: 12, display: "flex", flexDirection: "column",
-            background: "linear-gradient(95deg, rgba(79,138,247,0.12) 16%, rgba(122,162,255,0.12) 69%), rgba(144,170,220,0.08)",
-            border: "2px solid var(--pf-blue-line)",
-            borderRadius: 12,
-          }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--pf-ink)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 4 2 21h20L12 4Z" /><path d="M12 10v5" /><circle cx="12" cy="18" r="0.8" fill="currentColor" />
-              </svg>
-              <span style={{ fontWeight: 600, fontSize: 14, color: "var(--pf-ink)" }}>Important Notes</span>
+              {/* Price */}
+              <div style={{ marginBottom: 16 }}>
+                <p style={{ fontSize: 13, color: "var(--pf-text-3)", marginBottom: 4 }}>Price</p>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                  {showStrikethrough && strikethroughPrice > totalPrice && (
+                    <span style={{ fontSize: 18, color: "var(--pf-text-3)", textDecoration: "line-through" }}>{formatPrice(strikethroughPrice, currencyCode)}</span>
+                  )}
+                  <span style={{ fontSize: 32, fontWeight: 700, color: "var(--pf-ink)" }}>{formattedPrice}</span>
+                </div>
+              </div>
+
+              {/* Qty + Add to cart */}
+              <p style={{ fontSize: 13, color: "var(--pf-text-3)", marginBottom: 8 }}>Quantity</p>
+              <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                <div style={{ display: "inline-flex", alignItems: "center", border: "2px solid var(--pf-ink)", borderRadius: 10, height: 52 }}>
+                  <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: 44, height: 50, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L16 9.57398C16.5523 9.57398 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574L4 11.574C3.44772 11.574 3 11.1263 3 10.574Z" fill="var(--pf-ink)" /></svg>
+                  </button>
+                  <span style={{ minWidth: 28, textAlign: "center", fontSize: 16, fontWeight: 700, color: "var(--pf-ink)" }}>{qty}</span>
+                  <button onClick={() => setQty(Math.min(99, qty + 1))} style={{ width: 44, height: 50, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                    <svg width="16" height="16" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M10 3.57397C10.5523 3.57397 11 4.02169 11 4.57397V9.57397H16C16.5523 9.57397 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574H11V16.574C11 17.1263 10.5523 17.574 10 17.574C9.44772 17.574 9 17.1263 9 16.574V11.574H4C3.44772 11.574 3 11.1263 3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L9 9.57397V4.57397C9 4.02169 9.44772 3.57397 10 3.57397Z" fill="var(--pf-ink)" /></svg>
+                  </button>
+                </div>
+                <button disabled={outOfStock || adding} onClick={handleAdd} className="pf-btn pf-btn--primary" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flex: 1, height: 52, borderRadius: 10, cursor: adding ? "wait" : "pointer", transition: "all 200ms ease", ...(addError ? { background: "#ef4444" } : added ? { background: "#16a34a" } : {}) }}>
+                  {adding ? (
+                    <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="50 20" /></svg>
+                  ) : addError ? (
+                    <span style={{ fontWeight: 700, fontSize: 14, color: "#fff" }}>Failed</span>
+                  ) : added ? (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="#fff" /></svg>
+                  ) : (
+                    <>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25z" /></svg>
+                      <span style={{ fontWeight: 700, fontSize: 15, color: "#fff" }}>Add to cart &middot; {formattedPrice}</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+
+            {/* USPs */}
+            <div style={{ borderTop: "1px solid var(--pf-line)", marginTop: 24, paddingTop: 20, display: "flex", flexDirection: "column", gap: 8 }}>
               {[
-                "This product is intended for research and laboratory use only.",
-                "Must be handled by qualified research professionals.",
-                "Store in a cool, dry place away from direct sunlight.",
-                "Keep out of reach of children and unauthorized individuals.",
-                "Follow all applicable local regulations regarding research compounds.",
-              ].map((note, i) => (
+                { icon: "truck", text: "Same-day shipping · Orders before 2pm CT" },
+                { icon: "shield", text: "Lot COA included · HPLC third-party tested" },
+                { icon: "bolt", text: "99%+ purity · Pharmaceutical grade" },
+                { icon: "lab", text: "For laboratory research use only" },
+              ].map((usp, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--pf-blue)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                    <circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" />
-                  </svg>
-                  <span style={{ fontSize: 16, lineHeight: "24px", color: "var(--pf-ink)" }}>{note}</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
+                  <span style={{ fontSize: 13, color: "var(--pf-text-2)" }}>{usp.text}</span>
                 </div>
               ))}
             </div>
