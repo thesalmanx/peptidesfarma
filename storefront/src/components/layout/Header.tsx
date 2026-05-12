@@ -191,15 +191,22 @@ export default function Header() {
             style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", height: 52, padding: "0 20px", background: "none", border: "none", borderBottom: "1px solid var(--pf-line)", cursor: "pointer", fontFamily: "inherit" }}
           >
             <span style={{ fontSize: 15, fontWeight: 600, color: "var(--pf-ink)", textTransform: "uppercase", letterSpacing: "0.03em" }}>Shop</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--pf-ink)" style={{ transform: mobileShopOpen ? "rotate(180deg)" : "none", transition: "transform 200ms ease" }}><path d="m7 10 5 5 5-5z" /></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--pf-ink)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "transform 250ms ease", transform: mobileShopOpen ? "rotate(180deg)" : "none" }}><path d="m6 9 6 6 6-6" /></svg>
           </button>
-          {mobileShopOpen && (
-            <div style={{ padding: "12px 20px", display: "flex", flexDirection: "column", gap: 8, borderBottom: "1px solid var(--pf-line)", background: "var(--pf-paper)" }}>
-              <Link href="/products" onClick={() => setMobileOpen(false)} style={{ fontSize: 14, color: "var(--pf-ink)", textDecoration: "none", padding: "8px 0", fontWeight: 500 }}>All Products</Link>
-              <Link href="/products" onClick={() => setMobileOpen(false)} style={{ fontSize: 14, color: "var(--pf-text-2)", textDecoration: "none", padding: "8px 0" }}>Best Sellers</Link>
-              <Link href="/products" onClick={() => setMobileOpen(false)} style={{ fontSize: 14, color: "var(--pf-text-2)", textDecoration: "none", padding: "8px 0" }}>New Arrivals</Link>
-            </div>
-          )}
+          <div style={{
+            maxHeight: mobileShopOpen ? 200 : 0,
+            overflow: "hidden",
+            transition: "max-height 300ms ease, opacity 300ms ease, padding 300ms ease",
+            opacity: mobileShopOpen ? 1 : 0,
+            padding: mobileShopOpen ? "12px 20px" : "0 20px",
+            display: "flex", flexDirection: "column", gap: 4,
+            borderBottom: mobileShopOpen ? "1px solid var(--pf-line)" : "none",
+            background: "var(--pf-paper)",
+          }}>
+            <Link href="/products" onClick={() => setMobileOpen(false)} style={{ fontSize: 14, color: "var(--pf-ink)", textDecoration: "none", padding: "8px 0", fontWeight: 500 }}>All Products</Link>
+            <Link href="/products" onClick={() => setMobileOpen(false)} style={{ fontSize: 14, color: "var(--pf-text-2)", textDecoration: "none", padding: "8px 0" }}>Best Sellers</Link>
+            <Link href="/products" onClick={() => setMobileOpen(false)} style={{ fontSize: 14, color: "var(--pf-text-2)", textDecoration: "none", padding: "8px 0" }}>New Arrivals</Link>
+          </div>
 
           {navLinks.map((link, i) => (
             <Link
