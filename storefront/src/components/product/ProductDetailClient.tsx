@@ -278,20 +278,17 @@ export default function ProductDetailClient({ product, images, options, variants
               </p>
             )}
 
-            {/* Chips */}
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 12px", background: "rgba(0,28,134,0.06)", borderRadius: 99, fontSize: 13, fontWeight: 500, color: "var(--pf-ink)" }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
-                99%+ purity
-              </span>
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 12px", background: "rgba(0,28,134,0.06)", borderRadius: 99, fontSize: 13, fontWeight: 500, color: "var(--pf-ink)" }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" /></svg>
-                HPLC verified
-              </span>
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 12px", background: "rgba(0,28,134,0.06)", borderRadius: 99, fontSize: 13, fontWeight: 500, color: "var(--pf-ink)" }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" /></svg>
-                Same-day shipping
-              </span>
+            {/* Chips — full width on mobile */}
+            <div className="grid grid-cols-2 md:flex md:flex-wrap" style={{ gap: 8, marginBottom: 20 }}>
+              {[
+                { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>, text: "99%+ purity" },
+                { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" /></svg>, text: "HPLC verified" },
+                { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" /></svg>, text: "Same-day shipping" },
+              ].map((chip, i) => (
+                <span key={i} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "6px 12px", background: "rgba(0,28,134,0.06)", borderRadius: 99, fontSize: 13, fontWeight: 500, color: "var(--pf-ink)" }}>
+                  {chip.icon}{chip.text}
+                </span>
+              ))}
             </div>
 
             {/* Spec table */}
@@ -306,7 +303,7 @@ export default function ProductDetailClient({ product, images, options, variants
               {hasMultipleVariants && (
                 <div style={{ marginBottom: 16 }}>
                   <p style={{ fontSize: 13, color: "var(--pf-text-3)", marginBottom: 8 }}>Dosage</p>
-                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  <div className="grid grid-cols-3 md:flex md:flex-wrap" style={{ gap: 8 }}>
                     {options.map((opt) => opt.values.map((val) => {
                       const active = selectedOptions[opt.title] === val.value
                       const variant = variants.find((v) => v.options[opt.title] === val.value)
@@ -314,7 +311,7 @@ export default function ProductDetailClient({ product, images, options, variants
                       return (
                         <button key={val.id} disabled={oos} onClick={() => setSelectedOptions((prev) => ({ ...prev, [opt.title]: val.value }))}
                           className="hover:border-[var(--pf-ink)]"
-                          style={{ height: 42, padding: "0 22px", borderRadius: 10, border: active ? "2px solid var(--pf-ink)" : "1.5px solid var(--pf-line)", background: active ? "var(--pf-ink)" : "#fff", color: active ? "#fff" : "var(--pf-ink)", cursor: oos ? "not-allowed" : "pointer", fontFamily: "inherit", textDecoration: oos ? "line-through" : "none", fontSize: 14, fontWeight: 600, transition: "all 200ms ease", opacity: oos ? 0.35 : 1 }}>
+                          style={{ height: 42, padding: "0 12px", borderRadius: 10, border: active ? "2px solid var(--pf-ink)" : "1.5px solid var(--pf-line)", background: active ? "var(--pf-ink)" : "#fff", color: active ? "#fff" : "var(--pf-ink)", cursor: oos ? "not-allowed" : "pointer", fontFamily: "inherit", textDecoration: oos ? "line-through" : "none", fontSize: 14, fontWeight: 600, transition: "all 200ms ease", opacity: oos ? 0.35 : 1 }}>
                           {val.value}
                         </button>
                       )
@@ -326,13 +323,13 @@ export default function ProductDetailClient({ product, images, options, variants
               {/* Bundle & Save */}
               <div style={{ marginBottom: 16 }}>
                 <p style={{ fontSize: 13, color: "var(--pf-text-3)", marginBottom: 8 }}>Bundle &amp; Save</p>
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <div className="grid grid-cols-3 md:flex md:flex-wrap" style={{ gap: 8 }}>
                   {bundleTiers.map((tier) => {
                     const actualActive = tier === activeTier
                     return (
-                      <button key={tier.qty} onClick={() => setQty(tier.qty)} style={{ display: "flex", alignItems: "center", gap: 6, padding: "10px 16px", borderRadius: 10, border: actualActive ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", background: "#fff", cursor: "pointer", transition: "all 180ms ease", position: "relative", fontFamily: "inherit" }}>
+                      <button key={tier.qty} onClick={() => setQty(tier.qty)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 12px", borderRadius: 10, border: actualActive ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", background: "#fff", cursor: "pointer", transition: "all 180ms ease", position: "relative", fontFamily: "inherit" }}>
                         {tier.tag && <span style={{ position: "absolute", top: -7, right: 6, padding: "1px 6px", borderRadius: 99, background: tier.tag === "BEST VALUE" ? "#16a34a" : "var(--pf-blue)", color: "#fff", fontSize: 8, fontWeight: 700, letterSpacing: "0.03em", textTransform: "uppercase" }}>{tier.tag}</span>}
-                        <div style={{ textAlign: "left" }}>
+                        <div style={{ textAlign: "center" }}>
                           <div style={{ fontSize: 13, fontWeight: 600, color: "var(--pf-ink)", whiteSpace: "nowrap" }}>{tier.label}</div>
                           {tier.discount > 0 && <div style={{ fontSize: 11, fontWeight: 600, color: "#16a34a" }}>{tier.discount}% OFF</div>}
                         </div>
