@@ -63,17 +63,11 @@ export default function ProductDetailClient({ product, images, options, variants
 
   const goToImage = (idx: number) => {
     setActiveImgIdx(idx)
-    setUserBrowsing(true)
     if (thumbsRef.current) {
       const thumb = thumbsRef.current.children[idx] as HTMLElement
       if (thumb) thumb.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" })
     }
   }
-
-  // Reset browsing when variant changes — show variant image
-  useEffect(() => {
-    setUserBrowsing(false)
-  }, [selectedOptions])
   const [tab, setTab] = useState("description")
   const [adding, setAdding] = useState(false)
   const touchStartX = useRef(0)
@@ -113,11 +107,7 @@ export default function ProductDetailClient({ product, images, options, variants
   )
 
   const variantImage = selectedVariant?.metadata_image || selectedVariant?.images?.[0]?.url || null
-  const [userBrowsing, setUserBrowsing] = useState(false)
-  // Default: show thumbnail (product card image) for all variants. Browse gallery manually via arrows.
-  const mainImage = userBrowsing
-    ? (images[activeImgIdx]?.url || product.thumbnail || variantImage || images[0]?.url || null)
-    : (product.thumbnail || variantImage || images[0]?.url || null)
+  const mainImage = variantImage || images[activeImgIdx]?.url || images[0]?.url || null
   const outOfStock = selectedVariant ? isOOS(selectedVariant) : false
 
   const meaningfulVariants = variants.filter((v) => v.title && v.title.toLowerCase() !== "default")
@@ -229,7 +219,7 @@ export default function ProductDetailClient({ product, images, options, variants
               <div
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
-                style={{ width: "100%", aspectRatio: "3/4", borderRadius: 14, overflow: "hidden", background: "linear-gradient(180deg, #f7f8fa 0%, #eef1f8 100%)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}
+                style={{ width: "100%", aspectRatio: "1/1", borderRadius: 14, overflow: "hidden", background: "linear-gradient(180deg, #f7f8fa 0%, #eef1f8 100%)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}
               >
                 {mainImage ? (
                   <Image key={mainImage} src={mainImage} alt={product.title} fill className="object-cover" style={{ objectPosition: "80% center", transition: "opacity 300ms ease" }} sizes="(max-width: 768px) 100vw, 618px" priority />
