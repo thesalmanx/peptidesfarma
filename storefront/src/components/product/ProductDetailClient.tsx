@@ -510,6 +510,9 @@ export default function ProductDetailClient({ product, images, options, variants
 
       {/* FAQ Section */}
       <FaqBlock blok={{ component: "faq_section", _uid: "pdp-faq" } as any} />
+
+      {/* Spacer for sticky mobile CTA bar */}
+      <div className="md:hidden" style={{ height: 80 }} />
     </div>
   )
 }
