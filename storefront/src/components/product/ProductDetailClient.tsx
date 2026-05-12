@@ -6,6 +6,7 @@ import Link from "next/link"
 import { useCart } from "@/lib/cart-context"
 import { formatPrice } from "@/lib/format-price"
 import { toggleWishlistItem, isInWishlist } from "@/lib/wishlist"
+import PfDropdown from "@/components/ui/PfDropdown"
 import ProductCard from "./ProductCard"
 import FaqBlock from "@/components/storyblok/FaqBlock"
 
@@ -229,26 +230,32 @@ export default function ProductDetailClient({ product, images, options, variants
                 {/* Mobile arrows on hero image + dot indicators */}
                 {images.length > 1 && (
                   <>
-                    {/* Left arrow */}
+                    {/* Left arrow — blue blob */}
                     {activeImgIdx > 0 && (
                       <button
                         onClick={() => goToImage(activeImgIdx - 1)}
                         className="md:hidden"
                         aria-label="Previous"
-                        style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", width: 36, height: 36, borderRadius: 99, background: "rgba(255,255,255,0.9)", boxShadow: "0 2px 8px rgba(0,0,0,0.12)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 4 }}
+                        style={{ position: "absolute", left: 4, top: "50%", transform: "translateY(-50%)", width: 44, height: 44, background: "transparent", border: "none", padding: 0, cursor: "pointer", zIndex: 4 }}
                       >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" /></svg>
+                        <svg width="40" height="40" viewBox="0 0 32 31" fill="none" style={{ filter: "drop-shadow(2px 3px 2px rgba(0,0,0,0.15))" }}>
+                          <path d="M24.2127 5.20756C19.6631 -0.512652 4.38643 1.13904 2.18762 13.006C-0.0111818 24.8729 12.6303 29.2929 19.333 28.7656C34.1489 27.5905 29.8177 12.2741 24.2127 5.20756Z" fill="var(--pf-ink)" />
+                          <path d="M12.1365 18.3409L9.04553 15.2499M9.04553 15.2499L12.1365 12.1589M9.04553 15.2499L22.9551 15.2499" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
                       </button>
                     )}
-                    {/* Right arrow */}
+                    {/* Right arrow — blue blob */}
                     {activeImgIdx < images.length - 1 && (
                       <button
                         onClick={() => goToImage(activeImgIdx + 1)}
                         className="md:hidden"
                         aria-label="Next"
-                        style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", width: 36, height: 36, borderRadius: 99, background: "rgba(255,255,255,0.9)", boxShadow: "0 2px 8px rgba(0,0,0,0.12)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 4 }}
+                        style={{ position: "absolute", right: 4, top: "50%", transform: "translateY(-50%)", width: 44, height: 44, background: "transparent", border: "none", padding: 0, cursor: "pointer", zIndex: 4 }}
                       >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" /></svg>
+                        <svg width="40" height="40" viewBox="0 0 32 31" fill="none" style={{ filter: "drop-shadow(-2px 3px 2px rgba(0,0,0,0.15))" }}>
+                          <path d="M7.89663 25.2924C12.4463 31.0126 27.7229 29.3609 29.9218 17.494C32.1206 5.62705 19.479 1.20705 12.7764 1.73441C-2.03956 2.90946 2.29171 18.2258 7.89663 25.2924Z" fill="var(--pf-ink)" />
+                          <path d="M19.9728 12.159L23.0638 15.25M23.0638 15.25L19.9728 18.341M23.0638 15.25H9.1543" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
                       </button>
                     )}
                     {/* Dot indicators */}
@@ -457,19 +464,30 @@ export default function ProductDetailClient({ product, images, options, variants
           pointerEvents: showStickyBar ? "auto" : "none",
         }}
       >
-        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-          <div style={{ display: "inline-flex", alignItems: "center", border: "2px solid var(--pf-ink)", borderRadius: 10, height: 48 }}>
-            <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: 36, height: 46, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          {/* Qty stepper */}
+          <div style={{ display: "inline-flex", alignItems: "center", border: "2px solid var(--pf-ink)", borderRadius: 10, height: 44, flexShrink: 0 }}>
+            <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: 34, height: 42, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
               <svg width="14" height="14" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L16 9.57398C16.5523 9.57398 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574L4 11.574C3.44772 11.574 3 11.1263 3 10.574Z" fill="var(--pf-ink)" /></svg>
             </button>
-            <span style={{ minWidth: 20, textAlign: "center", fontSize: 14, fontWeight: 700, color: "var(--pf-ink)" }}>{qty}</span>
-            <button onClick={() => setQty(Math.min(99, qty + 1))} style={{ width: 36, height: 46, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+            <span style={{ minWidth: 18, textAlign: "center", fontSize: 13, fontWeight: 700, color: "var(--pf-ink)" }}>{qty}</span>
+            <button onClick={() => setQty(Math.min(99, qty + 1))} style={{ width: 34, height: 42, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
               <svg width="14" height="14" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M10 3.57397C10.5523 3.57397 11 4.02169 11 4.57397V9.57397H16C16.5523 9.57397 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574H11V16.574C11 17.1263 10.5523 17.574 10 17.574C9.44772 17.574 9 17.1263 9 16.574V11.574H4C3.44772 11.574 3 11.1263 3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L9 9.57397V4.57397C9 4.02169 9.44772 3.57397 10 3.57397Z" fill="var(--pf-ink)" /></svg>
             </button>
           </div>
-          <button disabled={outOfStock || adding} onClick={handleAdd} className="pf-btn pf-btn--primary" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flex: 1, height: 48, borderRadius: 10, cursor: adding ? "wait" : "pointer" }}>
-            <span style={{ fontWeight: 600, fontSize: 14, color: "#fff" }}>Add to cart &middot; {formattedPrice}</span>
+          {/* Add to cart */}
+          <button disabled={outOfStock || adding} onClick={handleAdd} className="pf-btn pf-btn--primary" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, flex: 1, height: 44, borderRadius: 10, cursor: adding ? "wait" : "pointer" }}>
+            <span style={{ fontWeight: 600, fontSize: 13, color: "#fff" }}>Add &middot; {formattedPrice}</span>
           </button>
+          {/* Variant selector dropdown — opens upward */}
+          {hasMultipleVariants && (
+            <PfDropdown
+              value={selectedOptions[options[0]?.title] || ""}
+              onChange={(v) => setSelectedOptions((prev) => ({ ...prev, [options[0].title]: v }))}
+              options={options[0]?.values.map((val) => ({ value: val.value, label: val.value })) || []}
+              direction="up"
+            />
+          )}
         </div>
       </div>
 

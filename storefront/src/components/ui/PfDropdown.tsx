@@ -12,9 +12,10 @@ interface PfDropdownProps {
   onChange: (value: string) => void
   options: PfDropdownOption[]
   placeholder?: string
+  direction?: "down" | "up"
 }
 
-export default function PfDropdown({ value, onChange, options, placeholder }: PfDropdownProps) {
+export default function PfDropdown({ value, onChange, options, placeholder, direction = "down" }: PfDropdownProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -71,7 +72,7 @@ export default function PfDropdown({ value, onChange, options, placeholder }: Pf
         <div
           style={{
             position: "absolute",
-            top: "calc(100% + 6px)",
+            ...(direction === "up" ? { bottom: "calc(100% + 6px)" } : { top: "calc(100% + 6px)" }),
             right: 0,
             minWidth: "100%",
             background: "#fff",
