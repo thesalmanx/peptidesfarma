@@ -137,6 +137,7 @@ export default async function ProductPage({ params }: PageProps) {
           title: product.title || "",
           description: product.description || null,
           handle: product.handle || "",
+          metadata: (product as any).metadata || null,
         }}
         images={images}
         options={options}

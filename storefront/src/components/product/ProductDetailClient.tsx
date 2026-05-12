@@ -36,7 +36,7 @@ interface RelatedProduct {
 }
 
 interface Props {
-  product: { title: string; description: string | null; handle: string }
+  product: { title: string; description: string | null; handle: string; metadata?: Record<string, unknown> | null }
   images: ProductImage[]
   options: ProductOption[]
   variants: ProductVariant[]
@@ -82,6 +82,10 @@ export default function ProductDetailClient({ product, images, options, variants
   const formattedPrice = selectedVariant?.calculated_price
     ? formatPrice(selectedVariant.calculated_price.calculated_amount * qty, selectedVariant.calculated_price.currency_code)
     : null
+
+  const discountPct = product.metadata?.discount_percentage ? Number(product.metadata.discount_percentage) : 0
+  const currentPrice = selectedVariant?.calculated_price?.calculated_amount ?? 0
+  const originalPrice = discountPct > 0 ? currentPrice / (1 - discountPct / 100) : 0
 
   const handleAdd = async () => {
     if (!selectedVariant || adding || added) return
@@ -266,9 +270,9 @@ export default function ProductDetailClient({ product, images, options, variants
       <section className="pf-pdp-hero" style={{ minHeight: "calc(100vh - 104px)", display: "flex", flexDirection: "column", justifyContent: "space-between", paddingTop: 40, paddingBottom: 0, background: "linear-gradient(180deg, #f7f8fa 0%, #c8d5e5 100%)" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto", width: "100%", padding: "0 24px", flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
           {/* Top: product info + vial */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "start" }}>
             <div style={{ paddingLeft: 42 }}>
-              <div style={{ fontSize: 12, color: "var(--pf-dark-text-2)", marginBottom: 16, marginTop: 66, fontFamily: "var(--pf-mono)", letterSpacing: "0.08em" }}>
+              <div style={{ fontSize: 12, color: "var(--pf-text-3)", marginBottom: 16, marginTop: 66, fontFamily: "var(--pf-mono)", letterSpacing: "0.08em" }}>
                 <Link href="/" style={{ cursor: "pointer", opacity: 0.7 }}>HOME</Link>
                 <span style={{ margin: "0 8px", opacity: 0.5 }}>/</span>
                 <Link href="/products" style={{ cursor: "pointer", opacity: 0.7 }}>PRODUCTS</Link>
@@ -276,9 +280,21 @@ export default function ProductDetailClient({ product, images, options, variants
                 <span style={{ color: "var(--pf-ink)" }}>{product.title.toUpperCase()}</span>
               </div>
 
-              <h1 style={{ fontSize: 64, fontWeight: 600, letterSpacing: "-0.03em", color: "var(--pf-ink)", margin: "0 0 12px", lineHeight: 1 }}>
-                {product.title}
-              </h1>
+              <div style={{ display: "flex", alignItems: "center", gap: 16, margin: "0 0 12px" }}>
+                <h1 style={{ fontSize: 64, fontWeight: 600, letterSpacing: "-0.03em", color: "var(--pf-ink)", margin: 0, lineHeight: 1 }}>
+                  {product.title}
+                </h1>
+                {discountPct > 0 && (
+                  <span style={{
+                    display: "inline-flex", alignItems: "center", justifyContent: "center",
+                    padding: "6px 12px", borderRadius: 99,
+                    background: "var(--pf-ink)", color: "#fff",
+                    fontSize: 13, fontWeight: 700,
+                  }}>
+                    {discountPct}% OFF
+                  </span>
+                )}
+              </div>
 
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 24, marginTop: 20 }}>
                 <span className="pf-chip">
@@ -302,15 +318,16 @@ export default function ProductDetailClient({ product, images, options, variants
               </dl>
             </div>
 
-            <div className="pf-pdp-vial" style={{ display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+            <div className="pf-pdp-vial" style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", overflow: "hidden", paddingTop: 50 }}>
               {mainImage ? (
                 <Image
+                  key={mainImage}
                   src={mainImage}
                   alt={product.title}
-                  width={300}
-                  height={420}
+                  width={280}
+                  height={380}
                   className="object-contain animate-variant-swap"
-                  style={{ width: "auto", maxHeight: 340, zIndex: 2, pointerEvents: "none" }}
+                  style={{ width: "auto", maxHeight: 320, zIndex: 2, pointerEvents: "none" }}
                   priority
                 />
               ) : (
@@ -343,21 +360,20 @@ export default function ProductDetailClient({ product, images, options, variants
                         height: 72,
                         padding: isShort ? 0 : "0 20px",
                         borderRadius: "50%",
-                        border: active ? "2px solid var(--pf-blue)" : "1px solid var(--pf-line)",
-                        background: active ? "var(--pf-blue-tint)" : "#fff",
-                        color: active ? "var(--pf-ink)" : "var(--pf-text-2)",
+                        border: active ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)",
+                        background: active ? "var(--pf-ink)" : "#fff",
+                        color: active ? "#fff" : "var(--pf-text-2)",
                         cursor: oos ? "not-allowed" : "pointer",
                         fontFamily: "inherit",
                         textDecoration: oos ? "line-through" : "none",
                         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
                         transition: "all 180ms ease",
                         opacity: oos ? 0.35 : 1,
-                        boxShadow: active ? "0 0 16px rgba(79,138,247,0.3)" : "none",
                       }}
                     >
-                      <span style={{ fontWeight: 700, fontSize: 15, lineHeight: 1.1 }}>{val.value}</span>
+                      <span style={{ fontWeight: 700, fontSize: 15, lineHeight: 1.1, color: "inherit" }}>{val.value}</span>
                       {variant?.calculated_price && (
-                        <span style={{ fontFamily: "var(--pf-mono)", fontSize: 11, opacity: active ? 1 : 0.7, marginTop: 3 }}>
+                        <span style={{ fontFamily: "var(--pf-mono)", fontSize: 11, opacity: active ? 0.8 : 0.6, marginTop: 3, color: "inherit" }}>
                           {formatPrice(variant.calculated_price.calculated_amount, variant.calculated_price.currency_code)}
                         </span>
                       )}
@@ -371,11 +387,18 @@ export default function ProductDetailClient({ product, images, options, variants
           <div className="pf-pdp-buybar-right" style={{ display: "flex", alignItems: "center", gap: 16, justifyContent: "flex-end" }}>
             <div style={{ textAlign: "right" }}>
               <div style={{ fontFamily: "var(--pf-mono)", fontSize: 11, letterSpacing: "0.12em", color: "var(--pf-text-3)", textTransform: "uppercase", marginBottom: 4 }}>Price</div>
-              <div style={{ fontFamily: "var(--pf-mono)", fontSize: 32, fontWeight: 700, color: "var(--pf-ink)" }}>
-                {selectedVariant?.calculated_price
-                  ? formatPrice(selectedVariant.calculated_price.calculated_amount * qty, selectedVariant.calculated_price.currency_code)
-                  : "-"
-                }
+              <div style={{ display: "flex", alignItems: "baseline", gap: 8, justifyContent: "flex-end" }}>
+                {discountPct > 0 && originalPrice > 0 && (
+                  <span style={{ fontFamily: "var(--pf-mono)", fontSize: 18, fontWeight: 400, color: "var(--pf-text-3)", textDecoration: "line-through" }}>
+                    {formatPrice(originalPrice * qty, selectedVariant?.calculated_price?.currency_code || "usd")}
+                  </span>
+                )}
+                <span style={{ fontFamily: "var(--pf-mono)", fontSize: 32, fontWeight: 700, color: "var(--pf-ink)" }}>
+                  {selectedVariant?.calculated_price
+                    ? formatPrice(selectedVariant.calculated_price.calculated_amount * qty, selectedVariant.calculated_price.currency_code)
+                    : "-"
+                  }
+                </span>
               </div>
             </div>
             <div style={{ display: "inline-flex", alignItems: "center", border: "1px solid var(--pf-line)", borderRadius: 999, height: 44, background: "#fff" }}>
