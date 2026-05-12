@@ -90,7 +90,7 @@ export default function ProductDetailClient({ product, images, options, variants
     setWishlisted(isInWishlist(product.handle))
   }, [product.handle])
 
-  // Sticky mobile CTA — NH exact approach: IntersectionObserver + isAboveViewport
+  // Sticky mobile CTA — show on load + when CTA not visible
   useEffect(() => {
     const el = ctaRef.current
     if (!el) return
@@ -100,8 +100,8 @@ export default function ProductDetailClient({ product, images, options, variants
     }
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const isAboveViewport = entry.boundingClientRect.bottom < 0
-        setShowStickyBar(!entry.isIntersecting && isAboveViewport)
+        // Hide when CTA is visible, show when it's not
+        setShowStickyBar(!entry.isIntersecting)
       },
       { threshold: 0 }
     )
