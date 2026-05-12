@@ -110,9 +110,9 @@ export default function CartItem({ item, variant = "drawer" }: CartItemProps) {
       {/* Image — NH: square, bordered, object-contain, linked */}
       <div className="shrink-0 mr-3">
         <Link href={`/product/${(item as any).product_handle || ""}`}>
-          <div className="relative rounded-md overflow-hidden flex items-center justify-center aspect-square" style={{ width: 72, minWidth: 72, border: "1px solid var(--pf-line)", background: "#fff" }}>
+          <div className="relative rounded-md overflow-hidden flex items-center justify-center aspect-square" style={{ width: 72, minWidth: 72, border: "1px solid var(--pf-line)", background: "var(--pf-paper)" }}>
             {thumbnail ? (
-              <Image src={thumbnail} alt={title} fill className="object-contain p-1" sizes="72px" quality={50} loading="eager" />
+              <Image src={thumbnail} alt={title} fill className="object-cover" style={{ objectPosition: "80% center" }} sizes="72px" quality={50} loading="eager" />
             ) : (
               <div className="w-full h-full flex items-center justify-center"><span className="text-xs" style={{ color: "var(--pf-text-3)" }}>No img</span></div>
             )}
