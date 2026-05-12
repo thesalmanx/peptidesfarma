@@ -60,14 +60,6 @@ export default function ProductDetailClient({ product, images, options, variants
   const [adding, setAdding] = useState(false)
   const [added, setAdded] = useState(false)
   const [addError, setAddError] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= 900)
-    check()
-    window.addEventListener("resize", check)
-    return () => window.removeEventListener("resize", check)
-  }, [])
 
   const selectedVariant = useMemo(
     () => variants.find((v) => Object.entries(selectedOptions).every(([k, val]) => v.options[k] === val)),
@@ -127,179 +119,19 @@ export default function ProductDetailClient({ product, images, options, variants
     setAdding(false)
   }
 
-  if (isMobile) {
-    return (
-      <div>
-        {/* Mobile Hero */}
-        <section className="pf-starfield" style={{ minHeight: "calc(100svh - 104px)", display: "flex", flexDirection: "column", padding: "16px 0 0" }}>
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, padding: "0 20px", flexShrink: 0 }}>
-            <h1 style={{ fontWeight: 700, fontSize: 40, lineHeight: "48px", letterSpacing: "-0.03em", color: "#fff", textAlign: "center", margin: 0 }}>
-              {product.title}
-            </h1>
-            {product.description && (
-              <p style={{ fontWeight: 400, fontSize: 16, lineHeight: "24px", color: "rgba(255,255,255,0.7)", textAlign: "center", margin: 0 }}>
-                {product.description.split(".")[0]}.
-              </p>
-            )}
-          </div>
-
-          {mainImage && (
-            <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 0, overflow: "hidden", padding: "8px 0" }}>
-              <Image
-                src={mainImage}
-                alt={product.title}
-                width={1024}
-                height={2336}
-                className="object-contain animate-variant-swap"
-                style={{ height: "100%", width: "auto", maxWidth: "135vw" }}
-                priority
-              />
-            </div>
-          )}
-
-          {formattedPrice && (
-            <p style={{ fontWeight: 600, fontSize: 32, lineHeight: "40px", letterSpacing: "-0.03em", color: "#fff", textAlign: "center", margin: "8px 0 0", flexShrink: 0 }}>
-              {formattedPrice}
-            </p>
-          )}
-
-          {hasMultipleVariants && (
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, padding: "12px 16px", flexShrink: 0 }}>
-              {options.map((opt) =>
-                opt.values.map((val) => {
-                  const active = selectedOptions[opt.title] === val.value
-                  const variant = variants.find((v) => v.options[opt.title] === val.value)
-                  const oos = variant ? isOOS(variant) : false
-                  const label = val.value
-                  const isShort = label.length <= 5
-                  return (
-                    <button
-                      key={val.id}
-                      onClick={() => setSelectedOptions((prev) => ({ ...prev, [opt.title]: val.value }))}
-                      style={{
-                        width: isShort ? 50 : "auto",
-                        minWidth: isShort ? 50 : 56,
-                        height: 50,
-                        padding: isShort ? 0 : "0 14px",
-                        borderRadius: "50%",
-                        background: active ? "#fff" : "rgba(255,255,255,0.08)",
-                        border: active ? "1px solid rgba(79,138,247,0.3)" : "1px solid rgba(255,255,255,0.15)",
-                        fontSize: 13,
-                        fontWeight: 700,
-                        color: active ? "var(--pf-ink)" : "rgba(255,255,255,0.45)",
-                        opacity: oos ? 0.35 : active ? 1 : 0.6,
-                        textDecoration: oos ? "line-through" : "none",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        transition: "all 180ms ease",
-                        fontFamily: "inherit",
-                      }}
-                    >
-                      {label}
-                    </button>
-                  )
-                })
-              )}
-            </div>
-          )}
-
-          {outOfStock ? (
-            <div style={{ display: "flex", justifyContent: "center", padding: "0 16px 16px", flexShrink: 0 }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", maxWidth: 280, height: 48, borderRadius: 999, border: "1px solid rgba(255,255,255,0.3)", opacity: 0.6 }}>
-                <span style={{ fontWeight: 700, fontSize: 18, color: "rgba(255,255,255,0.7)" }}>Sold out</span>
-              </div>
-            </div>
-          ) : (
-            <div style={{ display: "flex", justifyContent: "center", padding: "12px 16px 20px", flexShrink: 0 }}>
-              <button
-                onClick={handleAdd}
-                disabled={!selectedVariant || adding}
-                style={{
-                  display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                  width: "100%", maxWidth: 280, height: 48, borderRadius: 999,
-                  background: addError ? "var(--pf-err)" : added ? "var(--pf-blue)" : "#fff",
-                  border: addError || added ? "none" : "1px solid rgba(0,0,0,0.12)",
-                  cursor: adding ? "wait" : "pointer",
-                  transition: "all 200ms ease",
-                }}
-              >
-                {adding ? (
-                  <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="var(--pf-ink)" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="50 20" /></svg>
-                ) : addError ? (
-                  <span style={{ fontWeight: 700, fontSize: 16, color: "#fff" }}>Failed, try again</span>
-                ) : added ? (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                ) : (
-                  <span style={{ fontWeight: 700, fontSize: 18, letterSpacing: "-0.01em", color: "var(--pf-ink)" }}>Add to cart</span>
-                )}
-              </button>
-            </div>
-          )}
-        </section>
-
-        {/* Details below fold */}
-        <section style={{ padding: "40px 0 60px", background: "#fff" }}>
-          <div className="pf-wrap">
-            <div className="pf-pdp-tabs" style={{ display: "flex", gap: 0, borderBottom: "1px solid var(--pf-line)", marginBottom: 24 }}>
-              {([["description", "Description"], ["notes", "Important notes"]] as const).map(([k, l]) => (
-                <button key={k} onClick={() => setTab(k)} style={{
-                  padding: "12px 20px", background: "transparent", border: "none", cursor: "pointer", fontFamily: "inherit",
-                  fontSize: 14, fontWeight: 600,
-                  color: tab === k ? "var(--pf-text)" : "var(--pf-text-3)",
-                  borderBottom: tab === k ? "2px solid var(--pf-blue)" : "2px solid transparent",
-                  marginBottom: -1,
-                }}>{l}</button>
-              ))}
-            </div>
-            {tab === "description" && product.description && (
-              <p style={{ fontSize: 16, color: "var(--pf-text-2)", lineHeight: 1.7 }}>{product.description}</p>
-            )}
-            {tab === "notes" && (
-              <ul style={{ padding: 0, margin: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
-                {["For laboratory research use only", "Not for human or veterinary consumption", "Store at -20C away from direct light", "Handle by qualified personnel only", "COA available for download in your account"].map((n, i) => (
-                  <li key={i} style={{ display: "flex", gap: 12, fontSize: 14, color: "var(--pf-text-2)", lineHeight: 1.6 }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--pf-blue)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}><path d="m5 12 5 5L20 7" /></svg>
-                    <span>{n}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </section>
-
-        {/* FAQ - mobile */}
-        <FaqBlock blok={{ component: "faq_section", _uid: "pdp-faq-mobile" } as any} />
-
-        {relatedProducts.length > 0 && (
-          <section style={{ padding: "48px 0 60px", background: "#fff" }}>
-            <div className="pf-wrap">
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, marginBottom: 28 }}>
-                <h2 style={{ fontFamily: "var(--pf-display)", fontSize: 28, fontWeight: 700, letterSpacing: "-0.02em", color: "var(--pf-ink)", margin: 0, textAlign: "center" }}>
-                  You may also <span style={{ color: "var(--pf-blue)" }}>like</span>
-                </h2>
-                <p style={{ fontSize: 15, color: "var(--pf-text-2)", textAlign: "center", margin: 0 }}>High-purity compounds from our catalog.</p>
-              </div>
-              <RelatedSlider products={relatedProducts} />
-              <div style={{ marginTop: 24, display: "flex", justifyContent: "center" }}>
-                <a href="/products" className="pf-btn pf-btn--primary">See all products</a>
-              </div>
-            </div>
-          </section>
-        )}
-      </div>
-    )
-  }
+  // No separate mobile return — the desktop layout handles both via responsive flex
 
   return (
     <div style={{ background: "#fff" }}>
-      {/* Breadcrumbs */}
-      <div className="max-w-[1332px] mx-auto px-4 md:px-0 w-full pt-4">
-        <div style={{ fontSize: 12, color: "var(--pf-text-3)", fontFamily: "var(--pf-mono)", letterSpacing: "0.06em" }}>
-          <Link href="/" style={{ opacity: 0.7 }}>HOME</Link>
-          <span style={{ margin: "0 8px", opacity: 0.5 }}>/</span>
-          <Link href="/products" style={{ opacity: 0.7 }}>PRODUCTS</Link>
-          <span style={{ margin: "0 8px", opacity: 0.5 }}>/</span>
-          <span style={{ color: "var(--pf-ink)" }}>{product.title.toUpperCase()}</span>
-        </div>
+      {/* Breadcrumbs — NH style */}
+      <div className="max-w-[1332px] mx-auto px-4 md:px-16 w-full pt-4 pb-1">
+        <nav aria-label="Breadcrumb" style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "var(--pf-text-3)" }}>
+          <Link href="/" className="hover:opacity-70 transition-opacity" style={{ textDecoration: "none", color: "var(--pf-text-3)" }}>Home</Link>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-text-3)" style={{ opacity: 0.5 }}><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" /></svg>
+          <Link href="/products" className="hover:opacity-70 transition-opacity" style={{ textDecoration: "none", color: "var(--pf-text-3)" }}>Products</Link>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-text-3)" style={{ opacity: 0.5 }}><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" /></svg>
+          <span style={{ color: "var(--pf-ink)", fontWeight: 500 }}>{product.title}</span>
+        </nav>
       </div>
 
       {/* NH-style two-column card */}
@@ -308,7 +140,18 @@ export default function ProductDetailClient({ product, images, options, variants
 
           {/* LEFT: Sticky Image Gallery */}
           <div className="flex-1 w-full md:w-1/2 relative">
-            <div className="sticky top-[28px]">
+            {/* Mobile-only title (above image) */}
+            <div className="block md:hidden mb-4">
+              <h1 style={{ fontFamily: "var(--pf-display)", fontWeight: 700, fontSize: 32, lineHeight: "40px", letterSpacing: "-0.03em", color: "var(--pf-ink)", margin: "0 0 8px" }}>
+                {product.title}
+              </h1>
+              {product.description && (
+                <p style={{ fontSize: 14, lineHeight: "22px", color: "var(--pf-text-2)", margin: 0 }}>
+                  {product.description.split(".")[0]}.
+                </p>
+              )}
+            </div>
+            <div className="md:sticky md:top-[28px]">
               {/* Discount badge */}
               {discountPct > 0 && (
                 <span style={{ position: "absolute", top: 12, right: 12, zIndex: 3, padding: "4px 10px", borderRadius: 99, background: "var(--pf-ink)", color: "#fff", fontSize: 12, fontWeight: 700 }}>
@@ -338,8 +181,8 @@ export default function ProductDetailClient({ product, images, options, variants
 
           {/* RIGHT: Product Info */}
           <div className="flex-1 flex flex-col w-full md:w-1/2 pt-6 md:pt-0">
-            {/* Title */}
-            <h1 style={{ fontFamily: "var(--pf-display)", fontWeight: 700, fontSize: "clamp(32px, 4vw, 56px)", lineHeight: 1.1, letterSpacing: "-0.03em", color: "var(--pf-ink)", margin: "0 0 12px" }}>
+            {/* Title (desktop only — mobile title is above image) */}
+            <h1 className="hidden md:block" style={{ fontFamily: "var(--pf-display)", fontWeight: 700, fontSize: "clamp(32px, 4vw, 56px)", lineHeight: 1.1, letterSpacing: "-0.03em", color: "var(--pf-ink)", margin: "0 0 12px" }}>
               {product.title}
             </h1>
 
