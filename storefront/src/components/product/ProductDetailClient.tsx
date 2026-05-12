@@ -229,7 +229,7 @@ export default function ProductDetailClient({ product, images, options, variants
                 style={{ width: "100%", aspectRatio: "1/1", borderRadius: 14, overflow: "hidden", background: "linear-gradient(180deg, #f7f8fa 0%, #eef1f8 100%)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}
               >
                 {mainImage ? (
-                  <Image key={mainImage} src={mainImage} alt={product.title} fill className="object-contain" style={{ padding: 20, transition: "opacity 300ms ease" }} sizes="(max-width: 768px) 100vw, 618px" priority />
+                  <Image key={mainImage} src={mainImage} alt={product.title} fill className="object-cover" style={{ objectPosition: "80% center", transition: "opacity 300ms ease" }} sizes="(max-width: 768px) 100vw, 618px" priority />
                 ) : (
                   <span style={{ fontSize: 14, color: "var(--pf-text-3)" }}>No image</span>
                 )}
@@ -306,7 +306,7 @@ export default function ProductDetailClient({ product, images, options, variants
                   <div ref={thumbsRef} style={{ display: "flex", gap: 8, overflowX: "auto", padding: "0 4px", scrollBehavior: "smooth" }} className="pf-hide-scrollbar">
                     {images.map((img, i) => (
                       <button key={img.id} onClick={() => goToImage(i)} className="hover:opacity-80 transition-opacity" style={{ flexShrink: 0, width: 68, height: 68, borderRadius: 10, overflow: "hidden", border: activeImgIdx === i ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", cursor: "pointer", position: "relative", background: "#f7f8fa", padding: 0, transition: "border-color 200ms ease" }}>
-                        <Image src={img.url} alt="" fill className="object-contain" sizes="68px" style={{ padding: 4 }} />
+                        <Image src={img.url} alt="" fill className="object-cover" sizes="68px" style={{ objectPosition: "80% center" }} />
                       </button>
                     ))}
                   </div>
