@@ -267,8 +267,8 @@ export default function ProductDetailClient({ product, images, options, variants
   return (
     <div>
       {/* Hero + Buy bar in one 100vh dark section */}
-      <section className="pf-pdp-hero" style={{ minHeight: "calc(100vh - 104px)", display: "flex", flexDirection: "column", justifyContent: "space-between", paddingTop: 40, paddingBottom: 0, background: "linear-gradient(180deg, #f7f8fa 0%, #c8d5e5 100%)" }}>
-        <div style={{ maxWidth: 1180, margin: "0 auto", width: "100%", padding: "0 24px", flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+      <section className="pf-pdp-hero" style={{ display: "flex", flexDirection: "column", paddingTop: 40, paddingBottom: 0, background: "linear-gradient(180deg, #f7f8fa 0%, #c8d5e5 100%)" }}>
+        <div style={{ maxWidth: 1180, margin: "0 auto", width: "100%", padding: "0 24px" }}>
           {/* Top: product info + vial */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "start" }}>
             <div style={{ paddingLeft: 42 }}>
