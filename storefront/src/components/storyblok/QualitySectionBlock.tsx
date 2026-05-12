@@ -71,15 +71,16 @@ export default function QualitySectionBlock({ blok }: { blok: QualitySectionBlok
           </p>
         </div>
 
-        {/* Stats bar */}
+        {/* Stats bar - flex row, evenly distributed */}
         {stats.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6" style={{ marginBottom: 40 }}>
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6" style={{ marginBottom: 40 }}>
             {stats.map((stat, i) => (
               <div key={i} style={{
                 display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
-                padding: "24px 16px",
+                padding: "24px 32px",
                 background: i === 0 ? "linear-gradient(180deg, rgba(0,28,134,0) 0%, rgba(0,28,134,0.08) 100%)" : "rgba(0,36,173,0.04)",
                 borderRadius: 20,
+                flex: "1 1 0%", minWidth: 140, maxWidth: 280,
                 ...(i === 0 ? { filter: "drop-shadow(0px 0px 48px rgba(0,36,173,0.12))" } : {}),
               }}>
                 <span style={{ fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 700, letterSpacing: "-0.02em", color: "#05144D" }}>
@@ -94,29 +95,21 @@ export default function QualitySectionBlock({ blok }: { blok: QualitySectionBlok
         )}
 
         {/* Two-column: image + info */}
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-stretch">
           {/* Image */}
-          <div className="flex-1 min-h-[320px] lg:min-h-[440px] rounded-[24px] overflow-hidden relative" style={{ background: "linear-gradient(180deg, rgba(0,28,134,0.04) 0%, rgba(79,138,247,0.10) 100%)" }}>
-            {productImage ? (
-              <Image src={productImage} alt="Research-grade peptide" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 620px" />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center space-y-4">
-                  <div className="relative mx-auto w-24 h-36">
-                    <div className="absolute inset-x-5 top-0 h-7 bg-gray-300/50 rounded-t-lg" />
-                    <div className="absolute inset-0 top-7 bg-gradient-to-b from-white/80 to-blue-100/50 rounded-b-xl border border-gray-200/40" />
-                    <div className="absolute inset-x-3 top-14 bottom-3 flex flex-col items-center justify-center gap-1">
-                      <span className="text-[10px] font-bold text-gray-500">BPC-157</span>
-                      <span className="text-[8px] text-gray-400">5 mg</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+          <div className="flex-1 rounded-[24px] overflow-hidden relative flex items-center justify-center" style={{ background: "linear-gradient(180deg, rgba(0,28,134,0.04) 0%, rgba(79,138,247,0.10) 100%)", minHeight: 300 }}>
+            <Image
+              src={productImage || "/vials/nad.png"}
+              alt="Research-grade peptide"
+              width={280}
+              height={400}
+              className="object-contain"
+              style={{ maxHeight: "90%", width: "auto", animation: "pf-float-y 7s ease-in-out infinite" }}
+            />
           </div>
 
           {/* Info panel */}
-          <div className="flex-1 flex flex-col gap-5">
+          <div className="flex-1 flex flex-col gap-5 justify-center">
             {/* HPLC badge + description */}
             <div style={{ padding: 24, background: "#05144D", borderRadius: 20, color: "#fff" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
