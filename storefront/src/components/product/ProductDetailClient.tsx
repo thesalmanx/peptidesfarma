@@ -179,11 +179,19 @@ export default function ProductDetailClient({ product, images, options, variants
               )}
             </div>
             <div className="md:sticky md:top-[28px]">
-              {/* Discount badge */}
+              {/* Discount blob — same as ProductCard */}
               {showDiscountBadge && (
-                <span style={{ position: "absolute", top: 12, right: 12, zIndex: 3, padding: "6px 12px", borderRadius: 99, background: "var(--pf-ink)", color: "#fff", fontSize: 13, fontWeight: 700, letterSpacing: "0.02em" }}>
-                  {effectiveDiscountPct}% OFF
-                </span>
+                <div style={{
+                  position: "absolute", top: -6, right: -6, zIndex: 3,
+                  width: 72, height: 66,
+                  borderRadius: "47% 53% 52% 48% / 44% 50% 50% 56%",
+                  background: "var(--pf-ink)",
+                  display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                  pointerEvents: "none",
+                }}>
+                  <span style={{ fontSize: 20, fontWeight: 800, color: "#fff", lineHeight: 1 }}>{effectiveDiscountPct}%</span>
+                  <span style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.8)", textTransform: "uppercase", letterSpacing: "0.04em" }}>off</span>
+                </div>
               )}
               {/* Main image — object-contain so vial isn't cropped */}
               <div style={{ width: "100%", aspectRatio: "1/1", borderRadius: 10, overflow: "hidden", background: "var(--pf-paper)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
