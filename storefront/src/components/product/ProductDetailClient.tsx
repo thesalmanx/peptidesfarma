@@ -410,12 +410,12 @@ export default function ProductDetailClient({ product, images, options, variants
               {/* Qty + Add to cart + Wishlist — NH style row */}
               <p style={{ fontSize: 13, color: "var(--pf-text-3)", marginBottom: 8 }}>Quantity</p>
               <div ref={ctaRef} style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", border: "2px solid var(--pf-ink)", borderRadius: 10, width: 120, height: 52, flexShrink: 0 }}>
-                  <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: 36, height: 48, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", border: "2px solid var(--pf-ink)", borderRadius: 10, height: 52, flexShrink: 0, flex: "0 0 auto" }}>
+                  <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: 32, height: 48, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                     <svg width="16" height="16" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L16 9.57398C16.5523 9.57398 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574L4 11.574C3.44772 11.574 3 11.1263 3 10.574Z" fill="var(--pf-ink)" /></svg>
                   </button>
                   <span style={{ minWidth: 20, textAlign: "center", fontSize: 15, fontWeight: 700, color: "var(--pf-ink)" }}>{qty}</span>
-                  <button onClick={() => setQty(Math.min(99, qty + 1))} style={{ width: 36, height: 48, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                  <button onClick={() => setQty(Math.min(99, qty + 1))} style={{ width: 32, height: 48, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                     <svg width="16" height="16" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M10 3.57397C10.5523 3.57397 11 4.02169 11 4.57397V9.57397H16C16.5523 9.57397 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574H11V16.574C11 17.1263 10.5523 17.574 10 17.574C9.44772 17.574 9 17.1263 9 16.574V11.574H4C3.44772 11.574 3 11.1263 3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L9 9.57397V4.57397C9 4.02169 9.44772 3.57397 10 3.57397Z" fill="var(--pf-ink)" /></svg>
                   </button>
                 </div>
@@ -432,7 +432,7 @@ export default function ProductDetailClient({ product, images, options, variants
                 <button
                   onClick={() => { toggleWishlistItem(product.handle); setWishlisted(!wishlisted) }}
                   aria-label="Add to wishlist"
-                  style={{ width: 52, height: 52, flexShrink: 0, borderRadius: 10, border: "2px solid var(--pf-ink)", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all 180ms ease" }}
+                  style={{ width: 88, height: 52, flexShrink: 0, borderRadius: 10, border: "2px solid var(--pf-ink)", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all 180ms ease" }}
                 >
                   <svg width="22" height="22" viewBox="0 0 24 24" fill={wishlisted ? "var(--pf-blue)" : "none"}>
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke={wishlisted ? "var(--pf-blue)" : "var(--pf-text-3)"} strokeWidth={wishlisted ? 0 : 1.5} />
