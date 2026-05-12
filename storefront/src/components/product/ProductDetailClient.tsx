@@ -374,12 +374,9 @@ export default function ProductDetailClient({ product, images, options, variants
         </div>
       </div>
 
-      {/* FAQ Section */}
-      <FaqBlock blok={{ component: "faq_section", _uid: "pdp-faq" } as any} />
-
       {/* Related Products */}
       {relatedProducts.length > 0 && (
-        <section style={{ padding: "80px 0", background: "#fff" }}>
+        <section style={{ padding: "60px 0", background: "#fff" }}>
           <div className="pf-wrap">
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, marginBottom: 32 }}>
               <h2 style={{ fontFamily: "var(--pf-display)", fontWeight: 700, fontSize: 36, letterSpacing: "-0.025em", color: "var(--pf-ink)", margin: 0, textAlign: "center" }}>
@@ -394,6 +391,9 @@ export default function ProductDetailClient({ product, images, options, variants
           </div>
         </section>
       )}
+
+      {/* FAQ Section */}
+      <FaqBlock blok={{ component: "faq_section", _uid: "pdp-faq" } as any} />
     </div>
   )
 }

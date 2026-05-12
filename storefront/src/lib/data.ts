@@ -46,7 +46,7 @@ export function getProduct(handle: string) {
         const { products } = await sdk.store.product.list({
           handle,
           region_id: regionId,
-          fields: "+variants.calculated_price,+variants.options,+variants.inventory_quantity,+variants.manage_inventory,+variants.allow_backorder,+variants.images.id,+variants.images.url,+variants.metadata",
+          fields: "+variants.calculated_price,+variants.options,+variants.inventory_quantity,+variants.manage_inventory,+variants.allow_backorder,+variants.images.id,+variants.images.url,+variants.metadata,+metadata",
         })
         return products?.[0] || null
       } catch {
