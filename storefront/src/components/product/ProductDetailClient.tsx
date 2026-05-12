@@ -268,11 +268,11 @@ export default function ProductDetailClient({ product, images, options, variants
     <div>
       {/* Hero + Buy bar in one 100vh dark section */}
       <section className="pf-pdp-hero" style={{ display: "flex", flexDirection: "column", paddingTop: 40, paddingBottom: 0, background: "linear-gradient(180deg, #f7f8fa 0%, #c8d5e5 100%)" }}>
-        <div style={{ maxWidth: 1180, margin: "0 auto", width: "100%", padding: "0 24px" }}>
+        <div style={{ maxWidth: 1180, margin: "0 auto", width: "100%", padding: "0 48px" }}>
           {/* Top: product info + vial */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "start" }}>
-            <div style={{ paddingLeft: 42 }}>
-              <div style={{ fontSize: 12, color: "var(--pf-text-3)", marginBottom: 16, marginTop: 66, fontFamily: "var(--pf-mono)", letterSpacing: "0.08em" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "start" }}>
+            <div>
+              <div style={{ fontSize: 12, color: "var(--pf-text-3)", marginBottom: 16, marginTop: 48, fontFamily: "var(--pf-mono)", letterSpacing: "0.08em" }}>
                 <Link href="/" style={{ cursor: "pointer", opacity: 0.7 }}>HOME</Link>
                 <span style={{ margin: "0 8px", opacity: 0.5 }}>/</span>
                 <Link href="/products" style={{ cursor: "pointer", opacity: 0.7 }}>PRODUCTS</Link>
@@ -296,7 +296,7 @@ export default function ProductDetailClient({ product, images, options, variants
                 )}
               </div>
 
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 24, marginTop: 20 }}>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 28, marginTop: 16 }}>
                 <span className="pf-chip">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
                   99%+ purity
@@ -311,14 +311,14 @@ export default function ProductDetailClient({ product, images, options, variants
                 </span>
               </div>
 
-              <dl className="pf-spec" style={{ color: "var(--pf-dark-text)", marginBottom: 24, fontSize: 16 }}>
+              <dl className="pf-spec" style={{ color: "var(--pf-dark-text)", marginBottom: 32, fontSize: 16 }}>
                 <dt style={{ color: "var(--pf-text-3)", fontSize: 15 }}>Form</dt><dd style={{ color: "var(--pf-ink)", fontSize: 16 }}>Lyophilized powder</dd>
                 <dt style={{ color: "var(--pf-text-3)", fontSize: 15 }}>Storage</dt><dd style={{ color: "var(--pf-ink)", fontSize: 16 }}>-20 C, dark</dd>
                 <dt style={{ color: "var(--pf-text-3)", fontSize: 15 }}>Tested</dt><dd style={{ color: "var(--pf-ink)", fontSize: 16 }}>Freedom Diagnostics, 3rd party</dd>
               </dl>
             </div>
 
-            <div className="pf-pdp-vial" style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", overflow: "hidden", paddingTop: 50 }}>
+            <div className="pf-pdp-vial" style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", overflow: "hidden", paddingTop: 40 }}>
               {mainImage ? (
                 <Image
                   key={mainImage}
@@ -338,9 +338,9 @@ export default function ProductDetailClient({ product, images, options, variants
             </div>
           </div>
 
-          {/* Bottom: buy bar - matches hero */}
-          <div style={{ borderTop: "1px solid var(--pf-line)", margin: "0 -24px", padding: "0 24px" }}>
-          <div className="pf-pdp-buybar" style={{ padding: "24px 0", display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 40, alignItems: "center" }}>
+          {/* Bottom: buy bar */}
+          <div style={{ borderTop: "1px solid var(--pf-line)", marginTop: 32 }}>
+          <div className="pf-pdp-buybar" style={{ padding: "28px 0", display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 48, alignItems: "center" }}>
           <div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
               {options.map((opt) =>
