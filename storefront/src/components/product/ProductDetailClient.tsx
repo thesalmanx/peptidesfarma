@@ -90,21 +90,23 @@ export default function ProductDetailClient({ product, images, options, variants
     setWishlisted(isInWishlist(product.handle))
   }, [product.handle])
 
-  // Sticky mobile CTA — only on scroll, with debounce
+  // Sticky mobile CTA — NH exact approach: IntersectionObserver + isAboveViewport
   useEffect(() => {
-    let lastScroll = 0
-    const handleScroll = () => {
-      const el = ctaRef.current
-      if (!el) return
-      const rect = el.getBoundingClientRect()
-      const scrollY = window.scrollY
-      const scrollingDown = scrollY > lastScroll
-      lastScroll = scrollY
-      // Show only when scrolling down AND the CTA is above viewport
-      setShowStickyBar(scrollingDown && rect.bottom < 0)
+    const el = ctaRef.current
+    if (!el) return
+    if (window.matchMedia("(min-width: 768px)").matches) {
+      setShowStickyBar(false)
+      return
     }
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const isAboveViewport = entry.boundingClientRect.bottom < 0
+        setShowStickyBar(!entry.isIntersecting && isAboveViewport)
+      },
+      { threshold: 0 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
   }, [])
 
   const selectedVariant = useMemo(
@@ -461,12 +463,15 @@ export default function ProductDetailClient({ product, images, options, variants
       <div
         className="md:hidden fixed bottom-0 left-0 z-50 w-full bg-white"
         style={{
-          padding: 16,
+          padding: "12px 16px",
+          paddingBottom: "calc(12px + env(safe-area-inset-bottom, 0px))",
           borderTop: "1px solid var(--pf-line)",
+          boxShadow: "0 -2px 12px rgba(0,0,0,0.06)",
           transform: showStickyBar ? "translateY(0)" : "translateY(100%)",
           opacity: showStickyBar ? 1 : 0,
-          transition: "transform 250ms ease, opacity 250ms ease",
+          transition: "all 180ms ease-out",
           pointerEvents: showStickyBar ? "auto" : "none",
+          willChange: "transform, opacity",
         }}
       >
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
