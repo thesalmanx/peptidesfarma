@@ -53,12 +53,8 @@ export default async function ProductPage({ params }: PageProps) {
   if (!product) notFound()
 
   const productImages = (product.images || []).map((img) => ({ id: img.id, url: img.url }))
-  // Always include thumbnail as the first image (product card image)
-  const thumbUrl = product.thumbnail
-  const thumbAlreadyIncluded = thumbUrl && productImages.some((img) => img.url === thumbUrl)
-  const images = thumbUrl && !thumbAlreadyIncluded
-    ? [{ id: "thumb", url: thumbUrl }, ...productImages]
-    : productImages.length > 0 ? productImages : (thumbUrl ? [{ id: "thumb", url: thumbUrl }] : [])
+  // Use product images if available, fall back to thumbnail
+  const images = productImages.length > 0 ? productImages : (product.thumbnail ? [{ id: "thumb", url: product.thumbnail }] : [])
 
   const options = (product.options || []).map((opt) => ({
     id: opt.id,

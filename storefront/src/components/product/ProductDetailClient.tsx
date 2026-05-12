@@ -63,12 +63,17 @@ export default function ProductDetailClient({ product, images, options, variants
 
   const goToImage = (idx: number) => {
     setActiveImgIdx(idx)
-    // Scroll thumbnail into view
+    setUserBrowsing(true)
     if (thumbsRef.current) {
       const thumb = thumbsRef.current.children[idx] as HTMLElement
       if (thumb) thumb.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" })
     }
   }
+
+  // Reset browsing when variant changes — show variant image
+  useEffect(() => {
+    setUserBrowsing(false)
+  }, [selectedOptions])
   const [tab, setTab] = useState("description")
   const [adding, setAdding] = useState(false)
   const touchStartX = useRef(0)
@@ -108,7 +113,8 @@ export default function ProductDetailClient({ product, images, options, variants
   )
 
   const variantImage = selectedVariant?.metadata_image || selectedVariant?.images?.[0]?.url || null
-  const mainImage = images[activeImgIdx]?.url || variantImage || images[0]?.url || null
+  const [userBrowsing, setUserBrowsing] = useState(false)
+  const mainImage = userBrowsing ? (images[activeImgIdx]?.url || variantImage || images[0]?.url || null) : (variantImage || images[activeImgIdx]?.url || images[0]?.url || null)
   const outOfStock = selectedVariant ? isOOS(selectedVariant) : false
 
   const meaningfulVariants = variants.filter((v) => v.title && v.title.toLowerCase() !== "default")
