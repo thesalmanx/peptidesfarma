@@ -162,8 +162,8 @@ export default function ProductDetailClient({ product, images, options, variants
       </div>
 
       {/* NH-style two-column card */}
-      <section className="max-w-[1332px] mx-auto px-4 md:px-4 py-4 md:py-6">
-        <div style={{ border: "1px solid var(--pf-line)", borderRadius: 12, padding: 16, overflow: "hidden" }} className="md:p-[30px] flex flex-col md:flex-row md:items-start gap-0 md:gap-6 lg:gap-10">
+      <section className="max-w-[1332px] mx-auto px-4 md:px-6 py-4 md:py-6">
+        <div style={{ border: "1px solid var(--pf-line)", borderRadius: 16, padding: 16, overflow: "visible" }} className="md:p-[30px] flex flex-col md:flex-row md:items-start gap-6 md:gap-8 lg:gap-10">
 
           {/* LEFT: Sticky Image Gallery */}
           <div className="flex-1 w-full md:w-1/2 relative">
@@ -193,20 +193,20 @@ export default function ProductDetailClient({ product, images, options, variants
                   <span style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.8)", textTransform: "uppercase", letterSpacing: "0.04em" }}>off</span>
                 </div>
               )}
-              {/* Main image — object-contain so vial isn't cropped */}
-              <div style={{ width: "100%", aspectRatio: "1/1", borderRadius: 10, overflow: "hidden", background: "var(--pf-paper)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+              {/* Main image */}
+              <div style={{ width: "100%", aspectRatio: "1/1", borderRadius: 14, overflow: "hidden", background: "linear-gradient(180deg, #f7f8fa 0%, #eef1f8 100%)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
                 {mainImage ? (
-                  <Image key={mainImage} src={mainImage} alt={product.title} fill className="object-contain animate-variant-swap" style={{ padding: 16 }} sizes="(max-width: 768px) 100vw, 618px" priority />
+                  <Image key={mainImage} src={mainImage} alt={product.title} fill className="object-contain" style={{ padding: 20, transition: "opacity 300ms ease" }} sizes="(max-width: 768px) 100vw, 618px" priority />
                 ) : (
                   <span style={{ fontSize: 14, color: "var(--pf-text-3)" }}>No image</span>
                 )}
               </div>
               {/* Thumbnail row */}
               {images.length > 1 && (
-                <div style={{ display: "flex", gap: 10, marginTop: 16, overflowX: "auto" }} className="pf-hide-scrollbar">
-                  {images.map((img, i) => (
-                    <button key={img.id} onClick={() => {}} style={{ flexShrink: 0, width: 72, height: 72, borderRadius: 8, overflow: "hidden", border: mainImage === img.url ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", cursor: "pointer", position: "relative", background: "var(--pf-paper)", padding: 0 }}>
-                      <Image src={img.url} alt="" fill className="object-contain" sizes="72px" style={{ padding: 4 }} />
+                <div style={{ display: "flex", gap: 8, marginTop: 14, overflowX: "auto" }} className="pf-hide-scrollbar">
+                  {images.map((img) => (
+                    <button key={img.id} onClick={() => {}} className="hover:opacity-80 transition-opacity" style={{ flexShrink: 0, width: 68, height: 68, borderRadius: 10, overflow: "hidden", border: mainImage === img.url ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", cursor: "pointer", position: "relative", background: "#f7f8fa", padding: 0, transition: "border-color 200ms ease" }}>
+                      <Image src={img.url} alt="" fill className="object-contain" sizes="68px" style={{ padding: 4 }} />
                     </button>
                   ))}
                 </div>
@@ -263,7 +263,8 @@ export default function ProductDetailClient({ product, images, options, variants
                       const oos = variant ? isOOS(variant) : false
                       return (
                         <button key={val.id} disabled={oos} onClick={() => setSelectedOptions((prev) => ({ ...prev, [opt.title]: val.value }))}
-                          style={{ height: 40, padding: "0 20px", borderRadius: 10, border: active ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", background: active ? "var(--pf-ink)" : "#fff", color: active ? "#fff" : "var(--pf-ink)", cursor: oos ? "not-allowed" : "pointer", fontFamily: "inherit", textDecoration: oos ? "line-through" : "none", fontSize: 14, fontWeight: 600, transition: "all 180ms ease", opacity: oos ? 0.35 : 1 }}>
+                          className="hover:border-[var(--pf-ink)]"
+                          style={{ height: 42, padding: "0 22px", borderRadius: 10, border: active ? "2px solid var(--pf-ink)" : "1.5px solid var(--pf-line)", background: active ? "var(--pf-ink)" : "#fff", color: active ? "#fff" : "var(--pf-ink)", cursor: oos ? "not-allowed" : "pointer", fontFamily: "inherit", textDecoration: oos ? "line-through" : "none", fontSize: 14, fontWeight: 600, transition: "all 200ms ease", opacity: oos ? 0.35 : 1 }}>
                           {val.value}
                         </button>
                       )
@@ -293,12 +294,17 @@ export default function ProductDetailClient({ product, images, options, variants
 
               {/* Price */}
               <div style={{ marginBottom: 16 }}>
-                <p style={{ fontSize: 13, color: "var(--pf-text-3)", marginBottom: 4 }}>Price</p>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                <p style={{ fontSize: 13, color: "var(--pf-text-3)", marginBottom: 6 }}>Price</p>
+                <div style={{ display: "inline-flex", alignItems: "baseline", gap: 8, background: "var(--pf-paper)", padding: "10px 18px", borderRadius: 10 }}>
                   {showStrikethrough && strikethroughPrice > totalPrice && (
-                    <span style={{ fontSize: 18, color: "var(--pf-text-3)", textDecoration: "line-through" }}>{formatPrice(strikethroughPrice, currencyCode)}</span>
+                    <span style={{ fontSize: 16, color: "var(--pf-text-3)", textDecoration: "line-through", opacity: 0.5 }}>{formatPrice(strikethroughPrice, currencyCode)}</span>
                   )}
-                  <span style={{ fontSize: 32, fontWeight: 700, color: "var(--pf-ink)" }}>{formattedPrice}</span>
+                  <span style={{ fontSize: 28, fontWeight: 700, color: "var(--pf-ink)", letterSpacing: "-0.02em" }}>{formattedPrice}</span>
+                  {showDiscountBadge && (
+                    <span style={{ fontSize: 12, fontWeight: 700, color: "#16a34a", background: "rgba(22,163,106,0.1)", padding: "2px 8px", borderRadius: 99 }}>
+                      Save {effectiveDiscountPct}%
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -336,17 +342,17 @@ export default function ProductDetailClient({ product, images, options, variants
               </div>
             </div>
 
-            {/* USPs */}
+            {/* USPs with individual icons */}
             <div style={{ borderTop: "1px solid var(--pf-line)", marginTop: 24, paddingTop: 20, display: "flex", flexDirection: "column", gap: 10 }}>
               {[
-                "Same-day shipping · Orders before 2pm CT",
-                "Lot COA included · HPLC third-party tested",
-                "99%+ purity · Pharmaceutical grade",
-                "For laboratory research use only",
-              ].map((text, i) => (
+                { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" /></svg>, text: "Same-day shipping · Orders before 2pm CT" },
+                { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" /></svg>, text: "Lot COA included · HPLC third-party tested" },
+                { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M7 2v11h3v9l7-12h-4l4-8z" /></svg>, text: "99%+ purity · Pharmaceutical grade" },
+                { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" /></svg>, text: "For laboratory research use only" },
+              ].map((usp, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--pf-blue)" style={{ flexShrink: 0 }}><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
-                  <span style={{ fontSize: 14, color: "var(--pf-ink)", lineHeight: "20px" }}>{text}</span>
+                  <span style={{ flexShrink: 0, opacity: 0.8 }}>{usp.icon}</span>
+                  <span style={{ fontSize: 14, color: "var(--pf-ink)", lineHeight: "20px" }}>{usp.text}</span>
                 </div>
               ))}
             </div>
