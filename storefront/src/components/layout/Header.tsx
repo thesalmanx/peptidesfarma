@@ -71,9 +71,9 @@ export default function Header() {
           </div>
         </div>
 
-        {/* ROW 2: Logo + Search + Icons — NH layout */}
+        {/* ROW 2: Logo + Icons */}
         <div className="mx-auto px-4 md:px-8" style={{ maxWidth: 1332 }}>
-          <div className="flex items-center h-[56px] md:h-[80px]">
+          <div className="flex items-center justify-between h-[56px] md:h-[72px]">
             {/* Mobile: Hamburger */}
             <button
               onClick={() => setMobileOpen(true)}
@@ -88,23 +88,16 @@ export default function Header() {
               </div>
             </button>
 
-            {/* Logo — fixed width so search can center */}
-            <Link href="/" className="shrink-0" style={{ width: 180 }}>
+            {/* Logo */}
+            <Link href="/" className="shrink-0">
               <img src="/peptidesfarma-logo-dark.svg" alt="PeptidesFarma" className="h-7 md:h-9" />
             </Link>
 
-            {/* Desktop: Search bar (truly centered) */}
-            <div className="hidden md:flex flex-1 justify-center">
-              <div style={{ width: "100%", maxWidth: 420 }}>
-                <SearchButton variant="bar" />
-              </div>
-            </div>
-
-            {/* Right icons — same fixed width as logo for symmetry */}
-            <div className="flex items-center ml-auto md:ml-0 justify-end" style={{ gap: 20, width: "auto", minWidth: 180 }}>
-              <div className="md:hidden"><SearchButton /></div>
+            {/* Right icons */}
+            <div className="flex items-center" style={{ gap: 20 }}>
+              <SearchButton />
               <Link href="/account/wishlist" aria-label="Wishlist" className="hidden md:flex hover:opacity-80 transition-opacity">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="var(--pf-ink)" strokeWidth="1.5" /></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="var(--pf-ink)" strokeWidth="1.5" /></svg>
               </Link>
               <HeaderCartButton />
               <div className="hidden md:block"><HeaderAccountButton /></div>
