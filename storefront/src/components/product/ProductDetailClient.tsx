@@ -57,6 +57,7 @@ export default function ProductDetailClient({ product, images, options, variants
     return firstInStock ? { ...firstInStock.options } : defaults
   })
   const [qty, setQty] = useState(1)
+  const [activeImgIdx, setActiveImgIdx] = useState(0)
   const [tab, setTab] = useState("description")
   const [adding, setAdding] = useState(false)
   const [added, setAdded] = useState(false)
@@ -85,7 +86,8 @@ export default function ProductDetailClient({ product, images, options, variants
     [variants, selectedOptions]
   )
 
-  const mainImage = selectedVariant?.metadata_image || selectedVariant?.images?.[0]?.url || images[0]?.url || null
+  const variantImage = selectedVariant?.metadata_image || selectedVariant?.images?.[0]?.url || null
+  const mainImage = variantImage || images[activeImgIdx]?.url || images[0]?.url || null
   const outOfStock = selectedVariant ? isOOS(selectedVariant) : false
 
   const meaningfulVariants = variants.filter((v) => v.title && v.title.toLowerCase() !== "default")
@@ -193,19 +195,44 @@ export default function ProductDetailClient({ product, images, options, variants
                   <span style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.8)", textTransform: "uppercase", letterSpacing: "0.04em" }}>off</span>
                 </div>
               )}
-              {/* Main image */}
+              {/* Main image with arrows */}
               <div style={{ width: "100%", aspectRatio: "1/1", borderRadius: 14, overflow: "hidden", background: "linear-gradient(180deg, #f7f8fa 0%, #eef1f8 100%)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
                 {mainImage ? (
                   <Image key={mainImage} src={mainImage} alt={product.title} fill className="object-contain" style={{ padding: 20, transition: "opacity 300ms ease" }} sizes="(max-width: 768px) 100vw, 618px" priority />
                 ) : (
                   <span style={{ fontSize: 14, color: "var(--pf-text-3)" }}>No image</span>
                 )}
+                {/* Prev/Next arrows */}
+                {images.length > 1 && !variantImage && (
+                  <>
+                    {activeImgIdx > 0 && (
+                      <button
+                        onClick={() => setActiveImgIdx(activeImgIdx - 1)}
+                        aria-label="Previous image"
+                        className="hover:opacity-100 transition-opacity"
+                        style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", width: 36, height: 36, borderRadius: 99, background: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 4, opacity: 0.8 }}
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" /></svg>
+                      </button>
+                    )}
+                    {activeImgIdx < images.length - 1 && (
+                      <button
+                        onClick={() => setActiveImgIdx(activeImgIdx + 1)}
+                        aria-label="Next image"
+                        className="hover:opacity-100 transition-opacity"
+                        style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", width: 36, height: 36, borderRadius: 99, background: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 4, opacity: 0.8 }}
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" /></svg>
+                      </button>
+                    )}
+                  </>
+                )}
               </div>
               {/* Thumbnail row */}
               {images.length > 1 && (
                 <div style={{ display: "flex", gap: 8, marginTop: 14, overflowX: "auto" }} className="pf-hide-scrollbar">
-                  {images.map((img) => (
-                    <button key={img.id} onClick={() => {}} className="hover:opacity-80 transition-opacity" style={{ flexShrink: 0, width: 68, height: 68, borderRadius: 10, overflow: "hidden", border: mainImage === img.url ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", cursor: "pointer", position: "relative", background: "#f7f8fa", padding: 0, transition: "border-color 200ms ease" }}>
+                  {images.map((img, i) => (
+                    <button key={img.id} onClick={() => setActiveImgIdx(i)} className="hover:opacity-80 transition-opacity" style={{ flexShrink: 0, width: 68, height: 68, borderRadius: 10, overflow: "hidden", border: activeImgIdx === i && !variantImage ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", cursor: "pointer", position: "relative", background: "#f7f8fa", padding: 0, transition: "border-color 200ms ease" }}>
                       <Image src={img.url} alt="" fill className="object-contain" sizes="68px" style={{ padding: 4 }} />
                     </button>
                   ))}
