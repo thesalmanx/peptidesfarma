@@ -39,7 +39,7 @@ export default function SearchButton({ variant = "icon" }: { variant?: "icon" | 
         className="hover:opacity-80 transition-opacity cursor-pointer"
         style={{ background: "none", border: "none", padding: 0 }}
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" /></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--pf-ink)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></svg>
       </button>
       {isOpen && <SearchOverlay onClose={() => setIsOpen(false)} />}
     </>

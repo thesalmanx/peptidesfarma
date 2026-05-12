@@ -71,9 +71,10 @@ export default function Header() {
           </div>
         </div>
 
-        {/* ROW 2: Logo + Icons */}
+        {/* ROW 2: Logo + Nav links (center) + Icons */}
+        <div style={{ borderBottom: "1px solid var(--pf-line)" }}>
         <div className="mx-auto px-4 md:px-8" style={{ maxWidth: 1332 }}>
-          <div className="flex items-center justify-between h-[56px] md:h-[72px]">
+          <div className="flex items-center justify-between h-[56px] md:h-[64px]">
             {/* Mobile: Hamburger */}
             <button
               onClick={() => setMobileOpen(true)}
@@ -93,6 +94,42 @@ export default function Header() {
               <img src="/peptidesfarma-logo-dark.svg" alt="PeptidesFarma" className="h-7 md:h-9" />
             </Link>
 
+            {/* Center: Nav links with dividers (desktop) */}
+            <nav className="hidden md:flex items-center" style={{ margin: "0 auto" }}>
+              <div ref={catalogRef} style={{ position: "relative" }}>
+                <button
+                  onClick={() => setCatalogOpen(!catalogOpen)}
+                  className="hover:opacity-80 transition-opacity"
+                  style={{
+                    display: "flex", alignItems: "center", gap: 4,
+                    padding: "0 24px", height: 64, background: "none", border: "none",
+                    borderRight: "1px solid var(--pf-line)",
+                    fontSize: 14, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.03em",
+                    color: "var(--pf-ink)", cursor: "pointer", fontFamily: "inherit",
+                  }}
+                >
+                  Shop
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--pf-ink)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "transform 200ms ease", transform: catalogOpen ? "rotate(180deg)" : "none" }}><path d="m6 9 6 6 6-6" /></svg>
+                </button>
+              </div>
+              {navLinks.map((link, i) => (
+                <Link
+                  key={i}
+                  href={link.url}
+                  className="hover:opacity-80 transition-opacity"
+                  style={{
+                    display: "flex", alignItems: "center",
+                    padding: "0 24px", height: 64,
+                    borderRight: i < navLinks.length - 1 ? "1px solid var(--pf-line)" : "none",
+                    fontSize: 14, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.03em",
+                    color: "var(--pf-ink)", textDecoration: "none",
+                  }}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+
             {/* Right icons */}
             <div className="flex items-center" style={{ gap: 20 }}>
               <SearchButton />
@@ -104,46 +141,6 @@ export default function Header() {
             </div>
           </div>
         </div>
-
-        {/* ROW 3: Nav tab bar (desktop only) — centered */}
-        <div className="hidden md:block" style={{ borderBottom: "1px solid var(--pf-line)", background: "#fff" }}>
-          <div className="flex items-center justify-center mx-auto px-8" style={{ maxWidth: 1332 }}>
-            {/* Shop tab */}
-            <div ref={catalogRef} style={{ position: "relative" }}>
-              <button
-                onClick={() => setCatalogOpen(!catalogOpen)}
-                style={{
-                  display: "flex", alignItems: "center", gap: 4,
-                  padding: "12px 24px", background: "none", border: "none",
-                  borderRight: "1px solid var(--pf-line)",
-                  fontSize: 14, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.03em",
-                  color: "var(--pf-ink)", cursor: "pointer", fontFamily: "inherit",
-                  borderBottom: catalogOpen ? "2px solid var(--pf-ink)" : "2px solid transparent",
-                  transition: "border-color 200ms ease",
-                }}
-              >
-                Shop
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-ink)" style={{ opacity: 0.5, transform: catalogOpen ? "rotate(180deg)" : "none", transition: "transform 200ms ease" }}><path d="m7 10 5 5 5-5z" /></svg>
-              </button>
-            </div>
-            {navLinks.map((link, i) => (
-              <Link
-                key={i}
-                href={link.url}
-                className="hover:opacity-80 transition-opacity"
-                style={{
-                  display: "flex", alignItems: "center",
-                  padding: "12px 24px",
-                  borderRight: "1px solid var(--pf-line)",
-                  fontSize: 14, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.03em",
-                  color: "var(--pf-ink)", textDecoration: "none",
-                  borderBottom: pathname === link.url ? "2px solid var(--pf-ink)" : "2px solid transparent",
-                }}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
         </div>
 
         {/* Catalog dropdown */}
