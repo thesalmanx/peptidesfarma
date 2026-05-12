@@ -64,46 +64,69 @@ function FreeShippingBar({ subtotal }: { subtotal: number }) {
   const reachedStandard = dollars >= FREE_STANDARD_THRESHOLD
   const reached2Day = dollars >= FREE_2DAY_THRESHOLD
 
-  let message: React.ReactNode
   let progressPercent: number
-
-  if (reached2Day) {
-    message = <span style={{ fontSize: 13, fontWeight: 500, color: "#16a34a" }}>Free 2-day shipping unlocked!</span>
-    progressPercent = 100
-  } else if (reachedStandard) {
-    const remaining = FREE_2DAY_THRESHOLD - dollars
-    message = (
-      <span style={{ fontSize: 13, color: "var(--pf-ink)" }}>
-        <span style={{ fontWeight: 600, color: "#16a34a" }}>Free shipping!</span> &middot; <span style={{ fontWeight: 600 }}>${remaining.toFixed(0)}</span> to free 2-day
-      </span>
-    )
-    progressPercent = ((dollars - FREE_STANDARD_THRESHOLD) / (FREE_2DAY_THRESHOLD - FREE_STANDARD_THRESHOLD)) * 50 + 50
-  } else {
-    const remaining = FREE_STANDARD_THRESHOLD - dollars
-    message = (
-      <span style={{ fontSize: 13, color: "var(--pf-ink)" }}>
-        <span style={{ fontWeight: 600 }}>${remaining.toFixed(0)}</span> away from free shipping
-      </span>
-    )
-    progressPercent = (dollars / FREE_STANDARD_THRESHOLD) * 50
-  }
+  if (reached2Day) progressPercent = 100
+  else if (reachedStandard) progressPercent = ((dollars - FREE_STANDARD_THRESHOLD) / (FREE_2DAY_THRESHOLD - FREE_STANDARD_THRESHOLD)) * 50 + 50
+  else progressPercent = (dollars / FREE_STANDARD_THRESHOLD) * 50
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-        <IconShipping />
-        {message}
+    <div style={{ padding: "14px 16px", background: "var(--pf-paper)", borderRadius: 16 }}>
+      {/* Message */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+        <div style={{
+          width: 32, height: 32, borderRadius: 99, flexShrink: 0,
+          background: reached2Day ? "#dcfce7" : reachedStandard ? "#dcfce7" : "rgba(0,28,134,0.08)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          {reached2Day ? (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#16a34a"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
+          ) : (
+            <IconShipping />
+          )}
+        </div>
+        <div style={{ flex: 1 }}>
+          {reached2Day ? (
+            <span style={{ fontSize: 13, fontWeight: 600, color: "#16a34a" }}>Free 2-day shipping unlocked!</span>
+          ) : reachedStandard ? (
+            <span style={{ fontSize: 13, color: "var(--pf-ink)" }}>
+              <span style={{ fontWeight: 600, color: "#16a34a" }}>Free shipping!</span>{" "}
+              <span style={{ fontWeight: 500, color: "var(--pf-text-3)" }}>${(FREE_2DAY_THRESHOLD - dollars).toFixed(0)} to free 2-day</span>
+            </span>
+          ) : (
+            <span style={{ fontSize: 13, color: "var(--pf-ink)" }}>
+              <span style={{ fontWeight: 600 }}>${(FREE_STANDARD_THRESHOLD - dollars).toFixed(0)}</span>
+              <span style={{ color: "var(--pf-text-3)" }}> away from free shipping</span>
+            </span>
+          )}
+        </div>
       </div>
-      <div style={{ position: "relative", width: "100%", height: 5, borderRadius: 99, background: "#e5e7eb", overflow: "hidden" }}>
-        <div style={{ position: "absolute", left: 0, top: 0, height: "100%", borderRadius: 99, background: "#16a34a", transition: "width 500ms ease-out", width: `${Math.min(progressPercent, 100)}%` }} />
+
+      {/* Progress bar */}
+      <div style={{ position: "relative", width: "100%", height: 6, borderRadius: 99, background: "#e5e7eb", overflow: "hidden" }}>
+        <div style={{
+          position: "absolute", left: 0, top: 0, height: "100%", borderRadius: 99,
+          background: reached2Day ? "#16a34a" : reachedStandard ? "linear-gradient(90deg, #16a34a 0%, #4ade80 100%)" : "linear-gradient(90deg, var(--pf-blue) 0%, #4F8AF7 100%)",
+          transition: "width 600ms cubic-bezier(.22,1,.36,1)",
+          width: `${Math.min(progressPercent, 100)}%`,
+        }} />
+        {/* Midpoint marker */}
+        <div style={{ position: "absolute", left: "50%", top: -1, width: 2, height: 8, background: "#fff", borderRadius: 1, transform: "translateX(-50%)", opacity: 0.8 }} />
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <span style={{ fontSize: 11, color: reachedStandard ? "#16a34a" : "var(--pf-text-3)", fontWeight: reachedStandard ? 500 : 400 }}>
-          Free standard &middot; ${FREE_STANDARD_THRESHOLD}
-        </span>
-        <span style={{ fontSize: 11, color: reached2Day ? "#16a34a" : "var(--pf-text-3)", fontWeight: reached2Day ? 500 : 400 }}>
-          Free 2-day &middot; ${FREE_2DAY_THRESHOLD}
-        </span>
+
+      {/* Labels */}
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+          {reachedStandard && <svg width="10" height="10" viewBox="0 0 24 24" fill="#16a34a"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>}
+          <span style={{ fontSize: 11, color: reachedStandard ? "#16a34a" : "var(--pf-text-3)", fontWeight: reachedStandard ? 600 : 400 }}>
+            Standard &middot; ${FREE_STANDARD_THRESHOLD}
+          </span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+          {reached2Day && <svg width="10" height="10" viewBox="0 0 24 24" fill="#16a34a"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>}
+          <span style={{ fontSize: 11, color: reached2Day ? "#16a34a" : "var(--pf-text-3)", fontWeight: reached2Day ? 600 : 400 }}>
+            2-Day &middot; ${FREE_2DAY_THRESHOLD}
+          </span>
+        </div>
       </div>
     </div>
   )
