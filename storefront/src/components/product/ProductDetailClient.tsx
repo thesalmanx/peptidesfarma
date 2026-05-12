@@ -215,26 +215,24 @@ export default function ProductDetailClient({ product, images, options, variants
               {/* Thumbnail gallery with arrows — NH GallerySlider style */}
               {images.length > 1 && (
                 <div className="hidden md:block" style={{ position: "relative", marginTop: 16 }}>
-                  {/* Left arrow */}
+                  {/* Left arrow — NH blob style */}
                   {activeImgIdx > 0 && (
                     <button
                       onClick={() => setActiveImgIdx(activeImgIdx - 1)}
                       aria-label="Previous"
-                      className="hover:opacity-100 transition-opacity"
-                      style={{ position: "absolute", left: -16, top: "50%", transform: "translateY(-50%)", width: 32, height: 32, borderRadius: 99, background: "#fff", boxShadow: "0 1px 6px rgba(0,0,0,0.15)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 4, opacity: 0.9 }}
+                      style={{ position: "absolute", left: -26, top: "50%", transform: "translateY(-50%)", width: 64, height: 64, background: "transparent", border: "none", padding: 0, cursor: "pointer", zIndex: 10, display: "flex", alignItems: "center", justifyContent: "center" }}
                     >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" /></svg>
+                      <Image src="/icons/gallery-arrow-left.svg" alt="Previous" width={48} height={48} style={{ filter: "drop-shadow(2px 3px 2px rgba(0,0,0,0.2))", pointerEvents: "none" }} />
                     </button>
                   )}
-                  {/* Right arrow */}
+                  {/* Right arrow — NH blob style */}
                   {activeImgIdx < images.length - 1 && (
                     <button
                       onClick={() => setActiveImgIdx(activeImgIdx + 1)}
                       aria-label="Next"
-                      className="hover:opacity-100 transition-opacity"
-                      style={{ position: "absolute", right: -16, top: "50%", transform: "translateY(-50%)", width: 32, height: 32, borderRadius: 99, background: "#fff", boxShadow: "0 1px 6px rgba(0,0,0,0.15)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 4, opacity: 0.9 }}
+                      style={{ position: "absolute", right: -26, top: "50%", transform: "translateY(-50%)", width: 64, height: 64, background: "transparent", border: "none", padding: 0, cursor: "pointer", zIndex: 10, display: "flex", alignItems: "center", justifyContent: "center" }}
                     >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" /></svg>
+                      <Image src="/icons/gallery-arrow-right.svg" alt="Next" width={48} height={48} style={{ filter: "drop-shadow(-2px 3px 2px rgba(0,0,0,0.2))", pointerEvents: "none" }} />
                     </button>
                   )}
                   {/* Thumbnails */}
