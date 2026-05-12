@@ -402,74 +402,69 @@ export default function ProductDetailClient({ product, images, options, variants
             </div>
           )}
 
-          {/* Bundle & Save */}
-          <div style={{ marginBottom: 20 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "var(--pf-ink)", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 10 }}>Bundle &amp; Save</div>
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-              {bundleTiers.map((tier) => {
-                const isActive = qty >= tier.qty && (tier.qty === 3 ? qty >= 3 : qty === tier.qty)
-                const actualActive = tier === activeTier
-                return (
-                  <button
-                    key={tier.qty}
-                    onClick={() => setQty(tier.qty)}
-                    style={{
-                      display: "flex", alignItems: "center", gap: 10,
-                      padding: "12px 16px", borderRadius: 14,
-                      border: actualActive ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)",
-                      background: "#fff", cursor: "pointer",
-                      transition: "all 180ms ease",
-                      position: "relative",
-                      fontFamily: "inherit",
-                    }}
-                  >
-                    {tier.tag && (
-                      <span style={{
-                        position: "absolute", top: -8, right: 8,
-                        padding: "2px 8px", borderRadius: 99,
-                        background: tier.tag === "BEST VALUE" ? "#16a34a" : "var(--pf-blue)",
-                        color: "#fff", fontSize: 9, fontWeight: 700,
-                        letterSpacing: "0.04em", textTransform: "uppercase",
-                      }}>
-                        {tier.tag}
-                      </span>
+          {/* Bundle & Save + Price + Qty + Add to cart — all one line */}
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            {/* Bundle tiers */}
+            {bundleTiers.map((tier) => {
+              const actualActive = tier === activeTier
+              return (
+                <button
+                  key={tier.qty}
+                  onClick={() => setQty(tier.qty)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 6,
+                    padding: "10px 14px", borderRadius: 12,
+                    border: actualActive ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)",
+                    background: "#fff", cursor: "pointer",
+                    transition: "all 180ms ease",
+                    position: "relative", fontFamily: "inherit",
+                    flexShrink: 0,
+                  }}
+                >
+                  {tier.tag && (
+                    <span style={{
+                      position: "absolute", top: -7, right: 6,
+                      padding: "1px 6px", borderRadius: 99,
+                      background: tier.tag === "BEST VALUE" ? "#16a34a" : "var(--pf-blue)",
+                      color: "#fff", fontSize: 8, fontWeight: 700,
+                      letterSpacing: "0.03em", textTransform: "uppercase",
+                    }}>
+                      {tier.tag}
+                    </span>
+                  )}
+                  <div style={{ textAlign: "left" }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: "var(--pf-ink)", whiteSpace: "nowrap" }}>{tier.label}</div>
+                    {tier.discount > 0 && (
+                      <div style={{ fontSize: 11, fontWeight: 600, color: "#16a34a" }}>{tier.discount}% OFF</div>
                     )}
-                    <div style={{ textAlign: "left" }}>
-                      <div style={{ fontSize: 14, fontWeight: 600, color: "var(--pf-ink)" }}>{tier.label}</div>
-                      {tier.discount > 0 && (
-                        <div style={{ fontSize: 12, fontWeight: 600, color: "#16a34a" }}>{tier.discount}% OFF</div>
-                      )}
-                    </div>
-                  </button>
-                )
-              })}
-            </div>
-          </div>
+                  </div>
+                </button>
+              )
+            })}
 
-          {/* Price + Qty + Add to cart */}
-          <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            {/* Spacer */}
+            <div style={{ flex: 1 }} />
+
             {/* Price */}
-            <div style={{ marginRight: "auto" }}>
-              <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-                {showStrikethrough && strikethroughPrice > totalPrice && (
-                  <span style={{ fontSize: 18, fontWeight: 400, color: "var(--pf-text-3)", textDecoration: "line-through" }}>
-                    {formatPrice(strikethroughPrice, currencyCode)}
-                  </span>
-                )}
-                <span style={{ fontSize: 32, fontWeight: 700, color: "var(--pf-ink)" }}>
-                  {formattedPrice}
+            <div style={{ display: "flex", alignItems: "baseline", gap: 6, flexShrink: 0 }}>
+              {showStrikethrough && strikethroughPrice > totalPrice && (
+                <span style={{ fontSize: 16, fontWeight: 400, color: "var(--pf-text-3)", textDecoration: "line-through" }}>
+                  {formatPrice(strikethroughPrice, currencyCode)}
                 </span>
-              </div>
+              )}
+              <span style={{ fontSize: 28, fontWeight: 700, color: "var(--pf-ink)" }}>
+                {formattedPrice}
+              </span>
             </div>
 
             {/* Qty stepper */}
-            <div style={{ display: "inline-flex", alignItems: "center", border: "2px solid var(--pf-ink)", borderRadius: 10, height: 44 }}>
-              <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: 40, height: 42, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-                <svg width="16" height="16" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L16 9.57398C16.5523 9.57398 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574L4 11.574C3.44772 11.574 3 11.1263 3 10.574Z" fill="var(--pf-ink)" /></svg>
+            <div style={{ display: "inline-flex", alignItems: "center", border: "2px solid var(--pf-ink)", borderRadius: 10, height: 44, flexShrink: 0 }}>
+              <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: 36, height: 42, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                <svg width="14" height="14" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L16 9.57398C16.5523 9.57398 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574L4 11.574C3.44772 11.574 3 11.1263 3 10.574Z" fill="var(--pf-ink)" /></svg>
               </button>
-              <span style={{ minWidth: 28, textAlign: "center", fontSize: 15, fontWeight: 700, color: "var(--pf-ink)" }}>{qty}</span>
-              <button onClick={() => setQty(Math.min(99, qty + 1))} style={{ width: 40, height: 42, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-                <svg width="16" height="16" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M10 3.57397C10.5523 3.57397 11 4.02169 11 4.57397V9.57397H16C16.5523 9.57397 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574H11V16.574C11 17.1263 10.5523 17.574 10 17.574C9.44772 17.574 9 17.1263 9 16.574V11.574H4C3.44772 11.574 3 11.1263 3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L9 9.57397V4.57397C9 4.02169 9.44772 3.57397 10 3.57397Z" fill="var(--pf-ink)" /></svg>
+              <span style={{ minWidth: 24, textAlign: "center", fontSize: 14, fontWeight: 700, color: "var(--pf-ink)" }}>{qty}</span>
+              <button onClick={() => setQty(Math.min(99, qty + 1))} style={{ width: 36, height: 42, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                <svg width="14" height="14" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M10 3.57397C10.5523 3.57397 11 4.02169 11 4.57397V9.57397H16C16.5523 9.57397 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574H11V16.574C11 17.1263 10.5523 17.574 10 17.574C9.44772 17.574 9 17.1263 9 16.574V11.574H4C3.44772 11.574 3 11.1263 3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L9 9.57397V4.57397C9 4.02169 9.44772 3.57397 10 3.57397Z" fill="var(--pf-ink)" /></svg>
               </button>
             </div>
             {/* Add to cart */}
