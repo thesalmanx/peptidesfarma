@@ -16,7 +16,7 @@ interface ProductVariant {
   options: Record<string, string>
   images?: ProductImage[]
   metadata_image?: string | null
-  calculated_price?: { calculated_amount: number; currency_code: string }
+  calculated_price?: { calculated_amount: number; original_amount?: number; currency_code: string }
   inventory_quantity?: number
 }
 
@@ -79,13 +79,38 @@ export default function ProductDetailClient({ product, images, options, variants
 
   const meaningfulVariants = variants.filter((v) => v.title && v.title.toLowerCase() !== "default")
   const hasMultipleVariants = meaningfulVariants.length > 1
-  const formattedPrice = selectedVariant?.calculated_price
-    ? formatPrice(selectedVariant.calculated_price.calculated_amount * qty, selectedVariant.calculated_price.currency_code)
-    : null
+  // Bundle discounts
+  const bundleTiers = [
+    { qty: 1, label: "1 Bottle", discount: 0 },
+    { qty: 2, label: "2 Bottles", discount: 3, tag: "POPULAR" },
+    { qty: 3, label: "3+ Bottles", discount: 5, tag: "BEST VALUE" },
+  ]
+  const activeTier = bundleTiers.findLast((t) => qty >= t.qty) || bundleTiers[0]
+  const bundleDiscount = activeTier.discount
 
+  const basePrice = selectedVariant?.calculated_price?.calculated_amount ?? 0
+  const compareAt = selectedVariant?.calculated_price?.original_amount
   const discountPct = product.metadata?.discount_percentage ? Number(product.metadata.discount_percentage) : 0
-  const currentPrice = selectedVariant?.calculated_price?.calculated_amount ?? 0
-  const originalPrice = discountPct > 0 ? currentPrice / (1 - discountPct / 100) : 0
+
+  // Effective price per unit after bundle discount
+  const effectiveUnitPrice = bundleDiscount > 0 ? basePrice * (1 - bundleDiscount / 100) : basePrice
+  const totalPrice = effectiveUnitPrice * qty
+  const currencyCode = selectedVariant?.calculated_price?.currency_code || "usd"
+
+  const formattedPrice = formatPrice(totalPrice, currencyCode)
+
+  // Original price for strikethrough: use compare-at from Medusa, or calc from discount_percentage, or base price if bundle discount
+  const hasCompareAt = compareAt != null && compareAt > basePrice
+  const hasMetaDiscount = discountPct > 0
+  const showStrikethrough = hasCompareAt || hasMetaDiscount || bundleDiscount > 0
+
+  const strikethroughPrice = hasCompareAt
+    ? compareAt * qty
+    : hasMetaDiscount
+      ? (basePrice / (1 - discountPct / 100)) * qty
+      : bundleDiscount > 0
+        ? basePrice * qty
+        : 0
 
   const handleAdd = async () => {
     if (!selectedVariant || adding || added) return
@@ -340,102 +365,140 @@ export default function ProductDetailClient({ product, images, options, variants
 
           {/* Bottom: buy bar */}
           <div style={{ borderTop: "1px solid var(--pf-line)", marginTop: 32 }}>
-          <div className="pf-pdp-buybar" style={{ padding: "28px 0", display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 48, alignItems: "center" }}>
-          <div>
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+          <div style={{ padding: "28px 0" }}>
+          {/* Variant selector */}
+          {hasMultipleVariants && (
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center", marginBottom: 20 }}>
+              <span style={{ fontSize: 14, fontWeight: 600, color: "var(--pf-ink)", marginRight: 4 }}>Dosage</span>
               {options.map((opt) =>
                 opt.values.map((val) => {
                   const active = selectedOptions[opt.title] === val.value
                   const variant = variants.find((v) => v.options[opt.title] === val.value)
                   const oos = variant ? isOOS(variant) : false
-                  const isShort = val.value.length <= 5
                   return (
                     <button
                       key={val.id}
                       disabled={oos}
                       onClick={() => setSelectedOptions((prev) => ({ ...prev, [opt.title]: val.value }))}
                       style={{
-                        width: isShort ? 72 : "auto",
-                        minWidth: isShort ? 72 : 80,
-                        height: 72,
-                        padding: isShort ? 0 : "0 20px",
-                        borderRadius: "50%",
+                        height: 40, padding: "0 20px",
+                        borderRadius: 10,
                         border: active ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)",
                         background: active ? "var(--pf-ink)" : "#fff",
-                        color: active ? "#fff" : "var(--pf-text-2)",
+                        color: active ? "#fff" : "var(--pf-ink)",
                         cursor: oos ? "not-allowed" : "pointer",
                         fontFamily: "inherit",
                         textDecoration: oos ? "line-through" : "none",
-                        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                        fontSize: 14, fontWeight: 600,
                         transition: "all 180ms ease",
                         opacity: oos ? 0.35 : 1,
                       }}
                     >
-                      <span style={{ fontWeight: 700, fontSize: 15, lineHeight: 1.1, color: "inherit" }}>{val.value}</span>
-                      {variant?.calculated_price && (
-                        <span style={{ fontFamily: "var(--pf-mono)", fontSize: 11, opacity: active ? 0.8 : 0.6, marginTop: 3, color: "inherit" }}>
-                          {formatPrice(variant.calculated_price.calculated_amount, variant.calculated_price.currency_code)}
-                        </span>
-                      )}
+                      {val.value}
                     </button>
                   )
                 })
               )}
             </div>
+          )}
+
+          {/* Bundle & Save */}
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "var(--pf-ink)", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 10 }}>Bundle &amp; Save</div>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              {bundleTiers.map((tier) => {
+                const isActive = qty >= tier.qty && (tier.qty === 3 ? qty >= 3 : qty === tier.qty)
+                const actualActive = tier === activeTier
+                return (
+                  <button
+                    key={tier.qty}
+                    onClick={() => setQty(tier.qty)}
+                    style={{
+                      display: "flex", alignItems: "center", gap: 10,
+                      padding: "12px 16px", borderRadius: 14,
+                      border: actualActive ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)",
+                      background: "#fff", cursor: "pointer",
+                      transition: "all 180ms ease",
+                      position: "relative",
+                      fontFamily: "inherit",
+                    }}
+                  >
+                    {tier.tag && (
+                      <span style={{
+                        position: "absolute", top: -8, right: 8,
+                        padding: "2px 8px", borderRadius: 99,
+                        background: tier.tag === "BEST VALUE" ? "#16a34a" : "var(--pf-blue)",
+                        color: "#fff", fontSize: 9, fontWeight: 700,
+                        letterSpacing: "0.04em", textTransform: "uppercase",
+                      }}>
+                        {tier.tag}
+                      </span>
+                    )}
+                    <div style={{ textAlign: "left" }}>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: "var(--pf-ink)" }}>{tier.label}</div>
+                      {tier.discount > 0 && (
+                        <div style={{ fontSize: 12, fontWeight: 600, color: "#16a34a" }}>{tier.discount}% OFF</div>
+                      )}
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
           </div>
 
-          <div className="pf-pdp-buybar-right" style={{ display: "flex", alignItems: "center", gap: 16, justifyContent: "flex-end" }}>
-            <div style={{ textAlign: "right" }}>
-              <div style={{ fontFamily: "var(--pf-mono)", fontSize: 11, letterSpacing: "0.12em", color: "var(--pf-text-3)", textTransform: "uppercase", marginBottom: 4 }}>Price</div>
-              <div style={{ display: "flex", alignItems: "baseline", gap: 8, justifyContent: "flex-end" }}>
-                {discountPct > 0 && originalPrice > 0 && (
-                  <span style={{ fontFamily: "var(--pf-mono)", fontSize: 18, fontWeight: 400, color: "var(--pf-text-3)", textDecoration: "line-through" }}>
-                    {formatPrice(originalPrice * qty, selectedVariant?.calculated_price?.currency_code || "usd")}
+          {/* Price + Qty + Add to cart */}
+          <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            {/* Price */}
+            <div style={{ marginRight: "auto" }}>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                {showStrikethrough && strikethroughPrice > totalPrice && (
+                  <span style={{ fontSize: 18, fontWeight: 400, color: "var(--pf-text-3)", textDecoration: "line-through" }}>
+                    {formatPrice(strikethroughPrice, currencyCode)}
                   </span>
                 )}
-                <span style={{ fontFamily: "var(--pf-mono)", fontSize: 32, fontWeight: 700, color: "var(--pf-ink)" }}>
-                  {selectedVariant?.calculated_price
-                    ? formatPrice(selectedVariant.calculated_price.calculated_amount * qty, selectedVariant.calculated_price.currency_code)
-                    : "-"
-                  }
+                <span style={{ fontSize: 32, fontWeight: 700, color: "var(--pf-ink)" }}>
+                  {formattedPrice}
                 </span>
               </div>
             </div>
-            <div style={{ display: "inline-flex", alignItems: "center", border: "1px solid var(--pf-line)", borderRadius: 999, height: 44, background: "#fff" }}>
-              <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: 40, height: 42, border: "none", background: "transparent", color: "var(--pf-ink)", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14" /></svg>
+
+            {/* Qty stepper */}
+            <div style={{ display: "inline-flex", alignItems: "center", border: "2px solid var(--pf-ink)", borderRadius: 10, height: 44 }}>
+              <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: 40, height: 42, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                <svg width="16" height="16" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L16 9.57398C16.5523 9.57398 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574L4 11.574C3.44772 11.574 3 11.1263 3 10.574Z" fill="var(--pf-ink)" /></svg>
               </button>
-              <span style={{ minWidth: 32, textAlign: "center", fontSize: 15, fontWeight: 700, fontFamily: "var(--pf-mono)", color: "var(--pf-ink)" }}>{qty}</span>
-              <button onClick={() => setQty(Math.min(99, qty + 1))} style={{ width: 40, height: 42, border: "none", background: "transparent", color: "var(--pf-ink)", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 5v14" /><path d="M5 12h14" /></svg>
+              <span style={{ minWidth: 28, textAlign: "center", fontSize: 15, fontWeight: 700, color: "var(--pf-ink)" }}>{qty}</span>
+              <button onClick={() => setQty(Math.min(99, qty + 1))} style={{ width: 40, height: 42, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                <svg width="16" height="16" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M10 3.57397C10.5523 3.57397 11 4.02169 11 4.57397V9.57397H16C16.5523 9.57397 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574H11V16.574C11 17.1263 10.5523 17.574 10 17.574C9.44772 17.574 9 17.1263 9 16.574V11.574H4C3.44772 11.574 3 11.1263 3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L9 9.57397V4.57397C9 4.02169 9.44772 3.57397 10 3.57397Z" fill="var(--pf-ink)" /></svg>
               </button>
             </div>
+            {/* Add to cart */}
             <button
               disabled={outOfStock || adding}
               onClick={handleAdd}
+              className="pf-btn pf-btn--primary"
               style={{
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                width: 180, height: 44, borderRadius: 999, padding: "12px 24px",
-                background: addError ? "#ef4444" : added ? "var(--pf-blue)" : "#fff",
-                border: addError ? "none" : added ? "none" : "1px solid rgba(0,0,0,0.24)",
+                flex: 1, minWidth: 180, height: 48, borderRadius: 12,
                 cursor: adding ? "wait" : "pointer",
-                transition: "all 300ms ease",
+                transition: "all 200ms ease",
+                ...(addError ? { background: "#ef4444" } : added ? { background: "#16a34a" } : {}),
               }}
             >
               {adding ? (
                 <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="10" stroke="var(--pf-ink)" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="50 20" />
+                  <circle cx="12" cy="12" r="10" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="50 20" />
                 </svg>
               ) : addError ? (
                 <span style={{ fontWeight: 700, fontSize: 14, color: "#fff" }}>Failed, try again</span>
               ) : added ? (
-                <svg className="animate-check-pop" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M5 13l4 4L19 7" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="#fff" />
                 </svg>
               ) : (
                 <>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25z" /></svg>
-                  <span style={{ fontWeight: 700, fontSize: 14, letterSpacing: "-0.01em", color: "var(--pf-ink)" }}>Add to cart</span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25z" /></svg>
+                  <span style={{ fontWeight: 700, fontSize: 15, color: "#fff" }}>Add to cart</span>
                 </>
               )}
             </button>

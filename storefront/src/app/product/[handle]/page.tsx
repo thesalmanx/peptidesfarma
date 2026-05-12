@@ -78,7 +78,7 @@ export default async function ProductPage({ params }: PageProps) {
       images: variantImages,
       metadata_image: typeof variantMetadataImage === "string" ? variantMetadataImage : null,
       calculated_price: v.calculated_price
-        ? { calculated_amount: v.calculated_price.calculated_amount as number, currency_code: v.calculated_price.currency_code as string }
+        ? { calculated_amount: v.calculated_price.calculated_amount as number, original_amount: (v.calculated_price as any).original_amount as number | undefined, currency_code: v.calculated_price.currency_code as string }
         : undefined,
       inventory_quantity: (v as unknown as Record<string, unknown>).manage_inventory
         ? ((v as unknown as Record<string, unknown>).inventory_quantity as number) ?? 0
@@ -124,7 +124,7 @@ export default async function ProductPage({ params }: PageProps) {
         manage_inventory: (v as any).manage_inventory,
         allow_backorder: (v as any).allow_backorder,
         calculated_price: v.calculated_price
-          ? { calculated_amount: v.calculated_price.calculated_amount as number, currency_code: v.calculated_price.currency_code as string }
+          ? { calculated_amount: v.calculated_price.calculated_amount as number, original_amount: (v.calculated_price as any).original_amount as number | undefined, currency_code: v.calculated_price.currency_code as string }
           : undefined,
       })),
     }))
