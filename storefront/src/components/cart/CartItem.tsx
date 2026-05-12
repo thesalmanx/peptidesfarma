@@ -35,426 +35,136 @@ export default function CartItem({ item, variant = "drawer" }: CartItemProps) {
       <div
         className="flex"
         style={{
-          boxSizing: "border-box",
-          padding: "20px",
-          gap: "20px",
-          background:
-            "linear-gradient(95.01deg, rgba(17, 92, 111, 0.08) 16.35%, rgba(54, 132, 142, 0.08) 68.78%), #FFFFFF",
-          border: "2px solid rgba(144, 183, 188, 0.08)",
-          borderRadius: "20px",
+          padding: 20, gap: 20,
+          background: "var(--pf-paper)",
+          border: "1px solid var(--pf-line)",
+          borderRadius: 20,
         }}
       >
-        <style>{`
-          @keyframes qty-pop {
-            0% { transform: scale(1); }
-            40% { transform: scale(1.35); }
-            100% { transform: scale(1); }
-          }
-          .qty-num { display: inline-block; }
-          .qty-btn { transition: transform 0.1s ease; }
-          .qty-btn:active { transform: scale(0.85); }
-        `}</style>
-
         <div
           className="shrink-0 relative overflow-hidden hidden sm:block"
-          style={{
-            width: "141px",
-            height: "141px",
-            background: "#F2F7FD",
-            borderRadius: "8px",
-          }}
+          style={{ width: 120, height: 120, background: "#fff", borderRadius: 14 }}
         >
           {thumbnail ? (
-            <Image src={thumbnail} alt={title} fill className="object-cover" sizes="141px" />
+            <Image src={thumbnail} alt={title} fill className="object-cover" sizes="120px" style={{ objectPosition: "80% center" }} />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs">
-              No img
-            </div>
+            <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs">No img</div>
           )}
         </div>
 
-        <div
-          className="shrink-0 relative overflow-hidden sm:hidden"
-          style={{
-            width: "80px",
-            height: "80px",
-            background: "#F2F7FD",
-            borderRadius: "8px",
-          }}
-        >
+        <div className="shrink-0 relative overflow-hidden sm:hidden" style={{ width: 80, height: 80, background: "#fff", borderRadius: 12 }}>
           {thumbnail ? (
-            <Image src={thumbnail} alt={title} fill className="object-cover" sizes="80px" />
+            <Image src={thumbnail} alt={title} fill className="object-cover" sizes="80px" style={{ objectPosition: "80% center" }} />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs">
-              No img
-            </div>
+            <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs">No img</div>
           )}
         </div>
 
-        <div
-          className="flex flex-col justify-between flex-1 min-w-0"
-          style={{ minHeight: "100px" }}
-        >
+        <div className="flex flex-col justify-between flex-1 min-w-0" style={{ minHeight: 100 }}>
           <div>
-            <h3
-              className="truncate"
-              style={{
-                fontWeight: 600,
-                fontSize: "20px",
-                lineHeight: "30px",
-                letterSpacing: "-0.02em",
-                color: "#242424",
-              }}
-            >
+            <h3 className="truncate" style={{ fontWeight: 600, fontSize: 18, lineHeight: "28px", letterSpacing: "-0.02em", color: "var(--pf-ink)" }}>
               {title}
             </h3>
             <div className="flex items-center gap-1.5 mt-1 flex-wrap">
               {variantLabel && (
-                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium"
-                  style={{ background: "rgba(17,92,111,0.08)", color: "#4F8AF7" }}>
+                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium" style={{ background: "rgba(0,28,134,0.08)", color: "var(--pf-blue)" }}>
                   {variantLabel}
                 </span>
               )}
               {isSubscription && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide uppercase"
-                  style={{ background: "linear-gradient(90deg, #4F8AF7 0%, #4F8AF7 100%)", color: "#fff" }}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3" />
-                  </svg>
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide uppercase" style={{ background: "var(--pf-blue)", color: "#fff" }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" /></svg>
                   Monthly
                 </span>
               )}
             </div>
           </div>
 
-          <div className="flex flex-col" style={{ gap: "8px" }}>
-            <span
-              style={{
-                fontWeight: 400,
-                fontSize: "16px",
-                lineHeight: "24px",
-                color: "rgba(56, 54, 55, 0.72)",
-              }}
-            >
-              Quantity
-            </span>
-
-            <div className="flex items-center" style={{ gap: "0px" }}>
-              <button
-                onClick={() => handleQuantity(item.quantity - 1)}
-                aria-label="Decrease quantity"
-                className="qty-btn flex items-center justify-center shrink-0 cursor-pointer hover:opacity-70"
-                style={{
-                  boxSizing: "border-box",
-                  width: "28px",
-                  height: "28px",
-                  padding: "6px",
-                  background: "#FFFFFF",
-                  border: "1px solid #242424",
-                  borderRadius: "8px",
-                }}
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <line
-                    x1="3.33"
-                    y1="8"
-                    x2="12.67"
-                    y2="8"
-                    stroke="#242424"
-                    strokeWidth="1.67"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </button>
-
-              <span
-                key={item.quantity}
-                className="qty-num"
-                style={{
-                  width: "33px",
-                  fontWeight: 600,
-                  fontSize: "18px",
-                  lineHeight: "28px",
-                  textAlign: "center",
-                  color: "#242424",
-                  animation: "qty-pop 0.25s ease-out",
-                }}
-              >
-                {item.quantity}
-              </span>
-
-              <button
-                onClick={() => handleQuantity(item.quantity + 1)}
-                aria-label="Increase quantity"
-                className="qty-btn flex items-center justify-center shrink-0 cursor-pointer hover:opacity-70"
-                style={{
-                  boxSizing: "border-box",
-                  width: "28px",
-                  height: "28px",
-                  padding: "6px",
-                  background: "#FFFFFF",
-                  border: "1px solid #242424",
-                  borderRadius: "8px",
-                }}
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <line
-                    x1="3.33"
-                    y1="8"
-                    x2="12.67"
-                    y2="8"
-                    stroke="#242424"
-                    strokeWidth="1.67"
-                    strokeLinecap="round"
-                  />
-                  <line
-                    x1="8"
-                    y1="3.33"
-                    x2="8"
-                    y2="12.67"
-                    stroke="#242424"
-                    strokeWidth="1.67"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </button>
-            </div>
+          <div className="flex items-center gap-0 mt-3">
+            <button onClick={() => handleQuantity(item.quantity - 1)} aria-label="Decrease" className="flex items-center justify-center shrink-0 cursor-pointer hover:opacity-70 active:scale-90 transition-transform" style={{ width: 32, height: 32, background: "#fff", border: "1px solid var(--pf-line)", borderRadius: 10 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M19 13H5v-2h14v2z" /></svg>
+            </button>
+            <span style={{ width: 36, fontWeight: 600, fontSize: 16, textAlign: "center", color: "var(--pf-ink)" }}>{item.quantity}</span>
+            <button onClick={() => handleQuantity(item.quantity + 1)} aria-label="Increase" className="flex items-center justify-center shrink-0 cursor-pointer hover:opacity-70 active:scale-90 transition-transform" style={{ width: 32, height: 32, background: "#fff", border: "1px solid var(--pf-line)", borderRadius: 10 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" /></svg>
+            </button>
           </div>
         </div>
 
-        <div
-          className="flex flex-col items-end justify-between shrink-0"
-          style={{ minHeight: "100px" }}
-        >
-          <span
-            style={{
-              fontWeight: 600,
-              fontSize: "20px",
-              lineHeight: "30px",
-              letterSpacing: "-0.02em",
-              color: "#4F8AF7",
-            }}
-          >
+        <div className="flex flex-col items-end justify-between shrink-0" style={{ minHeight: 100 }}>
+          <span style={{ fontWeight: 700, fontSize: 18, lineHeight: "28px", letterSpacing: "-0.02em", color: "var(--pf-ink)" }}>
             {formatPrice(total, currencyCode)}
           </span>
-
-          <button
-            onClick={handleRemove}
-            className="cursor-pointer hover:opacity-70 transition-opacity"
-            aria-label="Remove item"
-          >
-            <Image src="/icons/trash-03.svg" alt="" width={24} height={24} />
+          <button onClick={handleRemove} className="cursor-pointer hover:opacity-70 transition-opacity" aria-label="Remove item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--pf-text-3)"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" /></svg>
           </button>
         </div>
       </div>
     )
   }
 
+  // Drawer variant
   return (
     <div
       className="relative flex items-start"
       style={{
-        boxSizing: "border-box",
-        padding: "12px",
-        gap: "12px",
-        minHeight: "108px",
-        background:
-          "linear-gradient(95.01deg, rgba(17, 92, 111, 0.08) 16.35%, rgba(54, 132, 142, 0.08) 68.78%), #FFFFFF",
-        border: "2px solid rgba(144, 183, 188, 0.08)",
-        borderRadius: "16px",
+        padding: 12, gap: 12, minHeight: 96,
+        background: "#fff",
+        border: "1px solid var(--pf-line)",
+        borderRadius: 16,
       }}
     >
-      <style>{`
-        @keyframes qty-pop {
-          0% { transform: scale(1); }
-          40% { transform: scale(1.35); }
-          100% { transform: scale(1); }
-        }
-        .qty-num { display: inline-block; }
-        .qty-btn { transition: transform 0.1s ease; }
-        .qty-btn:active { transform: scale(0.85); }
-      `}</style>
-
-      <div
-        className="shrink-0 relative overflow-hidden"
-        style={{
-          width: "80px",
-          height: "80px",
-          background: "#F2F7FD",
-          borderRadius: "12px",
-        }}
-      >
+      {/* Thumbnail */}
+      <div className="shrink-0 relative overflow-hidden" style={{ width: 76, height: 76, background: "var(--pf-paper)", borderRadius: 12 }}>
         {thumbnail ? (
-          <Image src={thumbnail} alt={title} fill className="object-cover" sizes="80px" />
+          <Image src={thumbnail} alt={title} fill className="object-cover" sizes="76px" style={{ objectPosition: "80% center" }} />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs">
-            No img
-          </div>
+          <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs">No img</div>
         )}
       </div>
 
-      <div
-        className="flex flex-col justify-between items-start min-w-0"
-        style={{ flex: "1 1 0%", minHeight: "80px" }}
-      >
-        <div className="flex items-start justify-between w-full" style={{ gap: "8px" }}>
+      {/* Content */}
+      <div className="flex flex-col justify-between items-start min-w-0" style={{ flex: "1 1 0%", minHeight: 76 }}>
+        <div className="flex items-start justify-between w-full" style={{ gap: 8 }}>
           <div className="min-w-0 flex-1">
-            <h4
-              className="truncate"
-              style={{
-                fontWeight: 500,
-                fontSize: "18px",
-                lineHeight: "30px",
-                letterSpacing: "-0.02em",
-                color: "#141414",
-              }}
-            >
+            <h4 className="truncate" style={{ fontWeight: 600, fontSize: 15, lineHeight: "22px", letterSpacing: "-0.01em", color: "var(--pf-ink)", margin: 0 }}>
               {title}
             </h4>
-            <div className="flex items-center gap-1.5 flex-wrap">
+            <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
               {variantLabel && (
-                <span className="inline-flex items-center px-1.5 py-px rounded text-[10px] font-medium"
-                  style={{ background: "rgba(17,92,111,0.08)", color: "#4F8AF7" }}>
+                <span className="inline-flex items-center px-1.5 py-px rounded-md text-[10px] font-medium" style={{ background: "rgba(0,28,134,0.08)", color: "var(--pf-blue)" }}>
                   {variantLabel}
                 </span>
               )}
               {isSubscription && (
-                <span className="inline-flex items-center gap-1 px-2 py-px rounded-full text-[10px] font-semibold tracking-wide uppercase"
-                  style={{ background: "linear-gradient(90deg, #4F8AF7 0%, #4F8AF7 100%)", color: "#fff" }}>
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3" />
-                  </svg>
+                <span className="inline-flex items-center gap-1 px-2 py-px rounded-full text-[10px] font-semibold tracking-wide uppercase" style={{ background: "var(--pf-blue)", color: "#fff" }}>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" /></svg>
                   Monthly
                 </span>
               )}
             </div>
           </div>
-          <button
-            onClick={handleRemove}
-            className="shrink-0 hover:opacity-70 transition-opacity"
-            style={{ width: "20px", height: "20px" }}
-            aria-label="Remove item"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path
-                d="M14 6L6 14M6 6L14 14"
-                stroke="#141B34"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+          <button onClick={handleRemove} className="shrink-0 hover:opacity-70 transition-opacity" style={{ width: 20, height: 20 }} aria-label="Remove item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--pf-text-3)"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" /></svg>
           </button>
         </div>
 
-        <div className="flex items-end justify-between w-full">
+        <div className="flex items-end justify-between w-full mt-1">
+          {/* Qty */}
           <div className="flex items-center">
-            <button
-              onClick={() => handleQuantity(item.quantity - 1)}
-              aria-label="Decrease quantity"
-              className="qty-btn flex items-center justify-center shrink-0"
-              style={{
-                boxSizing: "border-box",
-                width: "28px",
-                height: "28px",
-                padding: "6px",
-                background: "#FFFFFF",
-                border: "1px solid #242424",
-                borderRadius: "8px",
-              }}
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <line
-                  x1="3.33"
-                  y1="8"
-                  x2="12.67"
-                  y2="8"
-                  stroke="#242424"
-                  strokeWidth="1.67"
-                  strokeLinecap="round"
-                />
-              </svg>
+            <button onClick={() => handleQuantity(item.quantity - 1)} aria-label="Decrease" className="flex items-center justify-center shrink-0 cursor-pointer hover:opacity-70 active:scale-90 transition-transform" style={{ width: 28, height: 28, background: "#fff", border: "1px solid var(--pf-line)", borderRadius: 8 }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M19 13H5v-2h14v2z" /></svg>
             </button>
-
-            <span
-              key={item.quantity}
-              className="qty-num"
-              style={{
-                width: "33px",
-                fontWeight: 600,
-                fontSize: "18px",
-                lineHeight: "28px",
-                textAlign: "center",
-                color: "#242424",
-                animation: "qty-pop 0.25s ease-out",
-              }}
-            >
-              {item.quantity}
-            </span>
-
-            <button
-              onClick={() => handleQuantity(item.quantity + 1)}
-              aria-label="Increase quantity"
-              className="qty-btn flex items-center justify-center shrink-0"
-              style={{
-                boxSizing: "border-box",
-                width: "28px",
-                height: "28px",
-                padding: "6px",
-                background: "#FFFFFF",
-                border: "1px solid #242424",
-                borderRadius: "8px",
-              }}
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <line
-                  x1="3.33"
-                  y1="8"
-                  x2="12.67"
-                  y2="8"
-                  stroke="#242424"
-                  strokeWidth="1.67"
-                  strokeLinecap="round"
-                />
-                <line
-                  x1="8"
-                  y1="3.33"
-                  x2="8"
-                  y2="12.67"
-                  stroke="#242424"
-                  strokeWidth="1.67"
-                  strokeLinecap="round"
-                />
-              </svg>
+            <span style={{ width: 30, fontWeight: 600, fontSize: 15, textAlign: "center", color: "var(--pf-ink)" }}>{item.quantity}</span>
+            <button onClick={() => handleQuantity(item.quantity + 1)} aria-label="Increase" className="flex items-center justify-center shrink-0 cursor-pointer hover:opacity-70 active:scale-90 transition-transform" style={{ width: 28, height: 28, background: "#fff", border: "1px solid var(--pf-line)", borderRadius: 8 }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" /></svg>
             </button>
           </div>
 
-          <div
-            className="flex flex-col justify-center items-start"
-            style={{ gap: "2px" }}
-          >
-            <span
-              style={{
-                fontWeight: 400,
-                fontSize: "12px",
-                lineHeight: "18px",
-                color: "#333333",
-              }}
-            >
-              Price
-            </span>
-            <span
-              style={{
-                fontWeight: 600,
-                fontSize: "20px",
-                lineHeight: "24px",
-                letterSpacing: "-0.02em",
-                color: "#141414",
-              }}
-            >
-              {formatPrice(total, currencyCode)}
-            </span>
-          </div>
+          {/* Price */}
+          <span style={{ fontWeight: 700, fontSize: 16, letterSpacing: "-0.02em", color: "var(--pf-ink)" }}>
+            {formatPrice(total, currencyCode)}
+          </span>
         </div>
       </div>
     </div>
