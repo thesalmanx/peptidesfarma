@@ -70,6 +70,16 @@ export default function ProductDetailClient({ product, images, options, variants
   }
   const [tab, setTab] = useState("description")
   const [adding, setAdding] = useState(false)
+  const touchStartX = useRef(0)
+
+  const handleTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX }
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const diff = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 50) {
+      if (diff > 0 && activeImgIdx < images.length - 1) goToImage(activeImgIdx + 1)
+      else if (diff < 0 && activeImgIdx > 0) goToImage(activeImgIdx - 1)
+    }
+  }
   const [added, setAdded] = useState(false)
   const [addError, setAddError] = useState(false)
   const [wishlisted, setWishlisted] = useState(false)
@@ -205,21 +215,49 @@ export default function ProductDetailClient({ product, images, options, variants
                   <span style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.8)", textTransform: "uppercase", letterSpacing: "0.04em" }}>off</span>
                 </div>
               )}
-              {/* Main image with arrows */}
-              <div style={{ width: "100%", aspectRatio: "1/1", borderRadius: 14, overflow: "hidden", background: "linear-gradient(180deg, #f7f8fa 0%, #eef1f8 100%)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+              {/* Main image with arrows + swipe */}
+              <div
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                style={{ width: "100%", aspectRatio: "1/1", borderRadius: 14, overflow: "hidden", background: "linear-gradient(180deg, #f7f8fa 0%, #eef1f8 100%)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}
+              >
                 {mainImage ? (
                   <Image key={mainImage} src={mainImage} alt={product.title} fill className="object-contain" style={{ padding: 20, transition: "opacity 300ms ease" }} sizes="(max-width: 768px) 100vw, 618px" priority />
                 ) : (
                   <span style={{ fontSize: 14, color: "var(--pf-text-3)" }}>No image</span>
                 )}
-                {/* Prev/Next arrows */}
-                {/* Dot indicators on mobile */}
+                {/* Mobile arrows on hero image + dot indicators */}
                 {images.length > 1 && (
-                  <div className="flex md:hidden" style={{ position: "absolute", bottom: 12, left: "50%", transform: "translateX(-50%)", gap: 6, zIndex: 4 }}>
-                    {images.map((_, i) => (
-                      <button key={i} onClick={() => goToImage(i)} style={{ width: activeImgIdx === i ? 10 : 8, height: activeImgIdx === i ? 10 : 8, borderRadius: 99, background: activeImgIdx === i ? "#fff" : "rgba(255,255,255,0.5)", border: "none", cursor: "pointer", padding: 0, transition: "all 200ms ease" }} />
-                    ))}
-                  </div>
+                  <>
+                    {/* Left arrow */}
+                    {activeImgIdx > 0 && (
+                      <button
+                        onClick={() => goToImage(activeImgIdx - 1)}
+                        className="md:hidden"
+                        aria-label="Previous"
+                        style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", width: 36, height: 36, borderRadius: 99, background: "rgba(255,255,255,0.9)", boxShadow: "0 2px 8px rgba(0,0,0,0.12)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 4 }}
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" /></svg>
+                      </button>
+                    )}
+                    {/* Right arrow */}
+                    {activeImgIdx < images.length - 1 && (
+                      <button
+                        onClick={() => goToImage(activeImgIdx + 1)}
+                        className="md:hidden"
+                        aria-label="Next"
+                        style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", width: 36, height: 36, borderRadius: 99, background: "rgba(255,255,255,0.9)", boxShadow: "0 2px 8px rgba(0,0,0,0.12)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 4 }}
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" /></svg>
+                      </button>
+                    )}
+                    {/* Dot indicators */}
+                    <div className="flex md:hidden" style={{ position: "absolute", bottom: 10, left: "50%", transform: "translateX(-50%)", gap: 5, zIndex: 4 }}>
+                      {images.map((_, i) => (
+                        <button key={i} onClick={() => goToImage(i)} style={{ width: activeImgIdx === i ? 10 : 7, height: activeImgIdx === i ? 10 : 7, borderRadius: 99, background: activeImgIdx === i ? "var(--pf-ink)" : "rgba(0,0,0,0.2)", border: "none", cursor: "pointer", padding: 0, transition: "all 200ms ease" }} />
+                      ))}
+                    </div>
+                  </>
                 )}
               </div>
               {/* Thumbnail gallery with arrows */}
