@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useCart } from "@/lib/cart-context"
 import { formatPrice } from "@/lib/format-price"
+import { toggleWishlistItem, isInWishlist } from "@/lib/wishlist"
 import ProductCard from "./ProductCard"
 import FaqBlock from "@/components/storyblok/FaqBlock"
 
@@ -60,6 +61,24 @@ export default function ProductDetailClient({ product, images, options, variants
   const [adding, setAdding] = useState(false)
   const [added, setAdded] = useState(false)
   const [addError, setAddError] = useState(false)
+  const [wishlisted, setWishlisted] = useState(false)
+  const [showStickyBar, setShowStickyBar] = useState(false)
+  const ctaRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setWishlisted(isInWishlist(product.handle))
+  }, [product.handle])
+
+  // Sticky mobile CTA — shows when main CTA scrolls out of view
+  useEffect(() => {
+    const el = ctaRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(([entry]) => {
+      setShowStickyBar(!entry.isIntersecting)
+    }, { threshold: 0 })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
 
   const selectedVariant = useMemo(
     () => variants.find((v) => Object.entries(selectedOptions).every(([k, val]) => v.options[k] === val)),
@@ -158,10 +177,10 @@ export default function ProductDetailClient({ product, images, options, variants
                   {discountPct}% OFF
                 </span>
               )}
-              {/* Main image */}
+              {/* Main image — object-contain so vial isn't cropped */}
               <div style={{ width: "100%", aspectRatio: "1/1", borderRadius: 10, overflow: "hidden", background: "var(--pf-paper)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
                 {mainImage ? (
-                  <Image key={mainImage} src={mainImage} alt={product.title} fill className="object-cover animate-variant-swap" style={{ objectPosition: "80% center" }} sizes="(max-width: 768px) 100vw, 618px" priority />
+                  <Image key={mainImage} src={mainImage} alt={product.title} fill className="object-contain animate-variant-swap" style={{ padding: 16 }} sizes="(max-width: 768px) 100vw, 618px" priority />
                 ) : (
                   <span style={{ fontSize: 14, color: "var(--pf-text-3)" }}>No image</span>
                 )}
@@ -171,7 +190,7 @@ export default function ProductDetailClient({ product, images, options, variants
                 <div style={{ display: "flex", gap: 10, marginTop: 16, overflowX: "auto" }} className="pf-hide-scrollbar">
                   {images.map((img, i) => (
                     <button key={img.id} onClick={() => {}} style={{ flexShrink: 0, width: 72, height: 72, borderRadius: 8, overflow: "hidden", border: mainImage === img.url ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", cursor: "pointer", position: "relative", background: "var(--pf-paper)", padding: 0 }}>
-                      <Image src={img.url} alt="" fill className="object-cover" sizes="72px" style={{ objectPosition: "80% center" }} />
+                      <Image src={img.url} alt="" fill className="object-contain" sizes="72px" style={{ padding: 4 }} />
                     </button>
                   ))}
                 </div>
@@ -188,17 +207,10 @@ export default function ProductDetailClient({ product, images, options, variants
 
             {/* Description */}
             {product.description && (
-              <p style={{ fontSize: 16, lineHeight: "26px", color: "var(--pf-text-2)", margin: "0 0 20px" }}>
+              <p className="hidden md:block" style={{ fontSize: 16, lineHeight: "26px", color: "var(--pf-text-2)", margin: "0 0 20px" }}>
                 {product.description.split(".").slice(0, 2).join(".")}.
               </p>
             )}
-
-            {/* Chips */}
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 20 }}>
-              <span className="pf-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>99%+ purity</span>
-              <span className="pf-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" /></svg>HPLC verified</span>
-              <span className="pf-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" /></svg>Same-day shipping</span>
-            </div>
 
             {/* Spec table */}
             <dl className="pf-spec" style={{ marginBottom: 24, fontSize: 15 }}>
@@ -258,52 +270,85 @@ export default function ProductDetailClient({ product, images, options, variants
                 </div>
               </div>
 
-              {/* Qty + Add to cart */}
+              {/* Qty + Add to cart + Wishlist — NH style row */}
               <p style={{ fontSize: 13, color: "var(--pf-text-3)", marginBottom: 8 }}>Quantity</p>
-              <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+              <div ref={ctaRef} style={{ display: "flex", gap: 10, alignItems: "center" }}>
                 <div style={{ display: "inline-flex", alignItems: "center", border: "2px solid var(--pf-ink)", borderRadius: 10, height: 52 }}>
-                  <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: 44, height: 50, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                  <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: 40, height: 50, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                     <svg width="16" height="16" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L16 9.57398C16.5523 9.57398 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574L4 11.574C3.44772 11.574 3 11.1263 3 10.574Z" fill="var(--pf-ink)" /></svg>
                   </button>
-                  <span style={{ minWidth: 28, textAlign: "center", fontSize: 16, fontWeight: 700, color: "var(--pf-ink)" }}>{qty}</span>
-                  <button onClick={() => setQty(Math.min(99, qty + 1))} style={{ width: 44, height: 50, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                  <span style={{ minWidth: 24, textAlign: "center", fontSize: 15, fontWeight: 700, color: "var(--pf-ink)" }}>{qty}</span>
+                  <button onClick={() => setQty(Math.min(99, qty + 1))} style={{ width: 40, height: 50, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                     <svg width="16" height="16" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M10 3.57397C10.5523 3.57397 11 4.02169 11 4.57397V9.57397H16C16.5523 9.57397 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574H11V16.574C11 17.1263 10.5523 17.574 10 17.574C9.44772 17.574 9 17.1263 9 16.574V11.574H4C3.44772 11.574 3 11.1263 3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L9 9.57397V4.57397C9 4.02169 9.44772 3.57397 10 3.57397Z" fill="var(--pf-ink)" /></svg>
                   </button>
                 </div>
                 <button disabled={outOfStock || adding} onClick={handleAdd} className="pf-btn pf-btn--primary" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flex: 1, height: 52, borderRadius: 10, cursor: adding ? "wait" : "pointer", transition: "all 200ms ease", ...(addError ? { background: "#ef4444" } : added ? { background: "#16a34a" } : {}) }}>
                   {adding ? (
                     <svg className="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="50 20" /></svg>
-                  ) : addError ? (
-                    <span style={{ fontWeight: 700, fontSize: 14, color: "#fff" }}>Failed</span>
                   ) : added ? (
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="#fff" /></svg>
                   ) : (
-                    <>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25z" /></svg>
-                      <span style={{ fontWeight: 700, fontSize: 15, color: "#fff" }}>Add to cart &middot; {formattedPrice}</span>
-                    </>
+                    <span style={{ fontWeight: 600, fontSize: 14, color: "#fff" }}>Add to cart &middot; {formattedPrice}</span>
                   )}
+                </button>
+                {/* Wishlist heart — NH style */}
+                <button
+                  onClick={() => { toggleWishlistItem(product.handle); setWishlisted(!wishlisted) }}
+                  aria-label="Add to wishlist"
+                  style={{ width: 52, height: 52, flexShrink: 0, borderRadius: 10, border: "1px solid var(--pf-line)", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all 180ms ease" }}
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill={wishlisted ? "var(--pf-blue)" : "none"}>
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke={wishlisted ? "var(--pf-blue)" : "var(--pf-text-3)"} strokeWidth={wishlisted ? 0 : 1.5} />
+                  </svg>
                 </button>
               </div>
             </div>
 
             {/* USPs */}
-            <div style={{ borderTop: "1px solid var(--pf-line)", marginTop: 24, paddingTop: 20, display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ borderTop: "1px solid var(--pf-line)", marginTop: 24, paddingTop: 20, display: "flex", flexDirection: "column", gap: 10 }}>
               {[
-                { icon: "truck", text: "Same-day shipping · Orders before 2pm CT" },
-                { icon: "shield", text: "Lot COA included · HPLC third-party tested" },
-                { icon: "bolt", text: "99%+ purity · Pharmaceutical grade" },
-                { icon: "lab", text: "For laboratory research use only" },
-              ].map((usp, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
-                  <span style={{ fontSize: 13, color: "var(--pf-text-2)" }}>{usp.text}</span>
+                "Same-day shipping · Orders before 2pm CT",
+                "Lot COA included · HPLC third-party tested",
+                "99%+ purity · Pharmaceutical grade",
+                "For laboratory research use only",
+              ].map((text, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--pf-blue)" style={{ flexShrink: 0 }}><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
+                  <span style={{ fontSize: 14, color: "var(--pf-ink)", lineHeight: "20px" }}>{text}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </section>
+
+      {/* Sticky mobile Add to Cart bar */}
+      <div
+        className="md:hidden fixed bottom-0 left-0 z-50 w-full bg-white"
+        style={{
+          padding: 16,
+          borderTop: "1px solid var(--pf-line)",
+          transform: showStickyBar ? "translateY(0)" : "translateY(100%)",
+          opacity: showStickyBar ? 1 : 0,
+          transition: "transform 250ms ease, opacity 250ms ease",
+          pointerEvents: showStickyBar ? "auto" : "none",
+        }}
+      >
+        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", border: "2px solid var(--pf-ink)", borderRadius: 10, height: 48 }}>
+            <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ width: 36, height: 46, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+              <svg width="14" height="14" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L16 9.57398C16.5523 9.57398 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574L4 11.574C3.44772 11.574 3 11.1263 3 10.574Z" fill="var(--pf-ink)" /></svg>
+            </button>
+            <span style={{ minWidth: 20, textAlign: "center", fontSize: 14, fontWeight: 700, color: "var(--pf-ink)" }}>{qty}</span>
+            <button onClick={() => setQty(Math.min(99, qty + 1))} style={{ width: 36, height: 46, border: "none", background: "transparent", display: "inline-flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+              <svg width="14" height="14" viewBox="0 0 20 21" fill="none"><path fillRule="evenodd" clipRule="evenodd" d="M10 3.57397C10.5523 3.57397 11 4.02169 11 4.57397V9.57397H16C16.5523 9.57397 17 10.0217 17 10.574C17 11.1263 16.5523 11.574 16 11.574H11V16.574C11 17.1263 10.5523 17.574 10 17.574C9.44772 17.574 9 17.1263 9 16.574V11.574H4C3.44772 11.574 3 11.1263 3 10.574C3 10.0217 3.44772 9.57397 4 9.57397L9 9.57397V4.57397C9 4.02169 9.44772 3.57397 10 3.57397Z" fill="var(--pf-ink)" /></svg>
+            </button>
+          </div>
+          <button disabled={outOfStock || adding} onClick={handleAdd} className="pf-btn pf-btn--primary" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flex: 1, height: 48, borderRadius: 10, cursor: adding ? "wait" : "pointer" }}>
+            <span style={{ fontWeight: 600, fontSize: 14, color: "#fff" }}>Add to cart &middot; {formattedPrice}</span>
+          </button>
+        </div>
+      </div>
 
       {/* FAQ Section */}
       <FaqBlock blok={{ component: "faq_section", _uid: "pdp-faq" } as any} />
