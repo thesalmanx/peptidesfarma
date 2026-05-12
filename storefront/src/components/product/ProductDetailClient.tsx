@@ -307,10 +307,10 @@ export default function ProductDetailClient({ product, images, options, variants
                 <Image
                   src={mainImage}
                   alt={product.title}
-                  width={500}
-                  height={700}
+                  width={300}
+                  height={420}
                   className="object-contain animate-variant-swap"
-                  style={{ width: "100%", maxWidth: 380, height: "auto", zIndex: 2, pointerEvents: "none" }}
+                  style={{ width: "auto", maxHeight: 340, zIndex: 2, pointerEvents: "none" }}
                   priority
                 />
               ) : (
