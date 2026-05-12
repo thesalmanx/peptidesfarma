@@ -44,80 +44,114 @@ export default function Header() {
   return (
     <>
       <header className="sticky top-0 z-[200]" style={{ background: "#fff" }}>
-        {/* Announcement Bar */}
-        <div className="overflow-hidden flex items-center" style={{ height: 36, background: "var(--pf-ink)" }}>
+        {/* ROW 1: USP Banner (desktop only) */}
+        <div className="hidden md:flex items-center justify-center" style={{ borderBottom: "1px solid var(--pf-line)" }}>
+          <div className="flex items-center w-full mx-auto" style={{ maxWidth: 1332 }}>
+            {[
+              { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="#16a34a"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>, text: "Free shipping from $200" },
+              { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="#16a34a"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>, text: "99%+ purity · Third-party tested" },
+              { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="#16a34a"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" /></svg>, text: "Same-day shipping before 2pm CT" },
+            ].map((usp, i) => (
+              <div key={i} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "8px 0" }}>
+                {usp.icon}
+                <span style={{ fontSize: 12, color: "var(--pf-ink)", fontWeight: 400 }}>{usp.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile: Announcement bar */}
+        <div className="md:hidden overflow-hidden flex items-center" style={{ height: 34, background: "var(--pf-ink)" }}>
           <div className="animate-marquee whitespace-nowrap flex items-center">
             {Array.from({ length: 8 }).map((_, i) => (
-              <span key={i} style={{ fontSize: 12, fontWeight: 500, lineHeight: "20px", letterSpacing: "0.02em", paddingRight: 96, color: "#fff" }}>
+              <span key={i} style={{ fontSize: 11, fontWeight: 500, paddingRight: 80, color: "#fff" }}>
                 Use coupon code &quot;RESEARCH10&quot; and get 10% off.
               </span>
             ))}
           </div>
         </div>
 
-        {/* Main nav row */}
-        <div style={{ borderBottom: "1px solid var(--pf-line)" }}>
-          <div className="flex items-center h-[56px] md:h-[72px] mx-auto px-4 md:px-8" style={{ maxWidth: 1332 }}>
-            {/* Mobile: Hamburger */}
-            <button
-              onClick={() => setMobileOpen(true)}
-              className="flex md:hidden items-center justify-center mr-2"
-              aria-label="Open menu"
-              style={{ width: 40, height: 40, background: "none", border: "none", cursor: "pointer" }}
-            >
-              <div style={{ display: "flex", flexDirection: "column", gap: 5, width: 20 }}>
-                <span style={{ width: 20, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
-                <span style={{ width: 20, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
-                <span style={{ width: 14, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
-              </div>
-            </button>
+        {/* ROW 2: Logo + Search + Icons */}
+        <div className="flex items-center h-[56px] md:h-[80px] mx-auto px-4 md:px-8" style={{ maxWidth: 1332 }}>
+          {/* Mobile: Hamburger */}
+          <button
+            onClick={() => setMobileOpen(true)}
+            className="flex md:hidden items-center justify-center mr-2"
+            aria-label="Open menu"
+            style={{ width: 40, height: 40, background: "none", border: "none", cursor: "pointer" }}
+          >
+            <div style={{ display: "flex", flexDirection: "column", gap: 5, width: 20 }}>
+              <span style={{ width: 20, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
+              <span style={{ width: 20, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
+              <span style={{ width: 14, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
+            </div>
+          </button>
 
-            {/* Logo */}
-            <Link href="/" className="shrink-0 mr-6 md:mr-8">
-              <img src="/peptidesfarma-logo-dark.svg" alt="PeptidesFarma" className="h-7 md:h-9" />
+          {/* Logo */}
+          <Link href="/" className="shrink-0">
+            <img src="/peptidesfarma-logo-dark.svg" alt="PeptidesFarma" className="h-7 md:h-9" />
+          </Link>
+
+          {/* Desktop: Search bar (center) */}
+          <div className="hidden md:flex flex-1 justify-center mx-8" style={{ maxWidth: 460 }}>
+            <SearchButton variant="bar" />
+          </div>
+
+          {/* Right icons */}
+          <div className="flex items-center ml-auto" style={{ gap: 20 }}>
+            <div className="md:hidden"><SearchButton /></div>
+            <Link href="/account/wishlist" aria-label="Wishlist" className="hidden md:flex hover:opacity-80 transition-opacity">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="var(--pf-ink)" strokeWidth="1.5" /></svg>
             </Link>
+            <HeaderCartButton />
+            <div className="hidden md:block"><HeaderAccountButton /></div>
+          </div>
+        </div>
 
-            {/* Desktop: Search bar trigger (center) */}
-            <div className="hidden md:flex flex-1 justify-center" style={{ maxWidth: 440 }}>
-              <SearchButton variant="bar" />
+        {/* ROW 3: Nav tab bar (desktop only) */}
+        <div className="hidden md:block" style={{ borderTop: "1px solid var(--pf-line)", borderBottom: "1px solid var(--pf-line)", background: "#fff" }}>
+          <div className="flex items-center mx-auto" style={{ maxWidth: 1332 }}>
+            {/* Shop tab */}
+            <div ref={catalogRef} style={{ position: "relative" }}>
+              <button
+                onClick={() => setCatalogOpen(!catalogOpen)}
+                style={{
+                  display: "flex", alignItems: "center", gap: 4,
+                  padding: "12px 24px", background: "none", border: "none",
+                  borderRight: "1px solid var(--pf-line)",
+                  fontSize: 14, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.03em",
+                  color: "var(--pf-ink)", cursor: "pointer", fontFamily: "inherit",
+                  borderBottom: catalogOpen ? "2px solid var(--pf-ink)" : "2px solid transparent",
+                  transition: "border-color 200ms ease",
+                }}
+              >
+                Shop
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-ink)" style={{ opacity: 0.5, transform: catalogOpen ? "rotate(180deg)" : "none", transition: "transform 200ms ease" }}><path d="m7 10 5 5 5-5z" /></svg>
+              </button>
             </div>
-
-            {/* Desktop: Nav links */}
-            <nav className="hidden md:flex items-center ml-auto" style={{ gap: 24 }}>
-              <div ref={catalogRef} style={{ position: "relative" }}>
-                <button
-                  onClick={() => setCatalogOpen(!catalogOpen)}
-                  className="hover:opacity-80 transition-opacity"
-                  style={{ fontSize: 15, fontWeight: 500, color: "var(--pf-ink)", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit", display: "inline-flex", alignItems: "center", gap: 4, padding: 0 }}
-                >
-                  Shop
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-ink)" style={{ opacity: 0.5, transform: catalogOpen ? "rotate(180deg)" : "none", transition: "transform 200ms ease" }}><path d="m7 10 5 5 5-5z" /></svg>
-                </button>
-              </div>
-              {navLinks.map((link, i) => (
-                <Link key={i} href={link.url} className="hover:opacity-80 transition-opacity" style={{ fontSize: 15, fontWeight: 500, color: "var(--pf-ink)", textDecoration: "none" }}>
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-
-            {/* Right icons */}
-            <div className="flex items-center ml-auto md:ml-6" style={{ gap: 16 }}>
-              {/* Mobile search */}
-              <div className="md:hidden"><SearchButton /></div>
-              {/* Wishlist */}
-              <Link href="/account/wishlist" aria-label="Wishlist" className="hidden md:flex hover:opacity-80 transition-opacity">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="var(--pf-ink)" strokeWidth="1.5" /></svg>
+            {navLinks.map((link, i) => (
+              <Link
+                key={i}
+                href={link.url}
+                className="hover:opacity-80 transition-opacity"
+                style={{
+                  display: "flex", alignItems: "center",
+                  padding: "12px 24px",
+                  borderRight: "1px solid var(--pf-line)",
+                  fontSize: 14, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.03em",
+                  color: "var(--pf-ink)", textDecoration: "none",
+                  borderBottom: pathname === link.url ? "2px solid var(--pf-ink)" : "2px solid transparent",
+                }}
+              >
+                {link.label}
               </Link>
-              <HeaderCartButton />
-              <div className="hidden md:block"><HeaderAccountButton /></div>
-            </div>
+            ))}
           </div>
         </div>
 
         {/* Catalog dropdown */}
         {catalogOpen && (
-          <div ref={catalogRef} style={{ position: "absolute", left: 0, right: 0, top: "100%", zIndex: 50 }}>
+          <div style={{ position: "absolute", left: 0, right: 0, top: "100%", zIndex: 50 }}>
             <div style={{ paddingTop: 4 }}>
               <div style={{ background: "#fff", borderRadius: 16, maxWidth: 780, margin: "0 auto", boxShadow: "0 12px 48px rgba(0,0,0,0.12)", overflow: "hidden", border: "1px solid var(--pf-line)" }}>
                 <CatalogPanel onClose={() => setCatalogOpen(false)} />
