@@ -97,14 +97,14 @@ export default function QualitySectionBlock({ blok }: { blok: QualitySectionBlok
         {/* Two-column: image + info */}
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-stretch">
           {/* Image */}
-          <div className="flex-1 rounded-[24px] overflow-hidden relative flex items-center justify-center" style={{ background: "linear-gradient(180deg, rgba(0,28,134,0.04) 0%, rgba(79,138,247,0.10) 100%)", minHeight: 300 }}>
+          <div className="rounded-[24px] overflow-hidden relative flex items-center justify-center" style={{ background: "linear-gradient(180deg, rgba(0,28,134,0.04) 0%, rgba(79,138,247,0.10) 100%)", width: "100%", maxWidth: 420, padding: "40px 20px", alignSelf: "center" }}>
             <Image
               src={productImage || "/vials/nad.png"}
               alt="Research-grade peptide"
-              width={280}
-              height={400}
+              width={180}
+              height={260}
               className="object-contain"
-              style={{ maxHeight: "90%", width: "auto", animation: "pf-float-y 7s ease-in-out infinite" }}
+              style={{ width: "auto", maxHeight: 240, animation: "pf-float-y 7s ease-in-out infinite" }}
             />
           </div>
 
