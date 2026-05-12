@@ -1,63 +1,15 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
-import dynamic from "next/dynamic"
 import HeaderCartButton from "./HeaderCartButton"
 import HeaderAccountButton from "./HeaderAccountButton"
 import SearchButton from "@/components/search/SearchButton"
 import { sdk } from "@/lib/medusa"
 import { formatPrice } from "@/lib/format-price"
 import Image from "next/image"
-import { useEffect } from "react"
 import { useCart } from "@/lib/cart-context"
-import { IoChevronDown } from "react-icons/io5"
-
-const MobileMenu = dynamic(() => import("@/components/layout/MobileMenu"))
-
-/* ─── PF Monogram ─── */
-function PFMonogram({ size = 32, bg = "var(--pf-blue)" }: { size?: number; bg?: string }) {
-  return (
-    <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: size,
-        height: size,
-        borderRadius: 8,
-        background: bg,
-        color: "#fff",
-        fontFamily: "var(--pf-display)",
-        fontWeight: 600,
-        fontSize: size * 0.42,
-        letterSpacing: "-0.02em",
-      }}
-    >
-      pf
-    </span>
-  )
-}
-
-/* ─── Wordmark ─── */
-function Wordmark({ color = "#fff", size = 15 }: { color?: string; size?: number }) {
-  return (
-    <span
-      style={{
-        fontFamily: "var(--pf-display)",
-        fontWeight: 600,
-        fontSize: size,
-        letterSpacing: "-0.02em",
-        color,
-        display: "inline-flex",
-        alignItems: "baseline",
-      }}
-    >
-      peptides<span style={{ color: "var(--pf-blue-soft)" }}>farma</span>
-    </span>
-  )
-}
 
 const navLinks = [
   { label: "Products", url: "/products" },
@@ -67,118 +19,184 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname()
-  const isProductPage = pathname.startsWith("/product/")
   const [catalogOpen, setCatalogOpen] = useState(false)
-  const [catalogHover, setCatalogHover] = useState(false)
-  const hoverTimer = useState<ReturnType<typeof setTimeout> | null>(null)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [mobileShopOpen, setMobileShopOpen] = useState(false)
+  const catalogRef = useRef<HTMLDivElement>(null)
 
-  const openCatalog = () => {
-    if (hoverTimer[0]) clearTimeout(hoverTimer[0])
-    setCatalogHover(true)
-  }
-  const closeCatalog = () => {
-    hoverTimer[0] = setTimeout(() => setCatalogHover(false), 250)
-  }
+  // Close catalog on outside click
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (catalogRef.current && !catalogRef.current.contains(e.target as Node)) setCatalogOpen(false)
+    }
+    if (catalogOpen) { document.addEventListener("mousedown", handleClick); return () => document.removeEventListener("mousedown", handleClick) }
+  }, [catalogOpen])
+
+  // Lock body on mobile menu
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : ""
+    return () => { document.body.style.overflow = "" }
+  }, [mobileOpen])
+
+  // Close mobile on route change
+  useEffect(() => { setMobileOpen(false); setMobileShopOpen(false) }, [pathname])
 
   return (
     <>
-      {/* Announcement + Header as one continuous gradient */}
-      <header
-        className="relative"
-        style={{ background: "#f7f8fa" }}
-      >
+      <header className="sticky top-0 z-[200]" style={{ background: "#fff" }}>
         {/* Announcement Bar */}
-        <div
-          className="overflow-hidden flex items-center"
-          style={{ height: 40, background: "var(--pf-ink)" }}
-        >
+        <div className="overflow-hidden flex items-center" style={{ height: 36, background: "var(--pf-ink)" }}>
           <div className="animate-marquee whitespace-nowrap flex items-center">
             {Array.from({ length: 8 }).map((_, i) => (
-              <span
-                key={i}
-                style={{ fontSize: 13, fontWeight: 500, lineHeight: "24px", letterSpacing: "0.02em", paddingRight: 96, color: "#fff" }}
-              >
+              <span key={i} style={{ fontSize: 12, fontWeight: 500, lineHeight: "20px", letterSpacing: "0.02em", paddingRight: 96, color: "#fff" }}>
                 Use coupon code &quot;RESEARCH10&quot; and get 10% off.
               </span>
             ))}
           </div>
         </div>
 
-        {/* Nav */}
-        <div className="h-16 md:h-[72px]">
-        <div
-          className="h-full flex items-center justify-between mx-auto px-5 md:px-20"
-          style={{ maxWidth: 1440 }}
-        >
-          {/* Logo */}
-          <Link href="/" className="shrink-0">
-            <img src="/peptidesfarma-logo-dark.svg" alt="PeptidesFarma" style={{ height: 32 }} className="md:h-10" />
-          </Link>
-
-          {/* Desktop Nav */}
-          <nav aria-label="Main navigation" className="hidden md:flex flex-1 items-center justify-center" style={{ gap: 32 }}>
-            <div
-              onMouseEnter={openCatalog}
-              onMouseLeave={closeCatalog}
-              style={{ position: "relative" }}
+        {/* Main nav row */}
+        <div style={{ borderBottom: "1px solid var(--pf-line)" }}>
+          <div className="flex items-center h-[56px] md:h-[72px] mx-auto px-4 md:px-8" style={{ maxWidth: 1332 }}>
+            {/* Mobile: Hamburger */}
+            <button
+              onClick={() => setMobileOpen(true)}
+              className="flex md:hidden items-center justify-center mr-2"
+              aria-label="Open menu"
+              style={{ width: 40, height: 40, background: "none", border: "none", cursor: "pointer" }}
             >
-              <Link
-                href="/products"
-                className="hover:opacity-80 transition-opacity"
-                style={{ fontSize: 16, fontWeight: 500, lineHeight: "24px", letterSpacing: "0.02em", color: "var(--pf-ink)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4 }}
-              >
-                Catalog
-                <IoChevronDown size={12} color="var(--pf-ink)" style={{ opacity: 0.5, transform: catalogHover ? "rotate(180deg)" : "none", transition: "transform 180ms" }} />
-              </Link>
-            </div>
-            {navLinks.map((link, i) => (
-              <Link
-                key={i}
-                href={link.url}
-                className="hover:opacity-80 transition-opacity"
-                style={{ fontSize: 16, fontWeight: 500, lineHeight: "24px", letterSpacing: "0.02em", color: "var(--pf-ink)", textDecoration: "none" }}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+              <div style={{ display: "flex", flexDirection: "column", gap: 5, width: 20 }}>
+                <span style={{ width: 20, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
+                <span style={{ width: 20, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
+                <span style={{ width: 14, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
+              </div>
+            </button>
 
-          {/* Desktop Right */}
-          <div className="hidden md:flex items-center" style={{ gap: 20 }}>
-            <SearchButton />
-            <Link href="/account/wishlist" aria-label="Wishlist" className="hover:opacity-80 transition-opacity">
-              <Image src="/icons/favourite.svg" alt="Wishlist" width={24} height={24} className="w-6 h-6" />
+            {/* Logo */}
+            <Link href="/" className="shrink-0 mr-6 md:mr-8">
+              <img src="/peptidesfarma-logo-dark.svg" alt="PeptidesFarma" className="h-7 md:h-9" />
             </Link>
-            <HeaderCartButton />
-            <HeaderAccountButton />
-          </div>
 
-          {/* Mobile Right */}
-          <div className="flex md:hidden items-center" style={{ gap: 16 }}>
-            <SearchButton />
-            <HeaderCartButton />
-            <MobileMenu navLinks={[{ label: "Catalog", url: "/products" }, ...navLinks]} />
+            {/* Desktop: Search bar trigger (center) */}
+            <div className="hidden md:flex flex-1 justify-center" style={{ maxWidth: 440 }}>
+              <SearchButton variant="bar" />
+            </div>
+
+            {/* Desktop: Nav links */}
+            <nav className="hidden md:flex items-center ml-auto" style={{ gap: 24 }}>
+              <div ref={catalogRef} style={{ position: "relative" }}>
+                <button
+                  onClick={() => setCatalogOpen(!catalogOpen)}
+                  className="hover:opacity-80 transition-opacity"
+                  style={{ fontSize: 15, fontWeight: 500, color: "var(--pf-ink)", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit", display: "inline-flex", alignItems: "center", gap: 4, padding: 0 }}
+                >
+                  Shop
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-ink)" style={{ opacity: 0.5, transform: catalogOpen ? "rotate(180deg)" : "none", transition: "transform 200ms ease" }}><path d="m7 10 5 5 5-5z" /></svg>
+                </button>
+              </div>
+              {navLinks.map((link, i) => (
+                <Link key={i} href={link.url} className="hover:opacity-80 transition-opacity" style={{ fontSize: 15, fontWeight: 500, color: "var(--pf-ink)", textDecoration: "none" }}>
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Right icons */}
+            <div className="flex items-center ml-auto md:ml-6" style={{ gap: 16 }}>
+              {/* Mobile search */}
+              <div className="md:hidden"><SearchButton /></div>
+              {/* Wishlist */}
+              <Link href="/account/wishlist" aria-label="Wishlist" className="hidden md:flex hover:opacity-80 transition-opacity">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="var(--pf-ink)" strokeWidth="1.5" /></svg>
+              </Link>
+              <HeaderCartButton />
+              <div className="hidden md:block"><HeaderAccountButton /></div>
+            </div>
           </div>
         </div>
-        </div>
-        {/* Catalog hover dropdown */}
-        {catalogHover && (
-          <div
-            onMouseEnter={openCatalog}
-            onMouseLeave={closeCatalog}
-            style={{
-              position: "absolute", left: 0, right: 0, top: "100%", zIndex: 50,
-              animation: "pf-fade 180ms ease",
-            }}
-          >
-            <div style={{ paddingTop: 8 }}>
-              <div style={{ background: "#fff", borderRadius: 20, maxWidth: 780, margin: "0 auto", boxShadow: "0 12px 48px rgba(0,0,0,0.15)", overflow: "hidden" }}>
-                <CatalogPanel onClose={() => setCatalogHover(false)} />
+
+        {/* Catalog dropdown */}
+        {catalogOpen && (
+          <div ref={catalogRef} style={{ position: "absolute", left: 0, right: 0, top: "100%", zIndex: 50 }}>
+            <div style={{ paddingTop: 4 }}>
+              <div style={{ background: "#fff", borderRadius: 16, maxWidth: 780, margin: "0 auto", boxShadow: "0 12px 48px rgba(0,0,0,0.12)", overflow: "hidden", border: "1px solid var(--pf-line)" }}>
+                <CatalogPanel onClose={() => setCatalogOpen(false)} />
               </div>
             </div>
           </div>
         )}
       </header>
+
+      {/* Mobile drawer overlay */}
+      <div
+        onClick={() => setMobileOpen(false)}
+        style={{
+          position: "fixed", inset: 0, background: "rgba(29,29,27,0.4)", zIndex: 1300,
+          opacity: mobileOpen ? 1 : 0, pointerEvents: mobileOpen ? "auto" : "none",
+          transition: "opacity 240ms ease-out",
+        }}
+      />
+
+      {/* Mobile drawer */}
+      <div
+        style={{
+          position: "fixed", top: 0, bottom: 0, left: mobileOpen ? 0 : "-100%",
+          width: "100%", maxWidth: 320, background: "#fff", zIndex: 1300,
+          display: "flex", flexDirection: "column",
+          transition: "left 240ms ease-out",
+          overflowY: "auto",
+        }}
+      >
+        {/* Drawer header */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 56, padding: "0 16px", borderBottom: "1px solid var(--pf-line)" }}>
+          <img src="/peptidesfarma-logo-dark.svg" alt="PeptidesFarma" style={{ height: 28 }} />
+          <button onClick={() => setMobileOpen(false)} aria-label="Close menu" style={{ width: 40, height: 40, background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" /></svg>
+          </button>
+        </div>
+
+        {/* Drawer links */}
+        <div style={{ flex: 1 }}>
+          {/* Shop with drill-down */}
+          <button
+            onClick={() => setMobileShopOpen(!mobileShopOpen)}
+            style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", height: 52, padding: "0 20px", background: "none", border: "none", borderBottom: "1px solid var(--pf-line)", cursor: "pointer", fontFamily: "inherit" }}
+          >
+            <span style={{ fontSize: 15, fontWeight: 600, color: "var(--pf-ink)", textTransform: "uppercase", letterSpacing: "0.03em" }}>Shop</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--pf-ink)" style={{ transform: mobileShopOpen ? "rotate(180deg)" : "none", transition: "transform 200ms ease" }}><path d="m7 10 5 5 5-5z" /></svg>
+          </button>
+          {mobileShopOpen && (
+            <div style={{ padding: "12px 20px", display: "flex", flexDirection: "column", gap: 8, borderBottom: "1px solid var(--pf-line)", background: "var(--pf-paper)" }}>
+              <Link href="/products" onClick={() => setMobileOpen(false)} style={{ fontSize: 14, color: "var(--pf-ink)", textDecoration: "none", padding: "8px 0", fontWeight: 500 }}>All Products</Link>
+              <Link href="/products" onClick={() => setMobileOpen(false)} style={{ fontSize: 14, color: "var(--pf-text-2)", textDecoration: "none", padding: "8px 0" }}>Best Sellers</Link>
+              <Link href="/products" onClick={() => setMobileOpen(false)} style={{ fontSize: 14, color: "var(--pf-text-2)", textDecoration: "none", padding: "8px 0" }}>New Arrivals</Link>
+            </div>
+          )}
+
+          {navLinks.map((link, i) => (
+            <Link
+              key={i}
+              href={link.url}
+              onClick={() => setMobileOpen(false)}
+              style={{ display: "flex", alignItems: "center", height: 52, padding: "0 20px", borderBottom: "1px solid var(--pf-line)", fontSize: 15, fontWeight: 600, color: "var(--pf-ink)", textDecoration: "none", textTransform: "uppercase", letterSpacing: "0.03em" }}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Drawer footer */}
+        <div style={{ marginTop: "auto", background: "var(--pf-paper)", padding: 16, display: "flex", flexDirection: "column", gap: 12, borderTop: "1px solid var(--pf-line)" }}>
+          <Link href="/account" onClick={() => setMobileOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "var(--pf-ink)", fontSize: 14, fontWeight: 500 }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg>
+            My Account
+          </Link>
+          <Link href="/account/wishlist" onClick={() => setMobileOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "var(--pf-ink)", fontSize: 14, fontWeight: 500 }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="var(--pf-ink)" strokeWidth="1.5" /></svg>
+            Wishlist
+          </Link>
+        </div>
+      </div>
     </>
   )
 }
