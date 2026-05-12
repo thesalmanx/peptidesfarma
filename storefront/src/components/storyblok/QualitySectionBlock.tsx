@@ -71,42 +71,44 @@ export default function QualitySectionBlock({ blok }: { blok: QualitySectionBlok
           </p>
         </div>
 
-        {/* Stats bar - flex row, evenly distributed */}
-        {stats.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6" style={{ marginBottom: 40 }}>
-            {stats.map((stat, i) => (
-              <div key={i} style={{
-                display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
-                padding: "24px 32px",
-                background: i === 0 ? "linear-gradient(180deg, rgba(0,28,134,0) 0%, rgba(0,28,134,0.08) 100%)" : "rgba(0,36,173,0.04)",
-                borderRadius: 20,
-                flex: "1 1 0%", minWidth: 140, maxWidth: 280,
-                ...(i === 0 ? { filter: "drop-shadow(0px 0px 48px rgba(0,36,173,0.12))" } : {}),
-              }}>
-                <span style={{ fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 700, letterSpacing: "-0.02em", color: "#05144D" }}>
-                  {stat.value}
-                </span>
-                <span style={{ fontSize: 13, color: "#4A557E", textAlign: "center" }}>
-                  {stat.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
+        {/* Content container - keeps stats and bottom row same width */}
+        <div style={{ maxWidth: 860, margin: "0 auto", width: "100%" }}>
+          {/* Stats bar */}
+          {stats.length > 0 && (
+            <div className="flex flex-wrap justify-center gap-4 md:gap-5" style={{ marginBottom: 32 }}>
+              {stats.map((stat, i) => (
+                <div key={i} style={{
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
+                  padding: "20px 24px",
+                  background: i === 0 ? "linear-gradient(180deg, rgba(0,28,134,0) 0%, rgba(0,28,134,0.08) 100%)" : "rgba(0,36,173,0.04)",
+                  borderRadius: 20,
+                  flex: "1 1 0%", minWidth: 120,
+                  ...(i === 0 ? { filter: "drop-shadow(0px 0px 48px rgba(0,36,173,0.12))" } : {}),
+                }}>
+                  <span style={{ fontSize: "clamp(22px, 3vw, 32px)", fontWeight: 700, letterSpacing: "-0.02em", color: "#05144D" }}>
+                    {stat.value}
+                  </span>
+                  <span style={{ fontSize: 13, color: "#4A557E", textAlign: "center" }}>
+                    {stat.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
 
-        {/* Two-column: image + info */}
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-stretch">
-          {/* Image */}
-          <div className="rounded-[24px] overflow-hidden relative flex items-center justify-center" style={{ background: "linear-gradient(180deg, rgba(0,28,134,0.04) 0%, rgba(79,138,247,0.10) 100%)", width: "100%", maxWidth: 420, padding: "40px 20px", alignSelf: "center" }}>
-            <Image
-              src={productImage || "/vials/nad.png"}
-              alt="Research-grade peptide"
-              width={180}
-              height={260}
-              className="object-contain"
-              style={{ width: "auto", maxHeight: 240, animation: "pf-float-y 7s ease-in-out infinite" }}
-            />
-          </div>
+          {/* Two-column: image + info */}
+          <div className="flex flex-col md:flex-row gap-5 items-stretch">
+            {/* Image */}
+            <div className="rounded-[20px] overflow-hidden flex items-center justify-center" style={{ background: "linear-gradient(180deg, rgba(0,28,134,0.04) 0%, rgba(79,138,247,0.10) 100%)", flex: "0 0 auto", width: "100%", maxWidth: 280, padding: "32px 20px", alignSelf: "stretch" }}>
+              <Image
+                src={productImage || "/vials/nad.png"}
+                alt="Research-grade peptide"
+                width={160}
+                height={220}
+                className="object-contain"
+                style={{ width: "auto", maxHeight: 200, animation: "pf-float-y 7s ease-in-out infinite" }}
+              />
+            </div>
 
           {/* Info panel */}
           <div className="flex-1 flex flex-col gap-5 justify-center">
@@ -149,6 +151,7 @@ export default function QualitySectionBlock({ blok }: { blok: QualitySectionBlok
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </section>
