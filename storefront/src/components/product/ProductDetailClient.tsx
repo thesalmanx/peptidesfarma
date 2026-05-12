@@ -148,8 +148,8 @@ export default function ProductDetailClient({ product, images, options, variants
 
   return (
     <div style={{ background: "#fff" }}>
-      {/* Breadcrumbs — NH style */}
-      <div style={{ background: "var(--pf-paper)" }}>
+      {/* Breadcrumbs */}
+      <div style={{ background: "linear-gradient(180deg, #f7f8fa 0%, #e8eeff 100%)" }}>
       <div className="max-w-[1332px] mx-auto px-4 md:px-16 w-full py-3">
         <nav aria-label="Breadcrumb" style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "var(--pf-text-3)" }}>
           <Link href="/" className="hover:opacity-70 transition-opacity" style={{ textDecoration: "none", color: "var(--pf-text-3)" }}>Home</Link>
