@@ -110,9 +110,15 @@ export default function ProductDetailClient({ product, images, options, variants
 
   const formattedPrice = formatPrice(totalPrice, currencyCode)
 
-  // Original price for strikethrough: use compare-at from Medusa, or calc from discount_percentage, or base price if bundle discount
+  // Discount badge percentage — from compare-at or metadata
   const hasCompareAt = compareAt != null && compareAt > basePrice
   const hasMetaDiscount = discountPct > 0
+  const effectiveDiscountPct = hasCompareAt
+    ? Math.round((1 - basePrice / compareAt) * 100)
+    : hasMetaDiscount ? discountPct : 0
+  const showDiscountBadge = effectiveDiscountPct > 0
+
+  // Strikethrough: show whenever there's any form of discount
   const showStrikethrough = hasCompareAt || hasMetaDiscount || bundleDiscount > 0
 
   const strikethroughPrice = hasCompareAt
@@ -143,7 +149,8 @@ export default function ProductDetailClient({ product, images, options, variants
   return (
     <div style={{ background: "#fff" }}>
       {/* Breadcrumbs — NH style */}
-      <div className="max-w-[1332px] mx-auto px-4 md:px-16 w-full pt-4 pb-1">
+      <div style={{ background: "var(--pf-paper)" }}>
+      <div className="max-w-[1332px] mx-auto px-4 md:px-16 w-full py-3">
         <nav aria-label="Breadcrumb" style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "var(--pf-text-3)" }}>
           <Link href="/" className="hover:opacity-70 transition-opacity" style={{ textDecoration: "none", color: "var(--pf-text-3)" }}>Home</Link>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-text-3)" style={{ opacity: 0.5 }}><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" /></svg>
@@ -151,6 +158,7 @@ export default function ProductDetailClient({ product, images, options, variants
           <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-text-3)" style={{ opacity: 0.5 }}><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" /></svg>
           <span style={{ color: "var(--pf-ink)", fontWeight: 500 }}>{product.title}</span>
         </nav>
+      </div>
       </div>
 
       {/* NH-style two-column card */}
@@ -172,9 +180,9 @@ export default function ProductDetailClient({ product, images, options, variants
             </div>
             <div className="md:sticky md:top-[28px]">
               {/* Discount badge */}
-              {discountPct > 0 && (
-                <span style={{ position: "absolute", top: 12, right: 12, zIndex: 3, padding: "4px 10px", borderRadius: 99, background: "var(--pf-ink)", color: "#fff", fontSize: 12, fontWeight: 700 }}>
-                  {discountPct}% OFF
+              {showDiscountBadge && (
+                <span style={{ position: "absolute", top: 12, right: 12, zIndex: 3, padding: "6px 12px", borderRadius: 99, background: "var(--pf-ink)", color: "#fff", fontSize: 13, fontWeight: 700, letterSpacing: "0.02em" }}>
+                  {effectiveDiscountPct}% OFF
                 </span>
               )}
               {/* Main image — object-contain so vial isn't cropped */}
@@ -211,6 +219,22 @@ export default function ProductDetailClient({ product, images, options, variants
                 {product.description.split(".").slice(0, 2).join(".")}.
               </p>
             )}
+
+            {/* Chips */}
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 12px", background: "rgba(0,28,134,0.06)", borderRadius: 99, fontSize: 13, fontWeight: 500, color: "var(--pf-ink)" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
+                99%+ purity
+              </span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 12px", background: "rgba(0,28,134,0.06)", borderRadius: 99, fontSize: 13, fontWeight: 500, color: "var(--pf-ink)" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" /></svg>
+                HPLC verified
+              </span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 12px", background: "rgba(0,28,134,0.06)", borderRadius: 99, fontSize: 13, fontWeight: 500, color: "var(--pf-ink)" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" /></svg>
+                Same-day shipping
+              </span>
+            </div>
 
             {/* Spec table */}
             <dl className="pf-spec" style={{ marginBottom: 24, fontSize: 15 }}>
