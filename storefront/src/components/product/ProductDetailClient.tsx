@@ -229,7 +229,7 @@ export default function ProductDetailClient({ product, images, options, variants
               <div
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
-                style={{ width: "100%", aspectRatio: "1/1", borderRadius: 14, overflow: "hidden", background: "linear-gradient(180deg, #f7f8fa 0%, #eef1f8 100%)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}
+                style={{ width: "100%", aspectRatio: "3/4", borderRadius: 14, overflow: "hidden", background: "linear-gradient(180deg, #f7f8fa 0%, #eef1f8 100%)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}
               >
                 {mainImage ? (
                   <Image key={mainImage} src={mainImage} alt={product.title} fill className="object-cover" style={{ objectPosition: "80% center", transition: "opacity 300ms ease" }} sizes="(max-width: 768px) 100vw, 618px" priority />
