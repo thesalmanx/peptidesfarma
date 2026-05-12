@@ -87,7 +87,7 @@ export default function ProductDetailClient({ product, images, options, variants
   )
 
   const variantImage = selectedVariant?.metadata_image || selectedVariant?.images?.[0]?.url || null
-  const mainImage = variantImage || images[activeImgIdx]?.url || images[0]?.url || null
+  const mainImage = images[activeImgIdx]?.url || variantImage || images[0]?.url || null
   const outOfStock = selectedVariant ? isOOS(selectedVariant) : false
 
   const meaningfulVariants = variants.filter((v) => v.title && v.title.toLowerCase() !== "default")
@@ -203,28 +203,24 @@ export default function ProductDetailClient({ product, images, options, variants
                   <span style={{ fontSize: 14, color: "var(--pf-text-3)" }}>No image</span>
                 )}
                 {/* Prev/Next arrows */}
-                {images.length > 1 && !variantImage && (
+                {images.length > 1 && (
                   <>
-                    {activeImgIdx > 0 && (
-                      <button
-                        onClick={() => setActiveImgIdx(activeImgIdx - 1)}
-                        aria-label="Previous image"
-                        className="hover:opacity-100 transition-opacity"
-                        style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", width: 36, height: 36, borderRadius: 99, background: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 4, opacity: 0.8 }}
-                      >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" /></svg>
-                      </button>
-                    )}
-                    {activeImgIdx < images.length - 1 && (
-                      <button
-                        onClick={() => setActiveImgIdx(activeImgIdx + 1)}
-                        aria-label="Next image"
-                        className="hover:opacity-100 transition-opacity"
-                        style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", width: 36, height: 36, borderRadius: 99, background: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 4, opacity: 0.8 }}
-                      >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" /></svg>
-                      </button>
-                    )}
+                    <button
+                      onClick={() => setActiveImgIdx(Math.max(0, activeImgIdx - 1))}
+                      aria-label="Previous image"
+                      className="hover:opacity-100 transition-opacity"
+                      style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", width: 40, height: 40, borderRadius: 99, background: "#fff", boxShadow: "0 2px 10px rgba(0,0,0,0.12)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: activeImgIdx === 0 ? "default" : "pointer", zIndex: 4, opacity: activeImgIdx === 0 ? 0.3 : 0.85 }}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" /></svg>
+                    </button>
+                    <button
+                      onClick={() => setActiveImgIdx(Math.min(images.length - 1, activeImgIdx + 1))}
+                      aria-label="Next image"
+                      className="hover:opacity-100 transition-opacity"
+                      style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", width: 40, height: 40, borderRadius: 99, background: "#fff", boxShadow: "0 2px 10px rgba(0,0,0,0.12)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: activeImgIdx === images.length - 1 ? "default" : "pointer", zIndex: 4, opacity: activeImgIdx === images.length - 1 ? 0.3 : 0.85 }}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" /></svg>
+                    </button>
                   </>
                 )}
               </div>
@@ -232,7 +228,7 @@ export default function ProductDetailClient({ product, images, options, variants
               {images.length > 1 && (
                 <div style={{ display: "flex", gap: 8, marginTop: 14, overflowX: "auto" }} className="pf-hide-scrollbar">
                   {images.map((img, i) => (
-                    <button key={img.id} onClick={() => setActiveImgIdx(i)} className="hover:opacity-80 transition-opacity" style={{ flexShrink: 0, width: 68, height: 68, borderRadius: 10, overflow: "hidden", border: activeImgIdx === i && !variantImage ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", cursor: "pointer", position: "relative", background: "#f7f8fa", padding: 0, transition: "border-color 200ms ease" }}>
+                    <button key={img.id} onClick={() => setActiveImgIdx(i)} className="hover:opacity-80 transition-opacity" style={{ flexShrink: 0, width: 68, height: 68, borderRadius: 10, overflow: "hidden", border: activeImgIdx === i ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", cursor: "pointer", position: "relative", background: "#f7f8fa", padding: 0, transition: "border-color 200ms ease" }}>
                       <Image src={img.url} alt="" fill className="object-contain" sizes="68px" style={{ padding: 4 }} />
                     </button>
                   ))}
