@@ -3,9 +3,11 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useAuth } from "@/lib/auth-context"
+import { usePathname } from "next/navigation"
 
 export default function HeaderAccountButton() {
   const { isAuthenticated, isLoading, customer } = useAuth()
+  const pathname = usePathname()
 
   if (isLoading) {
     return <div className="w-6 h-6 rounded-full animate-pulse" style={{ background: "var(--pf-line)" }} />
@@ -13,7 +15,7 @@ export default function HeaderAccountButton() {
 
   if (!isAuthenticated) {
     return (
-      <Link href="/auth/login" aria-label="Sign In" className="hover:opacity-80 transition-opacity" style={{ color: "var(--pf-ink)" }}>
+      <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`} aria-label="Sign In" className="hover:opacity-80 transition-opacity" style={{ color: "var(--pf-ink)" }}>
         <Image src="/icons/user-circle.svg" alt="Account" width={24} height={24} className="w-6 h-6" />
       </Link>
     )

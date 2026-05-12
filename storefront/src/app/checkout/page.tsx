@@ -1690,13 +1690,16 @@ function CheckoutPageInner() {
                     <label className={LABEL_CLASS}>Phone</label>
                     <input type="tel" name="phone" autoComplete="tel" required value={form.phone} onChange={(e) => {
                       // Auto-format US phone: 123-456-7890
-                      const digits = e.target.value.replace(/\D/g, "").slice(0, 10)
+                      const digits = e.target.value.replace(/\D/g, "").slice(0, 11)
                       let formatted = digits
-                      if (digits.length > 6) formatted = `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`
+                      if (digits.length > 10) {
+                        // With country code: 1-949-922-1991
+                        formatted = `${digits.slice(0, 1)}-${digits.slice(1, 4)}-${digits.slice(4, 7)}-${digits.slice(7)}`
+                      } else if (digits.length > 6) formatted = `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`
                       else if (digits.length > 3) formatted = `${digits.slice(0, 3)}-${digits.slice(3)}`
                       setForm((prev) => ({ ...prev, phone: formatted }))
                       setFieldErrors((p) => ({ ...p, phone: "" }))
-                    }} placeholder="123-456-7890" maxLength={12} className={`${INPUT_CLASS} ${fieldErrors.phone ? "!border-red-400" : ""}`} />
+                    }} placeholder="1-949-922-1991" maxLength={15} className={`${INPUT_CLASS} ${fieldErrors.phone ? "!border-red-400" : ""}`} />
                     {fieldErrors.phone && <p className="text-red-500 text-[12px] mt-0.5">{fieldErrors.phone}</p>}
                   </div>
                 </div>

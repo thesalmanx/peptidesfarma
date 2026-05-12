@@ -48,11 +48,11 @@ export default function Header() {
         <div className="hidden md:flex items-center justify-center" style={{ borderBottom: "1px solid var(--pf-line)" }}>
           <div className="flex items-center w-full mx-auto" style={{ maxWidth: 1332 }}>
             {[
-              { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="#16a34a"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>, text: "Free shipping from $200" },
-              { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="#16a34a"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>, text: "99%+ purity · Third-party tested" },
-              { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="#16a34a"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9 1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" /></svg>, text: "Same-day shipping before 2pm CT" },
+              { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>, text: "Free shipping from $200" },
+              { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>, text: "99%+ purity · Third-party tested" },
+              { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>, text: "Same-day shipping before 2pm CT" },
             ].map((usp, i) => (
-              <div key={i} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "8px 0" }}>
+              <div key={i} style={{ flex: "1 1 33.33%", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "8px 0" }}>
                 {usp.icon}
                 <span style={{ fontSize: 12, color: "var(--pf-ink)", fontWeight: 400 }}>{usp.text}</span>
               </div>
@@ -71,46 +71,50 @@ export default function Header() {
           </div>
         </div>
 
-        {/* ROW 2: Logo + Search + Icons */}
-        <div className="flex items-center h-[56px] md:h-[80px] mx-auto px-4 md:px-8" style={{ maxWidth: 1332 }}>
-          {/* Mobile: Hamburger */}
-          <button
-            onClick={() => setMobileOpen(true)}
-            className="flex md:hidden items-center justify-center mr-2"
-            aria-label="Open menu"
-            style={{ width: 40, height: 40, background: "none", border: "none", cursor: "pointer" }}
-          >
-            <div style={{ display: "flex", flexDirection: "column", gap: 5, width: 20 }}>
-              <span style={{ width: 20, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
-              <span style={{ width: 20, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
-              <span style={{ width: 14, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
-            </div>
-          </button>
+        {/* ROW 2: Logo + Search + Icons — NH layout */}
+        <div className="mx-auto px-4 md:px-8" style={{ maxWidth: 1332 }}>
+          <div className="flex items-center h-[56px] md:h-[80px]">
+            {/* Mobile: Hamburger */}
+            <button
+              onClick={() => setMobileOpen(true)}
+              className="flex md:hidden items-center justify-center mr-2"
+              aria-label="Open menu"
+              style={{ width: 40, height: 40, background: "none", border: "none", cursor: "pointer" }}
+            >
+              <div style={{ display: "flex", flexDirection: "column", gap: 5, width: 20 }}>
+                <span style={{ width: 20, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
+                <span style={{ width: 20, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
+                <span style={{ width: 14, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
+              </div>
+            </button>
 
-          {/* Logo */}
-          <Link href="/" className="shrink-0">
-            <img src="/peptidesfarma-logo-dark.svg" alt="PeptidesFarma" className="h-7 md:h-9" />
-          </Link>
-
-          {/* Desktop: Search bar (center) */}
-          <div className="hidden md:flex flex-1 justify-center mx-8" style={{ maxWidth: 460 }}>
-            <SearchButton variant="bar" />
-          </div>
-
-          {/* Right icons */}
-          <div className="flex items-center ml-auto" style={{ gap: 20 }}>
-            <div className="md:hidden"><SearchButton /></div>
-            <Link href="/account/wishlist" aria-label="Wishlist" className="hidden md:flex hover:opacity-80 transition-opacity">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="var(--pf-ink)" strokeWidth="1.5" /></svg>
+            {/* Logo — fixed width so search can center */}
+            <Link href="/" className="shrink-0" style={{ width: 180 }}>
+              <img src="/peptidesfarma-logo-dark.svg" alt="PeptidesFarma" className="h-7 md:h-9" />
             </Link>
-            <HeaderCartButton />
-            <div className="hidden md:block"><HeaderAccountButton /></div>
+
+            {/* Desktop: Search bar (truly centered) */}
+            <div className="hidden md:flex flex-1 justify-center">
+              <div style={{ width: "100%", maxWidth: 420 }}>
+                <SearchButton variant="bar" />
+              </div>
+            </div>
+
+            {/* Right icons — same fixed width as logo for symmetry */}
+            <div className="flex items-center ml-auto md:ml-0 justify-end" style={{ gap: 20, width: "auto", minWidth: 180 }}>
+              <div className="md:hidden"><SearchButton /></div>
+              <Link href="/account/wishlist" aria-label="Wishlist" className="hidden md:flex hover:opacity-80 transition-opacity">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="var(--pf-ink)" strokeWidth="1.5" /></svg>
+              </Link>
+              <HeaderCartButton />
+              <div className="hidden md:block"><HeaderAccountButton /></div>
+            </div>
           </div>
         </div>
 
         {/* ROW 3: Nav tab bar (desktop only) */}
-        <div className="hidden md:block" style={{ borderTop: "1px solid var(--pf-line)", borderBottom: "1px solid var(--pf-line)", background: "#fff" }}>
-          <div className="flex items-center mx-auto" style={{ maxWidth: 1332 }}>
+        <div className="hidden md:block" style={{ borderBottom: "1px solid var(--pf-line)", background: "#fff" }}>
+          <div className="flex items-center mx-auto px-8" style={{ maxWidth: 1332 }}>
             {/* Shop tab */}
             <div ref={catalogRef} style={{ position: "relative" }}>
               <button
@@ -221,7 +225,7 @@ export default function Header() {
 
         {/* Drawer footer */}
         <div style={{ marginTop: "auto", background: "var(--pf-paper)", padding: 16, display: "flex", flexDirection: "column", gap: 12, borderTop: "1px solid var(--pf-line)" }}>
-          <Link href="/account" onClick={() => setMobileOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "var(--pf-ink)", fontSize: 14, fontWeight: 500 }}>
+          <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`} onClick={() => setMobileOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "var(--pf-ink)", fontSize: 14, fontWeight: 500 }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--pf-ink)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg>
             My Account
           </Link>
