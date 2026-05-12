@@ -75,31 +75,31 @@ export default function ProductsPageClient({ products }: { products: Product[] }
   return (
     <div style={{ background: "#fff" }}>
       {/* Page header */}
-      <section style={{ padding: "48px 0 0", background: "#fff" }}>
+      <section style={{ padding: "32px 0 0", background: "#fff" }}>
         <div className="pf-wrap">
-          <h1 style={{ fontSize: 36, fontWeight: 700, letterSpacing: "-0.03em", color: "var(--pf-ink)", margin: "0 0 8px" }}>
+          <h1 className="text-2xl md:text-4xl" style={{ fontWeight: 700, letterSpacing: "-0.03em", color: "var(--pf-ink)", margin: "0 0 8px" }}>
             All Products
           </h1>
-          <p style={{ color: "var(--pf-text-3)", fontSize: 15, margin: "0 0 28px" }}>
+          <p style={{ color: "var(--pf-text-3)", fontSize: 15, margin: "0 0 20px" }}>
             Premium research peptides with 99%+ purity
           </p>
 
           {/* Search + Sort row */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 20 }}>
-            <div style={{ position: "relative", width: 360 }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--pf-text-3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)" }}>
-                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3" style={{ marginBottom: 16 }}>
+            <div style={{ position: "relative", flex: 1, maxWidth: 360 }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--pf-text-3)" style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }}>
+                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
               </svg>
               <input
                 type="text"
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ width: "100%", height: 44, paddingLeft: 44, paddingRight: 16, border: "1px solid var(--pf-line)", borderRadius: 999, fontSize: 14, fontFamily: "inherit", color: "var(--pf-ink)", background: "#fff", outline: "none" }}
+                style={{ width: "100%", height: 42, paddingLeft: 42, paddingRight: 16, border: "1px solid var(--pf-line)", borderRadius: 10, fontSize: 14, fontFamily: "inherit", color: "var(--pf-ink)", background: "#fff", outline: "none" }}
               />
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ fontSize: 13, color: "var(--pf-text-3)" }}>Sort by:</span>
+              <span className="hidden sm:inline" style={{ fontSize: 13, color: "var(--pf-text-3)" }}>Sort by:</span>
               <PfDropdown
                 value={sort}
                 onChange={(v) => setSort(v as SortOption)}
@@ -113,8 +113,8 @@ export default function ProductsPageClient({ products }: { products: Product[] }
             </div>
           </div>
 
-          {/* Category pills */}
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", paddingBottom: 28, borderBottom: "1px solid var(--pf-line)" }}>
+          {/* Category pills — horizontal scroll on mobile */}
+          <div className="flex gap-2 pb-5 overflow-x-auto pf-hide-scrollbar" style={{ borderBottom: "1px solid var(--pf-line)" }}>
             {researchCategories.map((c) => (
               <CatPill key={c.id} label={c.label} active={category === c.id} onClick={() => setCategory(category === c.id ? "all" : c.id)} />
             ))}
@@ -122,10 +122,10 @@ export default function ProductsPageClient({ products }: { products: Product[] }
         </div>
       </section>
 
-      {/* Product grid */}
-      <section style={{ padding: "32px 0 80px", background: "#fff" }}>
+      {/* Product grid — 2 cols mobile, 4 cols desktop */}
+      <section style={{ padding: "24px 0 80px", background: "#fff" }}>
         <div className="pf-wrap">
-          <div className="pf-catalog-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20 }}>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
             {filtered.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}

@@ -323,8 +323,8 @@ export default function ProductDetailClient({ product, images, options, variants
               </p>
             )}
 
-            {/* Chips — full width on mobile */}
-            <div className="grid grid-cols-2 md:flex md:flex-wrap" style={{ gap: 8, marginBottom: 20 }}>
+            {/* Chips — flex wrap, centered when wrapping */}
+            <div className="flex flex-wrap justify-center md:justify-start" style={{ gap: 8, marginBottom: 20 }}>
               {[
                 { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>, text: "99%+ purity" },
                 { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pf-blue)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" /></svg>, text: "HPLC verified" },
