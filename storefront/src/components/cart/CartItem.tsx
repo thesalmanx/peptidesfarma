@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { useCart } from "@/lib/cart-context"
 import { formatPrice } from "@/lib/format-price"
 import type { HttpTypes } from "@medusajs/types"
