@@ -38,7 +38,7 @@ interface RelatedProduct {
 }
 
 interface Props {
-  product: { title: string; description: string | null; handle: string; metadata?: Record<string, unknown> | null }
+  product: { title: string; description: string | null; handle: string; metadata?: Record<string, unknown> | null; thumbnail?: string | null }
   images: ProductImage[]
   options: ProductOption[]
   variants: ProductVariant[]
@@ -114,7 +114,10 @@ export default function ProductDetailClient({ product, images, options, variants
 
   const variantImage = selectedVariant?.metadata_image || selectedVariant?.images?.[0]?.url || null
   const [userBrowsing, setUserBrowsing] = useState(false)
-  const mainImage = userBrowsing ? (images[activeImgIdx]?.url || variantImage || images[0]?.url || null) : (variantImage || images[activeImgIdx]?.url || images[0]?.url || null)
+  // Default: show thumbnail (product card image) for all variants. Browse gallery manually via arrows.
+  const mainImage = userBrowsing
+    ? (images[activeImgIdx]?.url || product.thumbnail || variantImage || images[0]?.url || null)
+    : (product.thumbnail || variantImage || images[0]?.url || null)
   const outOfStock = selectedVariant ? isOOS(selectedVariant) : false
 
   const meaningfulVariants = variants.filter((v) => v.title && v.title.toLowerCase() !== "default")

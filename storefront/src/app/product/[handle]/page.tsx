@@ -54,7 +54,8 @@ export default async function ProductPage({ params }: PageProps) {
 
   const productImages = (product.images || []).map((img) => ({ id: img.id, url: img.url }))
   // Use product images if available, fall back to thumbnail
-  const images = productImages.length > 0 ? productImages : (product.thumbnail ? [{ id: "thumb", url: product.thumbnail }] : [])
+  const thumbUrl = product.thumbnail
+  const images = productImages.length > 0 ? productImages : (thumbUrl ? [{ id: "thumb", url: thumbUrl }] : [])
 
   const options = (product.options || []).map((opt) => ({
     id: opt.id,
@@ -138,6 +139,7 @@ export default async function ProductPage({ params }: PageProps) {
           description: product.description || null,
           handle: product.handle || "",
           metadata: (product as any).metadata || null,
+          thumbnail: product.thumbnail || null,
         }}
         images={images}
         options={options}
