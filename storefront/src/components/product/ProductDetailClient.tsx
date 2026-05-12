@@ -90,12 +90,15 @@ export default function ProductDetailClient({ product, images, options, variants
     setWishlisted(isInWishlist(product.handle))
   }, [product.handle])
 
-  // Sticky mobile CTA — shows when main CTA scrolls out of view
+  // Sticky mobile CTA — shows when main CTA scrolls out of view (below viewport only)
   useEffect(() => {
     const el = ctaRef.current
     if (!el) return
     const obs = new IntersectionObserver(([entry]) => {
-      setShowStickyBar(!entry.isIntersecting)
+      // Only show sticky when CTA is above the viewport (user scrolled past it)
+      const rect = el.getBoundingClientRect()
+      const isAboveViewport = rect.bottom < 0
+      setShowStickyBar(!entry.isIntersecting && isAboveViewport)
     }, { threshold: 0 })
     obs.observe(el)
     return () => obs.disconnect()
