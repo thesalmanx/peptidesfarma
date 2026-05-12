@@ -163,7 +163,7 @@ export default function ProductDetailClient({ product, images, options, variants
 
       {/* NH-style two-column card */}
       <section className="max-w-[1332px] mx-auto px-4 md:px-4 py-4 md:py-6">
-        <div style={{ border: "1px solid var(--pf-line)", borderRadius: 12, padding: 16, overflow: "hidden" }} className="md:p-[30px] flex flex-col md:flex-row gap-0 md:gap-6 lg:gap-10">
+        <div style={{ border: "1px solid var(--pf-line)", borderRadius: 12, padding: 16, overflow: "hidden" }} className="md:p-[30px] flex flex-col md:flex-row md:items-start gap-0 md:gap-6 lg:gap-10">
 
           {/* LEFT: Sticky Image Gallery */}
           <div className="flex-1 w-full md:w-1/2 relative">
@@ -207,7 +207,7 @@ export default function ProductDetailClient({ product, images, options, variants
           </div>
 
           {/* RIGHT: Product Info */}
-          <div className="flex-1 flex flex-col w-full md:w-1/2 pt-6 md:pt-0">
+          <div className="flex-1 flex flex-col w-full md:w-1/2 pt-6 md:pt-2">
             {/* Title (desktop only — mobile title is above image) */}
             <h1 className="hidden md:block" style={{ fontFamily: "var(--pf-display)", fontWeight: 700, fontSize: "clamp(32px, 4vw, 56px)", lineHeight: 1.1, letterSpacing: "-0.03em", color: "var(--pf-ink)", margin: "0 0 12px" }}>
               {product.title}
