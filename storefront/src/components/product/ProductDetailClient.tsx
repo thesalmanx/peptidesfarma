@@ -58,6 +58,16 @@ export default function ProductDetailClient({ product, images, options, variants
   })
   const [qty, setQty] = useState(1)
   const [activeImgIdx, setActiveImgIdx] = useState(0)
+  const thumbsRef = useRef<HTMLDivElement>(null)
+
+  const goToImage = (idx: number) => {
+    setActiveImgIdx(idx)
+    // Scroll thumbnail into view
+    if (thumbsRef.current) {
+      const thumb = thumbsRef.current.children[idx] as HTMLElement
+      if (thumb) thumb.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" })
+    }
+  }
   const [tab, setTab] = useState("description")
   const [adding, setAdding] = useState(false)
   const [added, setAdded] = useState(false)
@@ -207,38 +217,44 @@ export default function ProductDetailClient({ product, images, options, variants
                 {images.length > 1 && (
                   <div className="flex md:hidden" style={{ position: "absolute", bottom: 12, left: "50%", transform: "translateX(-50%)", gap: 6, zIndex: 4 }}>
                     {images.map((_, i) => (
-                      <button key={i} onClick={() => setActiveImgIdx(i)} style={{ width: activeImgIdx === i ? 10 : 8, height: activeImgIdx === i ? 10 : 8, borderRadius: 99, background: activeImgIdx === i ? "#fff" : "rgba(255,255,255,0.5)", border: "none", cursor: "pointer", padding: 0, transition: "all 200ms ease" }} />
+                      <button key={i} onClick={() => goToImage(i)} style={{ width: activeImgIdx === i ? 10 : 8, height: activeImgIdx === i ? 10 : 8, borderRadius: 99, background: activeImgIdx === i ? "#fff" : "rgba(255,255,255,0.5)", border: "none", cursor: "pointer", padding: 0, transition: "all 200ms ease" }} />
                     ))}
                   </div>
                 )}
               </div>
-              {/* Thumbnail gallery with arrows — NH GallerySlider style */}
+              {/* Thumbnail gallery with arrows */}
               {images.length > 1 && (
-                <div className="hidden md:block" style={{ position: "relative", marginTop: 16 }}>
-                  {/* Left arrow — NH blob style */}
+                <div className="hidden md:block" style={{ position: "relative", marginTop: 16, overflow: "visible" }}>
+                  {/* Left arrow — blob style matching discount bubble */}
                   {activeImgIdx > 0 && (
                     <button
-                      onClick={() => setActiveImgIdx(activeImgIdx - 1)}
+                      onClick={() => goToImage(activeImgIdx - 1)}
                       aria-label="Previous"
-                      style={{ position: "absolute", left: -26, top: "50%", transform: "translateY(-50%)", width: 64, height: 64, background: "transparent", border: "none", padding: 0, cursor: "pointer", zIndex: 10, display: "flex", alignItems: "center", justifyContent: "center" }}
+                      style={{ position: "absolute", left: -22, top: "50%", transform: "translateY(-50%)", width: 44, height: 44, background: "transparent", border: "none", padding: 0, cursor: "pointer", zIndex: 10 }}
                     >
-                      <Image src="/icons/gallery-arrow-left.svg" alt="Previous" width={48} height={48} style={{ filter: "drop-shadow(2px 3px 2px rgba(0,0,0,0.2))", pointerEvents: "none" }} />
+                      <svg width="44" height="44" viewBox="0 0 32 31" fill="none" style={{ filter: "drop-shadow(2px 3px 2px rgba(0,0,0,0.15))" }}>
+                        <path d="M24.2127 5.20756C19.6631 -0.512652 4.38643 1.13904 2.18762 13.006C-0.0111818 24.8729 12.6303 29.2929 19.333 28.7656C34.1489 27.5905 29.8177 12.2741 24.2127 5.20756Z" fill="var(--pf-ink)" />
+                        <path d="M12.1365 18.3409L9.04553 15.2499M9.04553 15.2499L12.1365 12.1589M9.04553 15.2499L22.9551 15.2499" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
                     </button>
                   )}
-                  {/* Right arrow — NH blob style */}
+                  {/* Right arrow — blob style matching discount bubble */}
                   {activeImgIdx < images.length - 1 && (
                     <button
-                      onClick={() => setActiveImgIdx(activeImgIdx + 1)}
+                      onClick={() => goToImage(activeImgIdx + 1)}
                       aria-label="Next"
-                      style={{ position: "absolute", right: -26, top: "50%", transform: "translateY(-50%)", width: 64, height: 64, background: "transparent", border: "none", padding: 0, cursor: "pointer", zIndex: 10, display: "flex", alignItems: "center", justifyContent: "center" }}
+                      style={{ position: "absolute", right: -22, top: "50%", transform: "translateY(-50%)", width: 44, height: 44, background: "transparent", border: "none", padding: 0, cursor: "pointer", zIndex: 10 }}
                     >
-                      <Image src="/icons/gallery-arrow-right.svg" alt="Next" width={48} height={48} style={{ filter: "drop-shadow(-2px 3px 2px rgba(0,0,0,0.2))", pointerEvents: "none" }} />
+                      <svg width="44" height="44" viewBox="0 0 32 31" fill="none" style={{ filter: "drop-shadow(-2px 3px 2px rgba(0,0,0,0.15))" }}>
+                        <path d="M7.89663 25.2924C12.4463 31.0126 27.7229 29.3609 29.9218 17.494C32.1206 5.62705 19.479 1.20705 12.7764 1.73441C-2.03956 2.90946 2.29171 18.2258 7.89663 25.2924Z" fill="var(--pf-ink)" />
+                        <path d="M19.9728 12.159L23.0638 15.25M23.0638 15.25L19.9728 18.341M23.0638 15.25H9.1543" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
                     </button>
                   )}
                   {/* Thumbnails */}
-                  <div style={{ display: "flex", gap: 8, overflowX: "auto", padding: "0 4px" }} className="pf-hide-scrollbar">
+                  <div ref={thumbsRef} style={{ display: "flex", gap: 8, overflowX: "auto", padding: "0 4px", scrollBehavior: "smooth" }} className="pf-hide-scrollbar">
                     {images.map((img, i) => (
-                      <button key={img.id} onClick={() => setActiveImgIdx(i)} className="hover:opacity-80 transition-opacity" style={{ flexShrink: 0, width: 68, height: 68, borderRadius: 10, overflow: "hidden", border: activeImgIdx === i ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", cursor: "pointer", position: "relative", background: "#f7f8fa", padding: 0, transition: "border-color 200ms ease" }}>
+                      <button key={img.id} onClick={() => goToImage(i)} className="hover:opacity-80 transition-opacity" style={{ flexShrink: 0, width: 68, height: 68, borderRadius: 10, overflow: "hidden", border: activeImgIdx === i ? "2px solid var(--pf-ink)" : "1px solid var(--pf-line)", cursor: "pointer", position: "relative", background: "#f7f8fa", padding: 0, transition: "border-color 200ms ease" }}>
                         <Image src={img.url} alt="" fill className="object-contain" sizes="68px" style={{ padding: 4 }} />
                       </button>
                     ))}
