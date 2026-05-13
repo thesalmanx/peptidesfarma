@@ -72,7 +72,7 @@ export default function Header() {
         </div>
 
         {/* ROW 2: Logo + Nav links (center) + Icons */}
-        <div style={{ borderBottom: "1px solid var(--pf-line)" }}>
+        <div style={{ background: "var(--pf-ink)" }}>
         <div className="mx-auto px-4 md:px-8" style={{ maxWidth: 1332 }}>
           <div className="flex items-center justify-between h-[56px] md:h-[64px]">
             {/* Mobile: Hamburger */}
@@ -83,28 +83,28 @@ export default function Header() {
               style={{ width: 40, height: 40, background: "none", border: "none", cursor: "pointer" }}
             >
               <div style={{ display: "flex", flexDirection: "column", gap: 5, width: 20 }}>
-                <span style={{ width: 20, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
-                <span style={{ width: 20, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
-                <span style={{ width: 14, height: 2, background: "var(--pf-ink)", borderRadius: 1 }} />
+                <span style={{ width: 20, height: 2, background: "#fff", borderRadius: 1 }} />
+                <span style={{ width: 20, height: 2, background: "#fff", borderRadius: 1 }} />
+                <span style={{ width: 14, height: 2, background: "#fff", borderRadius: 1 }} />
               </div>
             </button>
 
             {/* Logo */}
             <Link href="/" className="shrink-0">
-              <img src="/peptidesfarma-logo-dark.svg" alt="PeptidesFarma" className="h-7 md:h-9" />
+              <img src="/peptidesfarma-logo-light.svg" alt="PeptidesFarma" className="h-7 md:h-9" onError={(e) => { (e.target as HTMLImageElement).src = "/peptidesfarma-logo-dark.svg" }} />
             </Link>
 
             {/* Center: Nav links with dividers (desktop) */}
-            <nav className="hidden md:flex items-center" style={{ margin: "0 auto", background: "var(--pf-ink)", borderRadius: 10, overflow: "hidden" }}>
+            <nav className="hidden md:flex items-center" style={{ margin: "0 auto" }}>
               <div ref={catalogRef} style={{ position: "relative" }}>
                 <button
                   onClick={() => setCatalogOpen(!catalogOpen)}
-                  className="hover:opacity-90 transition-opacity"
+                  className="hover:opacity-80 transition-opacity"
                   style={{
                     display: "flex", alignItems: "center", gap: 4,
-                    padding: "0 24px", height: 44, background: "none", border: "none",
+                    padding: "0 24px", height: 64, background: "none", border: "none",
                     borderRight: "1px solid rgba(255,255,255,0.15)",
-                    fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em",
+                    fontSize: 14, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em",
                     color: "#fff", cursor: "pointer", fontFamily: "inherit",
                   }}
                 >
@@ -116,12 +116,12 @@ export default function Header() {
                 <Link
                   key={i}
                   href={link.url}
-                  className="hover:opacity-90 transition-opacity"
+                  className="hover:opacity-80 transition-opacity"
                   style={{
                     display: "flex", alignItems: "center",
-                    padding: "0 24px", height: 44,
+                    padding: "0 24px", height: 64,
                     borderRight: i < navLinks.length - 1 ? "1px solid rgba(255,255,255,0.15)" : "none",
-                    fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em",
+                    fontSize: 14, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em",
                     color: "#fff", textDecoration: "none",
                   }}
                 >
@@ -132,9 +132,9 @@ export default function Header() {
 
             {/* Right icons */}
             <div className="flex items-center" style={{ gap: 20 }}>
-              <SearchButton />
+              <div style={{ color: "#fff" }}><SearchButton /></div>
               <Link href="/account/wishlist" aria-label="Wishlist" className="hidden md:flex hover:opacity-80 transition-opacity">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="var(--pf-ink)" strokeWidth="1.5" /></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="#fff" strokeWidth="1.5" /></svg>
               </Link>
               <HeaderCartButton />
               <div className="hidden md:block"><HeaderAccountButton /></div>
