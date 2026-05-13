@@ -95,34 +95,34 @@ export default function Header() {
             </Link>
 
             {/* Center: Nav links with dividers (desktop) */}
-            <nav className="hidden md:flex items-center" style={{ margin: "0 auto" }}>
+            <nav className="hidden md:flex items-center" style={{ margin: "0 auto", background: "var(--pf-ink)", borderRadius: 10, overflow: "hidden" }}>
               <div ref={catalogRef} style={{ position: "relative" }}>
                 <button
                   onClick={() => setCatalogOpen(!catalogOpen)}
-                  className="hover:opacity-80 transition-opacity"
+                  className="hover:opacity-90 transition-opacity"
                   style={{
                     display: "flex", alignItems: "center", gap: 4,
-                    padding: "0 24px", height: 64, background: "none", border: "none",
-                    borderRight: "1px solid var(--pf-line)",
-                    fontSize: 14, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.03em",
-                    color: "var(--pf-ink)", cursor: "pointer", fontFamily: "inherit",
+                    padding: "0 24px", height: 44, background: "none", border: "none",
+                    borderRight: "1px solid rgba(255,255,255,0.15)",
+                    fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em",
+                    color: "#fff", cursor: "pointer", fontFamily: "inherit",
                   }}
                 >
                   Shop
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--pf-ink)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: "transform 200ms ease", transform: catalogOpen ? "rotate(180deg)" : "none" }}><path d="m6 9 6 6 6-6" /></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.7, transition: "transform 200ms ease", transform: catalogOpen ? "rotate(180deg)" : "none" }}><path d="m6 9 6 6 6-6" /></svg>
                 </button>
               </div>
               {navLinks.map((link, i) => (
                 <Link
                   key={i}
                   href={link.url}
-                  className="hover:opacity-80 transition-opacity"
+                  className="hover:opacity-90 transition-opacity"
                   style={{
                     display: "flex", alignItems: "center",
-                    padding: "0 24px", height: 64,
-                    borderRight: i < navLinks.length - 1 ? "1px solid var(--pf-line)" : "none",
-                    fontSize: 14, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.03em",
-                    color: "var(--pf-ink)", textDecoration: "none",
+                    padding: "0 24px", height: 44,
+                    borderRight: i < navLinks.length - 1 ? "1px solid rgba(255,255,255,0.15)" : "none",
+                    fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em",
+                    color: "#fff", textDecoration: "none",
                   }}
                 >
                   {link.label}
